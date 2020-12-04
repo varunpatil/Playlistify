@@ -1,0 +1,15 @@
+asgiref==3.3.1
+beautifulsoup4==4.9.3
+certifi==2020.11.8
+chardet==3.0.4
+Django==3.1.4
+idna==2.10
+lyricsgenius==2.0.2
+musixmatch==0.9
+pytz==2020.4
+requests==2.25.0
+six==1.15.0
+soupsieve==2.0.1
+spotipy==2.16.1
+sqlparse==0.4.1
+urllib3==1.26.2
