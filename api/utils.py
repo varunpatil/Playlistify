@@ -12,11 +12,6 @@ if not os.path.exists(caches_folder):
     os.makedirs(caches_folder)
 
 
-def init_session(request, sp1):
-    if not request.session.get('me'):
-        request.session['me'] = sp1.me()
-
-
 def session_cache_path(request):
     if not request.session.get('uuid'):
         request.session['uuid'] = str(uuid.uuid4())
