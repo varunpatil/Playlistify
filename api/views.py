@@ -1,6 +1,10 @@
-from django.shortcuts import render
+import json
+
 from django.http import JsonResponse
+from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
+from spotipy import SpotifyException
+from . import utils
 
 
 def index(request):

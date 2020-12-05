@@ -13,7 +13,7 @@ class LoginRequiredMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.path != reverse('login'):
+        if request.path.startswith('/api') and request.path != reverse('login'):
             auth_manager = utils.get_auth_manager(request)
 
             try:
@@ -36,7 +36,7 @@ class InitRequestMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.path != reverse('login'):
+        if request.path.startswith('/api') and request.path != reverse('login'):
             auth_manager = utils.get_auth_manager(request)
             sp = utils.get_spotify_api_clients(request)
             request.sp = sp
