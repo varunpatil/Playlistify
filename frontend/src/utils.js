@@ -1,13 +1,9 @@
 export const isLoggedIn = () => {
-  var flag = window.localStorage.getItem("isLoggedIn");
+  var flag = localStorage.getItem("isLoggedIn");
 
-  if (flag) {
-    return true;
-  }
-
-  return false;
+  return Boolean(flag);
 };
 
 export const setLoggedInFlag = () => {
-  window.localStorage.setItem("isLoggedIn", true);
+  localStorage.setItem("isLoggedIn", true);
 };
