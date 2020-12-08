@@ -26,6 +26,7 @@ SECRET_KEY = config.DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+TIMER = True
 
 ALLOWED_HOSTS = []
 
@@ -52,6 +53,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # 'api.middleware.LoginRequiredMiddleware',
+    # 'api.middleware.InitRequestMiddleware',
+    # 'api.middleware.TimerMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -123,3 +128,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+SCOPE = ' '.join([
+    'ugc-image-upload',
+    'playlist-read-collaborative',
+    'playlist-modify-private',
+    'playlist-modify-public',
+    'playlist-read-private',
+    'user-read-playback-position',
+    'user-read-recently-played',
+    'user-top-read',
+    'user-read-currently-playing',
+    'user-read-playback-state',
+    'user-read-private',
+    'user-read-email',
+    'user-library-read',
+    'user-modify-playback-state',
+])
