@@ -1,37 +1,26 @@
-import React, { Component, component } from "react";
+import React from "react";
 import { render } from "react-dom";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  Redirect,
-} from "react-router-dom";
 
-import TopArtists from "./TopArtists";
-import TopTracks from "./TopTracks";
-import HomePage from "./HomePage";
+import axios from "axios";
+const queryString = require("query-string");
+
+import Home from "./Home.js";
 import LoginPage from "./LoginPage";
-
-import { isLoggedIn, setLoggedInFlag } from "../utils";
-
-const Home = () => {
-  return (
-    <Router>
-      <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route path="/top/artists" component={TopArtists} />
-        <Route path="/top/tracks" component={TopTracks} />
-      </Switch>
-    </Router>
-  );
-};
+import { isLoggedIn } from "../utils";
 
 export const App = () => {
-  var checkLogin = isLoggedIn()
-  console.log(checkLogin)
-  if (checkLogin) {
+  if (isLoggedIn()) {
     return <Home />;
+  }
+
+  let queryParams = queryString.parse(location.search);
+  if (location.pathname == "/login" && "code" in queryParams) {
+    axios.post("/api/login", { code: queryParams["code"] }).then((res) => {
+      if (res.data.message === "Success") {
+        localStorage.setItem("isLoggedIn", true);
+        location.replace("/");
+      }
+    });
   }
   return <LoginPage />;
 };
