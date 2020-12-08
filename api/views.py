@@ -44,5 +44,5 @@ def login(request):
 
 
 def get_me(request):
-    me = request.sp[0].get_current_user()
+    me = request.sp[0].current_user()
     return JsonResponse(me)
