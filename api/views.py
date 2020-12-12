@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from spotipy import SpotifyException
+
 from . import utils
 
 
@@ -46,3 +47,46 @@ def login(request):
 def get_me(request):
     me = request.sp[0].current_user()
     return JsonResponse(me)
+
+
+def top_tracks(request):
+    time_range = request.GET['time_range']
+    if time_range not in ['short_term', 'medium_term', 'long_term']:
+        time_range = 'short_term'
+    response = request.sp[0].current_user_top_tracks(
+        time_range=time_range, limit=50)
+
+    result = [{
+        'position': i + 1,
+        'track_name': item['name'],
+        'track_id': item['id'],
+        'track_url': item['external_urls']['spotify'],
+        'artist_name': item['artists'][0]['name'],
+        'artist_id': item['artists'][0]['id'],
+        'artist_url': item['artists'][0]['external_urls']['spotify'],
+        'duration_ms': item['duration_ms'],
+        'popularity': item['popularity'],
+        'preview_url': item['preview_url'],
+        'images': item['album']['images'],
+    } for i, item in enumerate(response['items'])]
+
+    return JsonResponse(response['items'], safe=False)
+    # return JsonResponse(result, safe=False)
+
+
+def top_artists(request):
+    time_range = request.GET['time_range']
+    response = request.sp[0].current_user_top_artists(
+        time_range=time_range, limit=50)
+
+    result = [{
+        'position': i + 1,
+        'artist_name': item['name'],
+        'artist_id': item['id'],
+        'genres': item['genres'],
+        'popularity': item['popularity'],
+        'url': item['external_urls']['spotify'],
+        'images': item['images'],
+    } for i, item in enumerate(response['items'])]
+
+    return JsonResponse(result, safe=False)
