@@ -1,26 +1,53 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { TopTracksList } from "./TopList";
-const queryString = require("query-string");
+import { makeStyles, Paper, Tab, Tabs } from "@material-ui/core";
+
+// import { TopTracksList } from "./TopList";
+import Loader from "./Loader";
+import Track from "./Track";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    marginBottom: theme.spacing(3),
+  },
+}));
 
 export default function TopTracks(props) {
-  const [topTracks, setTopTracks] = useState([]);
+  const classes = useStyles();
+  const [tracks, setTracks] = useState(null);
+  const [timeRange, setTimeRange] = useState("short_term");
 
-  useEffect(() => {
-    let time_range = queryString.parse(props.location.search)["time_range"];
-    getTopTracks(time_range);
-  }, []);
-
-  const getTopTracks = async (time_range) => {
-    const res = await axios.get("/api/top/tracks?time_range=" + time_range);
-    setTopTracks(res.data);
-    console.log(res.data);
+  const changeTimeRange = (event, newTimeRange) => {
+    setTimeRange(newTimeRange);
   };
+
+  useEffect(async () => {
+    const res = await axios.get("/api/top/tracks?time_range=" + timeRange);
+    setTracks(res.data);
+  }, [timeRange]);
 
   return (
     <div>
-      <h1>TOP TRACKS</h1>
-      <TopTracksList list={topTracks} />
+      <Paper className={classes.root}>
+        <Tabs
+          value={timeRange}
+          onChange={changeTimeRange}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
+          <Tab label="1 month" value="short_term" />
+          <Tab label="6 months" value="medium_term" />
+          <Tab label="All Time" value="long_term" />
+        </Tabs>
+      </Paper>
+
+      {tracks ? (
+        tracks.map((track, key) => <Track key={key} track={track} />)
+      ) : (
+        <Loader />
+      )}
     </div>
   );
 }
