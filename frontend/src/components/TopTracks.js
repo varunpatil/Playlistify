@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { makeStyles, Paper, Tab, Tabs } from "@material-ui/core";
 
-// import { TopTracksList } from "./TopList";
 import Loader from "./Loader";
 import Track from "./Track";
 

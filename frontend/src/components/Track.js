@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import {
   makeStyles,
@@ -25,19 +24,9 @@ const useStyles = makeStyles((theme) => ({
   cover: {
     minWidth: theme.spacing(15),
   },
-  controls: {
-    display: "flex",
-    alignItems: "center",
-    paddingLeft: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-  },
-  playIcon: {
-    height: 38,
-    width: 38,
-  },
 }));
 
-const Track = ({ track }) => {
+export default function Track({ track }) {
   const classes = useStyles();
 
   return (
@@ -59,10 +48,4 @@ const Track = ({ track }) => {
       </div>
     </Card>
   );
-};
-
-Track.propTypes = {
-  track: PropTypes.object.isRequired,
-};
-
-export default Track;
+}
