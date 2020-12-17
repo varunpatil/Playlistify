@@ -15,6 +15,12 @@ export const theme = createMuiTheme({
     },
   },
   typography: {
-    fontFamily: ['"Montserrat"', "sans-serif"].join(","),
+    fontFamily: [
+      "Circular",
+      "Helvetica",
+      "Arial",
+      "Montserrat",
+      "sans-serif",
+    ].join(","),
   },
 });
