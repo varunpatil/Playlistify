@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { makeStyles, Paper, Tab, Tabs } from "@material-ui/core";
+import { Paper, Tab, Tabs, makeStyles } from "@material-ui/core";
 
+import CreatePlaylistMenu from "./CreatePlaylistMenu";
 import Loader from "./Loader";
 import Track from "./Track";
 
@@ -12,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TopTracks(props) {
+export default function TopTracks() {
   const classes = useStyles();
   const [tracks, setTracks] = useState(null);
   const [timeRange, setTimeRange] = useState("short_term");
@@ -22,9 +23,15 @@ export default function TopTracks(props) {
   };
 
   useEffect(async () => {
+    // setTracks(null);
     const res = await axios.get("/api/top/tracks?time_range=" + timeRange);
     setTracks(res.data);
   }, [timeRange]);
+
+  let content = <Loader />;
+  if (tracks) {
+    content = tracks.map((track, key) => <Track key={key} track={track} />);
+  }
 
   return (
     <div>
@@ -36,17 +43,15 @@ export default function TopTracks(props) {
           textColor="primary"
           centered
         >
-          <Tab label="1 month" value="short_term" />
-          <Tab label="6 months" value="medium_term" />
+          <Tab label="Last month" value="short_term" />
+          <Tab label="Last 6 months" value="medium_term" />
           <Tab label="All Time" value="long_term" />
         </Tabs>
       </Paper>
 
-      {tracks ? (
-        tracks.map((track, key) => <Track key={key} track={track} />)
-      ) : (
-        <Loader />
-      )}
+      {content}
+
+      <CreatePlaylistMenu type="Artist" timeRange={timeRange} />
     </div>
   );
 }
