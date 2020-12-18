@@ -9,7 +9,7 @@ export default function NavBar() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="title" color="inherit">
-            Full stack Spotify
+            APP
           </Typography>
         </Toolbar>
       </AppBar>
