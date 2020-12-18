@@ -4,10 +4,10 @@ const queryString = require("query-string");
 
 import Home from "./Home.js";
 import LoginPage from "./LoginPage";
-import { isLoggedIn } from "../utils";
 
 export default function App() {
-  if (isLoggedIn()) {
+  let isLoggedIn = JSON.parse(localStorage.getItem("isLoggedIn"));
+  if (isLoggedIn) {
     return <Home />;
   }
 
