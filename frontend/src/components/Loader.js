@@ -1,8 +1,6 @@
 import React from "react";
 import { LinearProgress } from "@material-ui/core";
 
-function Loader() {
+export default function Loader() {
   return <LinearProgress />;
 }
-
-export default Loader;

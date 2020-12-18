@@ -8,10 +8,6 @@ from spotipy import SpotifyException
 from . import utils
 
 
-def index(request):
-    return JsonResponse({'message': 'Hello from api'})
-
-
 @require_http_methods('POST')
 def login(request):
     body = json.loads(request.body)
@@ -44,34 +40,12 @@ def login(request):
     return JsonResponse({"message": "Already Logged In"})
 
 
-def get_me(request):
-    me = request.sp[0].current_user()
-    return JsonResponse(me)
-
-
 def top_tracks(request):
-    time_range = request.GET['time_range']
-    if time_range not in ['short_term', 'medium_term', 'long_term']:
-        time_range = 'short_term'
+    time_range = request.GET.get('time_range', 'short_term')
     response = request.sp[0].current_user_top_tracks(
         time_range=time_range, limit=50)
 
-    result = [{
-        'position': i + 1,
-        'track_name': item['name'],
-        'track_id': item['id'],
-        'track_url': item['external_urls']['spotify'],
-        'artist_name': item['artists'][0]['name'],
-        'artist_id': item['artists'][0]['id'],
-        'artist_url': item['artists'][0]['external_urls']['spotify'],
-        'duration_ms': item['duration_ms'],
-        'popularity': item['popularity'],
-        'preview_url': item['preview_url'],
-        'images': item['album']['images'],
-    } for i, item in enumerate(response['items'])]
-
     return JsonResponse(response['items'], safe=False)
-    # return JsonResponse(result, safe=False)
 
 
 def top_artists(request):
