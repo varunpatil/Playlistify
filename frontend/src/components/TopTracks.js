@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TopTracks() {
   const classes = useStyles();
-  const [tracks, setTracks] = useState(null);
+  const [tracks, setTracks] = useState([]);
   const [timeRange, setTimeRange] = useState("short_term");
 
   const changeTimeRange = (event, newTimeRange) => {
@@ -29,7 +29,7 @@ export default function TopTracks() {
   }, [timeRange]);
 
   let content = <Loader />;
-  if (tracks) {
+  if (tracks.length) {
     content = tracks.map((track, key) => <Track key={key} track={track} />);
   }
 
@@ -51,7 +51,11 @@ export default function TopTracks() {
 
       {content}
 
-      <CreatePlaylistMenu type="Artist" timeRange={timeRange} />
+      <CreatePlaylistMenu
+        timeRange={timeRange}
+        type="Track"
+        ids={tracks.map((track) => track.id)}
+      />
     </div>
   );
 }
