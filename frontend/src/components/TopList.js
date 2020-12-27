@@ -13,34 +13,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TopTracks() {
+export default function TopList({ type }) {
   const classes = useStyles();
-  const [tracks, setTracks] = useState([]);
+  const [items, setItems] = useState([]);
   const [timeRange, setTimeRange] = useState("short_term");
 
-  const changeTimeRange = (event, newTimeRange) => {
-    setTimeRange(newTimeRange);
-  };
-
   useEffect(async () => {
-    // setTracks(null);
-    const res = await axios.get("/api/top/tracks?time_range=" + timeRange);
-    setTracks(res.data);
+    // setItems(null);
+    const res = await axios.get(
+      `/api/top/${type.toLowerCase()}s?time_range=` + timeRange
+    );
+    setItems(res.data);
   }, [timeRange]);
-
-  let content = <Loader />;
-  if (tracks.length) {
-    content = tracks.map((track, key) => (
-      <TopUnit type="Track" key={key} unit={track} />
-    ));
-  }
 
   return (
     <div>
       <Paper className={classes.root}>
         <Tabs
           value={timeRange}
-          onChange={changeTimeRange}
+          onChange={(e, newTimeRange) => {
+            setTimeRange(newTimeRange);
+          }}
           indicatorColor="primary"
           textColor="primary"
           centered
@@ -51,14 +44,26 @@ export default function TopTracks() {
         </Tabs>
       </Paper>
 
-      {content}
+      {items.length ? (
+        items.map((item, key) => <TopUnit type={type} key={key} unit={item} />)
+      ) : (
+        <Loader />
+      )}
 
-      <CreatePlaylistMenu
-        timeRange={timeRange}
-        type="Track"
-        trackIds={tracks.map((track) => track.id)}
-        artistIds={tracks.map((track) => track.artists[0].id)}
-      />
+      {type === "Track" ? (
+        <CreatePlaylistMenu
+          timeRange={timeRange}
+          type={type}
+          trackIds={items.map((item) => item.id)}
+          artistIds={items.map((item) => item.artists[0].id)}
+        />
+      ) : (
+        <CreatePlaylistMenu
+          timeRange={timeRange}
+          type={type}
+          artistIds={items.map((item) => item.id)}
+        />
+      )}
     </div>
   );
 }

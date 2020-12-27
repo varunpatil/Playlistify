@@ -2,8 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import HomePage from "./HomePage";
-import TopArtists from "./TopArtists";
-import TopTracks from "./TopTracks";
+import TopList from "./TopList";
 import NavBar from "./NavBar";
 
 export default function Home() {
@@ -13,8 +12,8 @@ export default function Home() {
       <Router>
         <Switch>
           <Route exact path="/" component={HomePage} />
-          <Route path="/top/artists" component={TopArtists} />
-          <Route path="/top/tracks" component={TopTracks} />
+          <Route path="/top/artists" render={() => <TopList type="Artist" />} />
+          <Route path="/top/tracks" render={() => <TopList type="Track" />} />
         </Switch>
       </Router>
     </div>
