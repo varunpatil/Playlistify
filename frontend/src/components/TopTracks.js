@@ -54,7 +54,8 @@ export default function TopTracks() {
       <CreatePlaylistMenu
         timeRange={timeRange}
         type="Track"
-        ids={tracks.map((track) => track.id)}
+        trackIds={tracks.map((track) => track.id)}
+        artistIds={tracks.map((track) => track.artists[0].id)}
       />
     </div>
   );

@@ -9,6 +9,13 @@ import {
   Box,
 } from "@material-ui/core";
 import { PlaylistAdd } from "@material-ui/icons";
+import axios from "axios";
+
+const label = {
+  short_term: "Last month",
+  medium_term: "Last 6 months",
+  long_term: "All Time",
+};
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -25,47 +32,46 @@ const useStyles = makeStyles((theme) => ({
 export default function CreatePlaylistMenu(props) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
-  const label = {
-    short_term: "Last month",
-    medium_term: "Last 6 months",
-    long_term: "All Time",
-  };
 
   const optionsList = [
     {
       title: "🎵 Create Playlist",
-      value: "create_playlist",
+      type: "create_playlist",
       subtitle:
         props.type === "Track"
-          ? `${label[props.timeRange]} Top-50 Tracks`
-          : `Top-5 Tracks from each of your ${
+          ? `${label[props.timeRange]} Top 50 Tracks`
+          : `Top 5 Tracks from each of your ${
               label[props.timeRange]
-            } Top-20 Artists`,
+            } Top 20 Artists`,
     },
     {
       title: "👌 Recommendation Playlist",
-      value: "recommendation_playlist",
+      type: "recommendation_playlist",
       subtitle: `Recommendations based on your ${
         label[props.timeRange]
-      } Top-20 ${props.type}s`,
+      } Top 20 ${props.type}s`,
     },
     {
       title: "👯 Similar Artists",
-      value: "similar_artists",
+      type: "similar_artists",
       subtitle: `Playlist with similar artists based on your ${
         label[props.timeRange]
-      } Top-20 ${props.type}s`,
+      } Top 20 ${props.type}s`,
     },
   ];
 
   const menuItemClick = (event) => {
-    const playlistType = event.currentTarget.dataset.value;
-    CreatePlaylist(props.type, playlistType, props.ids);
+    const option = JSON.parse(event.currentTarget.dataset.value);
+    CreatePlaylist(props, option);
     setAnchorEl(null);
   };
 
   const options = optionsList.map((option) => (
-    <MenuItem key={option} onClick={menuItemClick} data-value={option.value}>
+    <MenuItem
+      key={option}
+      onClick={menuItemClick}
+      data-value={JSON.stringify(option)}
+    >
       <Box>
         <Typography variant="h6">{option.title}</Typography>
         <Typography variant="subtitle2" color="textSecondary">
@@ -111,6 +117,47 @@ export default function CreatePlaylistMenu(props) {
   );
 }
 
-const CreatePlaylist = async (idType, playlistType, ids) => {
-  console.log(idType, playlistType, ids);
+const CreatePlaylist = async (props, option) => {
+  let apiPath = "";
+  let data1 = {
+    name: "",
+    description: option.subtitle,
+  };
+  let data2 = {};
+
+  if (option.type === "create_playlist") {
+    if (props.type === "Track") {
+      apiPath = "/api/playlist/add/";
+      data1.name = "🎵 Top 50 Tracks";
+      data2.track_ids = props.trackIds;
+    } else {
+      apiPath = "playlist/top/artists/";
+      data1.name = "🎵 Top 20 Artists";
+      data2.artist_ids = props.artistIds;
+    }
+  } else {
+    console.log("hello");
+    return;
+  }
+
+  let d = new Date();
+  const delimiter = " • ";
+
+  data1.name +=
+    delimiter +
+    label[props.timeRange] +
+    delimiter +
+    d.toLocaleString("default", { month: "short" }) +
+    "'" +
+    (d.getFullYear() % 100);
+
+  const res1 = await axios.post("/api/playlist/create/", data1);
+  data2.playlist_id = res1.data.playlist_id;
+  const res2 = await axios.post(apiPath, data2);
+
+  // else if (playlistType === "recommendation_playlist") {
+
+  // } else if (playlistType === "similar_artists") {
+
+  // }
 };

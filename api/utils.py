@@ -33,17 +33,17 @@ def get_spotify_api_clients(request):
     """
     return Spotify API Client object
 
-    sp1 ==> access to user private data
-    sp2 ==> access to public spotify data
-    sp1 >= sp2 in terms of access
+    sp0 ==> access to user private data
+    sp1 ==> access to public spotify data
+    sp0 >= sp1 in terms of access
 
-    sp2 should be used to counter rate limiting when user data is not required
+    sp1 is be used to counter rate limiting when user data is not required
     """
 
-    sp1 = spotipy.Spotify(auth_manager=get_auth_manager(request))
-    sp2 = spotipy.Spotify(
+    sp0 = spotipy.Spotify(auth_manager=get_auth_manager(request))
+    sp1 = spotipy.Spotify(
         auth_manager=spotipy.oauth2.SpotifyClientCredentials())
 
-    sp = (sp1, sp2)
+    sp = (sp0, sp1)
 
     return sp
