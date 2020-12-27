@@ -119,7 +119,6 @@ def seed_recommendation(request):
         )
         track_ids.extend([track['id'] for track in response['tracks']])
 
-    track_ids = helpers.filter_saved_tracks(request, track_ids)
     helpers.add_to_playlist(request, playlist_id, track_ids)
     return JsonResponse({"message": "success"})
 

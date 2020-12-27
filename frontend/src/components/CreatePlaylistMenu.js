@@ -135,9 +135,19 @@ const CreatePlaylist = async (props, option) => {
       data1.name = "🎵 Top 20 Artists";
       data2.artist_ids = props.artistIds;
     }
-  } else {
-    console.log("hello");
-    return;
+  } else if (option.type === "recommendation_playlist") {
+    apiPath = "/api/recommendation/seed/";
+    data1.name = "👌 Recommendations based on your Top 20 " + props.type + "s";
+
+    if (props.type === "Track") {
+      data2.track_ids = props.trackIds;
+    } else {
+      data2.artist_ids = props.artistIds;
+    }
+  } else if (option.type === "similar_artists") {
+    apiPath = "/api/similar_artists/";
+    data1.name = "👯 Similar artists for your Top 20 " + props.type + "s";
+    data2.artist_ids = props.artistIds;
   }
 
   let d = new Date();
@@ -154,10 +164,4 @@ const CreatePlaylist = async (props, option) => {
   const res1 = await axios.post("/api/playlist/create/", data1);
   data2.playlist_id = res1.data.playlist_id;
   const res2 = await axios.post(apiPath, data2);
-
-  // else if (playlistType === "recommendation_playlist") {
-
-  // } else if (playlistType === "similar_artists") {
-
-  // }
 };
