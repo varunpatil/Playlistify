@@ -38,11 +38,10 @@ class InitRequestMiddleware:
     def __call__(self, request):
         if request.path.startswith('/api') and request.path != reverse('login'):
             auth_manager = utils.get_auth_manager(request)
-            sp = utils.get_spotify_api_clients(request)
-            request.sp = sp
+            request.sp = utils.get_spotify_api_clients(request)
 
-            # if not request.session.get('me'):
-            #     request.session['me'] = sp[0].me()
+            if not request.session.get('me'):
+                request.session['me'] = request.sp[0].me()
 
         response = self.get_response(request)
         return response
@@ -57,6 +56,8 @@ class TimerMiddleware:
         response = self.get_response(request)
         end = time.time()
         if settings.TIMER:
+            print()
+            print()
             print("Took " + str(end - start) + " secs")
             # print(request.path + " took " + str(end - start) + " secs")
         return response

@@ -1,15 +1,13 @@
 import React from "react";
-import { render } from "react-dom";
-
 import axios from "axios";
 const queryString = require("query-string");
 
 import Home from "./Home.js";
 import LoginPage from "./LoginPage";
-import { isLoggedIn } from "../utils";
 
-export const App = () => {
-  if (isLoggedIn()) {
+export default function App() {
+  let isLoggedIn = JSON.parse(localStorage.getItem("isLoggedIn"));
+  if (isLoggedIn) {
     return <Home />;
   }
 
@@ -23,7 +21,4 @@ export const App = () => {
     });
   }
   return <LoginPage />;
-};
-
-const appDiv = document.getElementById("app");
-render(<App />, appDiv);
+}

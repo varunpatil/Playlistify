@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Button from '@material-ui/core/Button';
 import axios from "axios";
 
 export default function LoginPage() {
@@ -20,9 +21,9 @@ export default function LoginPage() {
   return (
     <div>
       <h1>This is Login page.</h1>
-      <button>
+      <Button variant="contained" color="primary">
         <a href={authUrl}>Login</a>
-      </button>
+      </Button>
     </div>
   );
 }
