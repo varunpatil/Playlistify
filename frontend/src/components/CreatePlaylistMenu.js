@@ -131,7 +131,7 @@ const CreatePlaylist = async (props, option) => {
       data1.name = "🎵 Top 50 Tracks";
       data2.track_ids = props.trackIds;
     } else {
-      apiPath = "playlist/top/artists/";
+      apiPath = "/api/playlist/top/artists/";
       data1.name = "🎵 Top 20 Artists";
       data2.artist_ids = props.artistIds;
     }
