@@ -1,5 +1,4 @@
 import React from "react";
-
 import {
   makeStyles,
   Card,
@@ -26,23 +25,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Track({ track }) {
+export default function TopUnit({ type, unit }) {
   const classes = useStyles();
 
   return (
     <Card className={classes.root}>
       <CardMedia
         className={classes.cover}
-        image={track.album.images[1].url}
-        title={track.name}
+        image={type === "Track" ? unit.album.images[1].url : unit.images[1].url}
+        title={unit.name}
       />
       <div className={classes.details}>
         <CardContent className={classes.content}>
           <Typography component="h6" variant="h6">
-            {track.name}
+            {unit.name}
           </Typography>
           <Typography variant="subtitle2" color="textSecondary">
-            {track.artists[0].name}
+            {type === "Track"
+              ? unit.artists[0].name
+              : unit.genres.slice(0, 3).join(" | ")}
           </Typography>
         </CardContent>
       </div>

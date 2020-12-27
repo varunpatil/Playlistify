@@ -4,7 +4,7 @@ import { Paper, Tab, Tabs, makeStyles } from "@material-ui/core";
 
 import CreatePlaylistMenu from "./CreatePlaylistMenu";
 import Loader from "./Loader";
-import Artist from "./Artist";
+import TopUnit from "./TopUnit";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,7 +31,7 @@ export default function TopArtists() {
   let content = <Loader />;
   if (artists.length) {
     content = artists.map((artist, key) => (
-      <Artist key={key} artist={artist} />
+      <TopUnit type="Artist" key={key} unit={artist} />
     ));
   }
 

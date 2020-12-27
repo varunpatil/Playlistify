@@ -4,7 +4,7 @@ import { Paper, Tab, Tabs, makeStyles } from "@material-ui/core";
 
 import CreatePlaylistMenu from "./CreatePlaylistMenu";
 import Loader from "./Loader";
-import Track from "./Track";
+import TopUnit from "./TopUnit";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,7 +30,9 @@ export default function TopTracks() {
 
   let content = <Loader />;
   if (tracks.length) {
-    content = tracks.map((track, key) => <Track key={key} track={track} />);
+    content = tracks.map((track, key) => (
+      <TopUnit type="Track" key={key} unit={track} />
+    ));
   }
 
   return (
