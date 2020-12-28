@@ -3,8 +3,7 @@ import { Switch, Route } from "react-router-dom";
 
 import Boilerplate from "./Boilerplate";
 import HomePage from "./HomePage";
-import TopTracks from "./TopTracks";
-import TopArtists from "./TopArtists";
+import { TopTracks, TopArtists } from "./TopList";
 
 export default function Home() {
   return (

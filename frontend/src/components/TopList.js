@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function TopList({ type }) {
+function TopList({ type }) {
   const classes = useStyles();
   const [items, setItems] = useState([]);
   const [timeRange, setTimeRange] = useState("short_term");
@@ -66,4 +66,12 @@ export default function TopList({ type }) {
       )}
     </div>
   );
+}
+
+export function TopTracks() {
+  return <TopList type="Track" />;
+}
+
+export function TopArtists() {
+  return <TopList type="Artist" />;
 }
