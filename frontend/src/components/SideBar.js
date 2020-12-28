@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
+  Collapse,
   Divider,
   List,
   ListItem,
@@ -9,19 +10,27 @@ import {
   makeStyles,
 } from "@material-ui/core";
 
-import { TrendingUp, Home } from "@material-ui/icons";
+import {
+  Audiotrack,
+  Person,
+  TrendingUp,
+  Home,
+  ExpandLess,
+  ExpandMore,
+} from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
-  // necessary for content to be below app bar
-  toolbar: theme.mixins.toolbar,
+  nested: {
+    paddingLeft: theme.spacing(4),
+  },
 }));
 
 export default function SideBar() {
   const classes = useStyles();
+  const [open1, setOpen1] = useState(true);
+
   return (
     <div>
-      <div className={classes.toolbar} />
-
       <List>
         <ListItem button key="home" component={Link} to="/">
           <ListItemIcon>
@@ -30,19 +39,53 @@ export default function SideBar() {
           <ListItemText primary={"Home"} />
         </ListItem>
 
-        <ListItem button key="top/tracks" component={Link} to="/top/tracks">
+        <Divider />
+
+        <ListItem
+          button
+          key="top"
+          onClick={() => {
+            setOpen1(!open1);
+          }}
+        >
           <ListItemIcon>
-            <Home />
+            <TrendingUp />
           </ListItemIcon>
-          <ListItemText primary={"Top Tracks"} />
+          <ListItemText primary="Rankings" />
+          {open1 ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
 
-        <ListItem button key="top/artists" component={Link} to="/top/artists">
-          <ListItemIcon>
-            <Home />
-          </ListItemIcon>
-          <ListItemText primary={"Top Artists"} />
-        </ListItem>
+        <Collapse in={open1} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItem
+              button
+              className={classes.nested}
+              key="top/tracks"
+              component={Link}
+              to="/top/tracks"
+            >
+              <ListItemIcon>
+                <Audiotrack />
+              </ListItemIcon>
+              <ListItemText primary={"Top Tracks"} />
+            </ListItem>
+
+            <ListItem
+              button
+              className={classes.nested}
+              key="top/artists"
+              component={Link}
+              to="/top/artists"
+            >
+              <ListItemIcon>
+                <Person />
+              </ListItemIcon>
+              <ListItemText primary={"Top Artists"} />
+            </ListItem>
+          </List>
+        </Collapse>
+
+        <Divider />
       </List>
     </div>
   );
