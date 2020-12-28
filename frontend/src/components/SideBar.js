@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   Divider,
   List,
@@ -22,14 +23,26 @@ export default function SideBar() {
       <div className={classes.toolbar} />
 
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              <Home />
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        <ListItem button key="home" component={Link} to="/">
+          <ListItemIcon>
+            <Home />
+          </ListItemIcon>
+          <ListItemText primary={"Home"} />
+        </ListItem>
+
+        <ListItem button key="top/tracks" component={Link} to="/top/tracks">
+          <ListItemIcon>
+            <Home />
+          </ListItemIcon>
+          <ListItemText primary={"Top Tracks"} />
+        </ListItem>
+
+        <ListItem button key="top/artists" component={Link} to="/top/artists">
+          <ListItemIcon>
+            <Home />
+          </ListItemIcon>
+          <ListItemText primary={"Top Artists"} />
+        </ListItem>
       </List>
     </div>
   );

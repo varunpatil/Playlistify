@@ -1,20 +1,19 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
-import HomePage from "./HomePage";
-import TopList from "./TopList";
 import Boilerplate from "./Boilerplate";
+import HomePage from "./HomePage";
+import TopTracks from "./TopTracks";
+import TopArtists from "./TopArtists";
 
 export default function Home() {
   return (
     <Boilerplate>
-      <Router>
-        <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route path="/top/artists" render={() => <TopList type="Artist" />} />
-          <Route path="/top/tracks" render={() => <TopList type="Track" />} />
-        </Switch>
-      </Router>
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+        <Route path="/top/tracks" component={TopTracks} />
+        <Route path="/top/artists" component={TopArtists} />
+      </Switch>
     </Boilerplate>
   );
 }
