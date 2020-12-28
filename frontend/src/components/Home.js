@@ -3,12 +3,11 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import HomePage from "./HomePage";
 import TopList from "./TopList";
-import NavBar from "./NavBar";
+import Boilerplate from "./Boilerplate";
 
 export default function Home() {
   return (
-    <div>
-      <NavBar />
+    <Boilerplate>
       <Router>
         <Switch>
           <Route exact path="/" component={HomePage} />
@@ -16,6 +15,6 @@ export default function Home() {
           <Route path="/top/tracks" render={() => <TopList type="Track" />} />
         </Switch>
       </Router>
-    </div>
+    </Boilerplate>
   );
 }
