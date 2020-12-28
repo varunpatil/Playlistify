@@ -1,14 +1,15 @@
-import React from "react";
-import AppBar from "@material-ui/core/AppBar";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Drawer from "@material-ui/core/Drawer";
-import Hidden from "@material-ui/core/Hidden";
-import IconButton from "@material-ui/core/IconButton";
+import React, { useState } from "react";
 import MenuIcon from "@material-ui/icons/Menu";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-
+import {
+  AppBar,
+  CssBaseline,
+  Drawer,
+  Hidden,
+  IconButton,
+  Toolbar,
+  Typography,
+  makeStyles,
+} from "@material-ui/core";
 import SideBar from "./SideBar";
 
 const drawerWidth = 240;
@@ -48,8 +49,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function BoilerPlate(props) {
   const classes = useStyles();
-  const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -83,7 +83,6 @@ export default function BoilerPlate(props) {
           <Drawer
             container={container}
             variant="temporary"
-            anchor={theme.direction === "rtl" ? "right" : "left"}
             open={mobileOpen}
             onClose={handleDrawerToggle}
             classes={{
