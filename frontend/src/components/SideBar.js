@@ -24,7 +24,7 @@ import {
 
 import Loader from "./Loader";
 
-export default function SideBar() {
+export default function SideBar({ toggle }) {
   const classes = useStyles();
   const [user, setUser] = useState(null);
 
@@ -51,11 +51,12 @@ export default function SideBar() {
   return (
     <List>
       {user ? getUser() : <Loader />}
-      <Base name="Home" path="/" icon={Home} />
+      <Base name="Home" path="/" icon={Home} toggle={toggle} />
       <Divider />
       <Parent
         name="Rankings"
         icon={TrendingUp}
+        toggle={toggle}
         children={[
           {
             name: "Top Tracks",
@@ -93,6 +94,7 @@ const Base = (props) => {
       component={Link}
       to={props.path}
       className={props.className}
+      onClick={props.toggle}
     >
       <ListItemIcon>
         <props.icon />
@@ -129,6 +131,7 @@ const Parent = (props) => {
                 name={child.name}
                 path={child.path}
                 icon={child.icon}
+                toggle={props.toggle}
                 className={classes.nested}
               />
             );

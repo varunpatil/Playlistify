@@ -94,7 +94,7 @@ export default function BoilerPlate(props) {
                 keepMounted: true, // Better open performance on mobile.
               }}
             >
-              <SideBar />
+              <SideBar toggle={handleDrawerToggle} />
             </Drawer>
           </Hidden>
           <Hidden xsDown implementation="css">
@@ -105,7 +105,7 @@ export default function BoilerPlate(props) {
               variant="permanent"
               open
             >
-              <SideBar />
+              <SideBar toggle={() => {}} />
             </Drawer>
           </Hidden>
         </nav>
