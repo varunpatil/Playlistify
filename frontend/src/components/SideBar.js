@@ -19,74 +19,88 @@ import {
   ExpandMore,
 } from "@material-ui/icons";
 
+export default function SideBar() {
+  return (
+    <List>
+      <Base name="Home" path="/" icon={Home} />
+      <Divider />
+      <Parent
+        name="Rankings"
+        icon={TrendingUp}
+        children={[
+          {
+            name: "Top Tracks",
+            path: "/top/tracks",
+            icon: Audiotrack,
+          },
+          {
+            name: "Top Artists",
+            path: "/top/artists",
+            icon: Person,
+          },
+        ]}
+      />
+      <Divider />
+    </List>
+  );
+}
+
 const useStyles = makeStyles((theme) => ({
   nested: {
     paddingLeft: theme.spacing(4),
   },
 }));
 
-export default function SideBar() {
-  const classes = useStyles();
-  const [open1, setOpen1] = useState(true);
+const Base = (props) => {
+  return (
+    <ListItem
+      button
+      key={props.name}
+      component={Link}
+      to={props.path}
+      className={props.className}
+    >
+      <ListItemIcon>
+        <props.icon />
+      </ListItemIcon>
+      <ListItemText primary={props.name} />
+    </ListItem>
+  );
+};
 
+const Parent = (props) => {
+  const classes = useStyles();
+  const [open, setOpen] = useState(true);
   return (
     <div>
-      <List>
-        <ListItem button key="home" component={Link} to="/">
-          <ListItemIcon>
-            <Home />
-          </ListItemIcon>
-          <ListItemText primary={"Home"} />
-        </ListItem>
+      <ListItem
+        button
+        key={props.name}
+        onClick={() => {
+          setOpen(!open);
+        }}
+      >
+        <ListItemIcon>
+          <props.icon />
+        </ListItemIcon>
+        <ListItemText primary={props.name} />
+        {open ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
 
-        <Divider />
-
-        <ListItem
-          button
-          key="top"
-          onClick={() => {
-            setOpen1(!open1);
-          }}
-        >
-          <ListItemIcon>
-            <TrendingUp />
-          </ListItemIcon>
-          <ListItemText primary="Rankings" />
-          {open1 ? <ExpandLess /> : <ExpandMore />}
-        </ListItem>
-
-        <Collapse in={open1} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            <ListItem
-              button
-              className={classes.nested}
-              key="top/tracks"
-              component={Link}
-              to="/top/tracks"
-            >
-              <ListItemIcon>
-                <Audiotrack />
-              </ListItemIcon>
-              <ListItemText primary={"Top Tracks"} />
-            </ListItem>
-
-            <ListItem
-              button
-              className={classes.nested}
-              key="top/artists"
-              component={Link}
-              to="/top/artists"
-            >
-              <ListItemIcon>
-                <Person />
-              </ListItemIcon>
-              <ListItemText primary={"Top Artists"} />
-            </ListItem>
-          </List>
-        </Collapse>
-
-        <Divider />
-      </List>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          {props.children.map((child) => {
+            return (
+              <Base
+                name={child.name}
+                path={child.path}
+                icon={child.icon}
+                className={classes.nested}
+              />
+            );
+          })}
+        </List>
+      </Collapse>
     </div>
   );
-}
+};
