@@ -41,6 +41,10 @@ def login(request):
     return JsonResponse({"message": "Already Logged In"})
 
 
+def me(request):
+    return JsonResponse(request.session['me'])
+
+
 def top_tracks(request):
     time_range = request.GET.get('time_range', 'short_term')
     response = request.sp[0].current_user_top_tracks(

@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import {
+  Avatar,
   Collapse,
   Divider,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  ListItemAvatar,
   makeStyles,
 } from "@material-ui/core";
 
@@ -19,9 +22,35 @@ import {
   ExpandMore,
 } from "@material-ui/icons";
 
+import Loader from "./Loader";
+
 export default function SideBar() {
+  const classes = useStyles();
+  const [user, setUser] = useState(null);
+
+  useEffect(async () => {
+    const res = await axios.get("/api/me");
+    setUser(res.data);
+  }, []);
+
+  const getUser = () => (
+    <ListItem>
+      <ListItemAvatar>
+        <Avatar
+          alt={user.display_name}
+          src={user.images.length > 0 ? user.images[0].url : ""}
+          className={classes.avatar}
+        />
+      </ListItemAvatar>
+      <ListItemText>
+        <strong>{user.display_name}</strong>
+      </ListItemText>
+    </ListItem>
+  );
+
   return (
     <List>
+      {user ? getUser() : <Loader />}
       <Base name="Home" path="/" icon={Home} />
       <Divider />
       <Parent
@@ -48,6 +77,11 @@ export default function SideBar() {
 const useStyles = makeStyles((theme) => ({
   nested: {
     paddingLeft: theme.spacing(4),
+  },
+  avatar: {
+    height: theme.spacing(6),
+    width: theme.spacing(6),
+    marginRight: theme.spacing(2),
   },
 }));
 
