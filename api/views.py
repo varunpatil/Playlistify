@@ -132,6 +132,7 @@ def similar_artists(request):
     body = json.loads(request.body)
     playlist_id = body['playlist_id']
     artist_ids = body['artist_ids'][:20]
+    artist_ids = helpers.remove_duplicates(artist_ids)
 
     similar_artist_ids = []
 
@@ -150,7 +151,7 @@ def similar_artists(request):
 
     tracks = sorted(tracks, key=lambda k: k['popularity'], reverse=True)
     track_ids = [track['id'] for track in tracks]
-    track_ids = helpers.filter_saved_tracks(request, track_ids)
 
-    helpers.add_to_playlist(request, playlist_id, track_ids, limit=50)
+    helpers.add_to_playlist(request, playlist_id, track_ids,
+                            limit=50, allow_saved_tracks=False)
     return JsonResponse({"message": "success"})

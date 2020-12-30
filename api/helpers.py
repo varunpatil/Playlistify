@@ -17,9 +17,12 @@ def filter_saved_tracks(request, track_ids):
     return [item for item, is_saved in zip(track_ids, mask) if not is_saved]
 
 
-def add_to_playlist(request, playlist_id, track_ids, limit=10000, shuffle=False, allow_duplicates=False):
+def add_to_playlist(request, playlist_id, track_ids, limit=10000, shuffle=False, allow_duplicates=False, allow_saved_tracks=True):
     if not allow_duplicates:
         track_ids = remove_duplicates(track_ids)
+
+    if not allow_saved_tracks:
+        track_ids = filter_saved_tracks(request, track_ids)
 
     track_ids = track_ids[:limit]
 
