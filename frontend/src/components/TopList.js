@@ -45,7 +45,9 @@ function TopList({ type }) {
       </Paper>
 
       {items.length ? (
-        items.map((item, key) => <TopUnit type={type} key={key} unit={item} />)
+        items.map((item, key) => (
+          <TopUnit type={type} key={key} rank={key + 1} unit={item} />
+        ))
       ) : (
         <Loader />
       )}

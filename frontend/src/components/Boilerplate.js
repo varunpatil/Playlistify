@@ -79,7 +79,7 @@ export default function BoilerPlate(props) {
       </AppBar>
 
       <Router>
-        <nav className={classes.drawer} aria-label="mailbox folders">
+        <nav className={classes.drawer} aria-label="drawer">
           {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
           <Hidden smUp implementation="css">
             <Drawer
@@ -105,7 +105,7 @@ export default function BoilerPlate(props) {
               variant="permanent"
               open
             >
-              <SideBar toggle={() => {}} />
+              <SideBar />
             </Drawer>
           </Hidden>
         </nav>
