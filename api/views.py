@@ -1,3 +1,4 @@
+import os
 import json
 import time
 
@@ -38,7 +39,14 @@ def login(request):
         auth_url = auth_manager.get_authorize_url()
         return JsonResponse({"auth_url": auth_url})
 
-    return JsonResponse({"message": "Already Logged In"})
+    return JsonResponse({"message": "Success"})
+
+
+def logout(request):
+    cache_path = utils.session_cache_path(request)
+    os.remove(cache_path)
+    request.session.flush()
+    return JsonResponse({"message": "Success"})
 
 
 def me(request):

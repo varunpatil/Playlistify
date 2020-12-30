@@ -20,9 +20,11 @@ import {
   Home,
   ExpandLess,
   ExpandMore,
+  PowerSettingsNew,
 } from "@material-ui/icons";
 
 import Loader from "./Loader";
+import { logout } from "../utils";
 
 export default function SideBar({ toggle }) {
   const classes = useStyles();
@@ -70,6 +72,14 @@ export default function SideBar({ toggle }) {
           },
         ]}
       />
+      <Divider />
+
+      <ListItem button key="logout" onClick={logout}>
+        <ListItemIcon>
+          <PowerSettingsNew />
+        </ListItemIcon>
+        <ListItemText primary="Logout" />
+      </ListItem>
       <Divider />
     </List>
   );
