@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from spotipy import SpotifyException
 
-from . import utils, helpers
+from . import utils, helpers, lyrics
 
 
 @require_http_methods('POST')
@@ -51,6 +51,24 @@ def logout(request):
 
 def me(request):
     return JsonResponse(request.session['me'])
+
+
+def now_playing(request):
+    response = request.sp[0].current_user_playing_track()
+    if response is None:
+        return JsonResponse({'message': 'No track currently playing.'})
+    return JsonResponse(response)
+
+
+def get_lyrics(request):
+    track_name = request.GET['track_name']
+    artist_name = request.GET['artist_name']
+    song = lyrics.get_song(track_name, artist_name)
+
+    if not song:
+        return JsonResponse({"found": False})
+
+    return JsonResponse(song)
 
 
 def top_tracks(request):
