@@ -3,13 +3,6 @@ from musixmatch import Musixmatch
 from project.config import GENIUS_TOKEN, MUSIXMATCH_TOKEN
 
 
-def sanitize(name):
-    for x in [" - ", "("]:
-        if x in name:
-            name = name.split(x)[0]
-    return name.strip()
-
-
 def get_song(track_name, artist_name):
     song = get_song_genius(track_name, artist_name)
     if song:
@@ -19,7 +12,7 @@ def get_song(track_name, artist_name):
     if song:
         return song
 
-    return None
+    return {'found': False}
 
 
 def get_song_genius(track_name, artist_name):
@@ -42,7 +35,7 @@ def get_song_genius(track_name, artist_name):
         'found': True,
         'track_name': track_name,
         'artist_name': artist_name,
-        'lyrics': lyrics,
+        'lyrics': add_line_breaks(lyrics),
         'source': 'Genius',
         'source_url': song.url,
     }
@@ -68,6 +61,27 @@ def get_song_musixmatch(track_name, artist_name):
         'found': True,
         'track_name': track_name,
         'artist_name': artist_name,
-        'lyrics': response['message']['body']['lyrics']['lyrics_body'].split('\n'),
+        'lyrics': add_line_breaks(response['message']['body']['lyrics']['lyrics_body'].split('\n')),
         'source': 'Musixmatch',
     }
+
+
+# <----------------------------->
+
+
+def sanitize(name):
+    for x in [" - ", "("]:
+        if x in name:
+            name = name.split(x)[0]
+    return name.strip()
+
+
+def add_line_breaks(my_list):
+    out = []
+
+    for line in my_list:
+        if(len(line) and line[0] == '[' and line[-1] == ']'):
+            out.append("")
+        out.append(line)
+
+    return out

@@ -64,10 +64,6 @@ def get_lyrics(request):
     track_name = request.GET['track_name']
     artist_name = request.GET['artist_name']
     song = lyrics.get_song(track_name, artist_name)
-
-    if not song:
-        return JsonResponse({"found": False})
-
     return JsonResponse(song)
 
 
