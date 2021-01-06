@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Iframe from "react-iframe";
 
 import {
   makeStyles,
@@ -22,6 +23,8 @@ import {
   YouTube,
   Help,
 } from "@material-ui/icons";
+
+import Loader from "./Loader";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,6 +53,7 @@ export default function HomePage() {
   const classes = useStyles();
   const [trackId, setTrackId] = useState(null);
   const [nowPlaying, setNowPlaying] = useState(null);
+  const [songInfo, setSongInfo] = useState(null);
 
   useEffect(() => {
     const refreshTime = 3000;
@@ -61,12 +65,19 @@ export default function HomePage() {
     return () => clearInterval(refreshNowPlaying);
   }, []);
 
-  useEffect(() => {
+  useEffect(async () => {
     if (!nowPlaying) return;
 
     if (nowPlaying.item.id !== trackId) {
       console.log("new track");
       setTrackId(nowPlaying.item.id);
+      setSongInfo(null);
+      const res = await axios.get(
+        `/api/lyrics?track_name=${nowPlaying.item.name}&artist_name=${nowPlaying.item.artists[0].name}`
+      );
+      if (res.data.found) {
+        setSongInfo(res.data);
+      }
     } else {
       console.log("updating");
     }
@@ -110,9 +121,24 @@ export default function HomePage() {
         }
       />
       <br />
-      <DropDown content="Lyrics" icon={FormatAlignLeft} />
-      <DropDown content="Meaning" icon={Help} />
-      <DropDown content="Watch Video" icon={YouTube} />
+      <DropDown
+        name="Lyrics"
+        icon={FormatAlignLeft}
+        component={Lyrics}
+        info={songInfo}
+      />
+      <DropDown
+        name="Meaning"
+        icon={Help}
+        component={Meaning}
+        info={songInfo}
+      />
+      <DropDown
+        name="Watch Video"
+        icon={YouTube}
+        component={Video}
+        info={songInfo}
+      />
     </div>
   );
 }
@@ -132,13 +158,47 @@ function DropDown(props) {
         <ListItemIcon>
           <props.icon />
         </ListItemIcon>
-        <ListItemText primary={props.content} />
+        <ListItemText primary={props.name} />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
 
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <div>This is {props.content}</div>
+        <props.component {...props} />
       </Collapse>
     </List>
   );
+}
+
+function Lyrics(props) {
+  let lyrics = <Loader />;
+  if (props.info) {
+    lyrics = <div>{props.info.lyrics}</div>;
+  }
+  return lyrics;
+}
+
+function Meaning(props) {
+  let meaning = <Loader />;
+  if (props.info) {
+    meaning = <div>{props.info.meaning}</div>;
+  }
+  return meaning;
+}
+
+function Video(props) {
+  let video = <Loader />;
+  if (props.info) {
+    video = (
+      <Iframe
+        url={props.info.youtube_embed_url}
+        width="450px"
+        height="450px"
+        id="myId"
+        className="myClassname"
+        display="initial"
+        position="relative"
+      />
+    );
+  }
+  return video;
 }

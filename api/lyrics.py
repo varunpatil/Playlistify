@@ -1,3 +1,4 @@
+import json
 from lyricsgenius import Genius
 from musixmatch import Musixmatch
 from project.config import GENIUS_TOKEN, MUSIXMATCH_TOKEN
@@ -24,25 +25,30 @@ def get_song_genius(track_name, artist_name):
         if not song:
             return None
 
-    lyrics = song.lyrics.split('\n')
-    word_count = 0
-    for line in lyrics:
-        word_count += len(line.split())
-    if word_count > 2500:  # filter out incorrect lyrics
+    song = json.loads(song.to_json())
+
+    lyrics = song['lyrics'].split('\n')
+    lyrics = add_line_breaks(lyrics)
+    if not check_lyrics(lyrics):
         return None
+
+    try:
+        meaning = song['description']['plain'].split('\n')
+    except:
+        meaning = None
 
     response = {
         'found': True,
-        'track_name': track_name,
-        'artist_name': artist_name,
-        'lyrics': add_line_breaks(lyrics),
+        'track_name': song['title'],
+        'artist_name': song['primary_artist']['name'],
+        'lyrics': lyrics,
+        'meaning': meaning,
         'source': 'Genius',
-        'source_url': song.url,
+        'source_url': song['url'],
     }
 
-    for item in song.media:
+    for item in song['media']:
         if item['provider'] == 'youtube':
-            response['youtube_url'] = item['url']
             response['youtube_embed_url'] = 'https://www.youtube.com/embed/' + \
                 item['url'].split('=')[1]
             break
@@ -74,6 +80,11 @@ def sanitize(name):
         if x in name:
             name = name.split(x)[0]
     return name.strip()
+
+
+def check_lyrics(lyrics):
+    word_count = sum(len(line.split()) for line in lyrics)
+    return (word_count < 2500)
 
 
 def add_line_breaks(my_list):
