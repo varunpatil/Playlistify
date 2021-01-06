@@ -2,14 +2,26 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import {
-  Box,
   makeStyles,
   Card,
   CardContent,
   CardMedia,
   LinearProgress,
   Typography,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Collapse,
 } from "@material-ui/core";
+
+import {
+  FormatAlignLeft,
+  ExpandLess,
+  ExpandMore,
+  YouTube,
+  Help,
+} from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
   },
   progress: {
     height: "6px",
+  },
+  list: {
+    backgroundColor: theme.palette.background.paper,
   },
 }));
 
@@ -94,6 +109,36 @@ export default function HomePage() {
             : 0
         }
       />
+      <br />
+      <DropDown content="Lyrics" icon={FormatAlignLeft} />
+      <DropDown content="Meaning" icon={Help} />
+      <DropDown content="Watch Video" icon={YouTube} />
     </div>
+  );
+}
+
+function DropDown(props) {
+  const classes = useStyles();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <List className={classes.list}>
+      <ListItem
+        button
+        onClick={() => {
+          setOpen(!open);
+        }}
+      >
+        <ListItemIcon>
+          <props.icon />
+        </ListItemIcon>
+        <ListItemText primary={props.content} />
+        {open ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <div>This is {props.content}</div>
+      </Collapse>
+    </List>
   );
 }
