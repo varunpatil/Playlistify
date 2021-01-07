@@ -13,7 +13,7 @@ def get_song(track_name, artist_name):
     if song:
         return song
 
-    return {'found': False}
+    return {}
 
 
 def get_song_genius(track_name, artist_name):
@@ -34,11 +34,12 @@ def get_song_genius(track_name, artist_name):
 
     try:
         meaning = song['description']['plain'].split('\n')
+        if (len(meaning) == 1 and meaning[0] == '?'):
+            meaning = None
     except:
         meaning = None
 
     response = {
-        'found': True,
         'track_name': song['title'],
         'artist_name': song['primary_artist']['name'],
         'lyrics': lyrics,
@@ -64,7 +65,6 @@ def get_song_musixmatch(track_name, artist_name):
         return None
 
     return {
-        'found': True,
         'track_name': track_name,
         'artist_name': artist_name,
         'lyrics': add_line_breaks(response['message']['body']['lyrics']['lyrics_body'].split('\n')),
