@@ -19,7 +19,6 @@ function TopList({ type }) {
   const [timeRange, setTimeRange] = useState("short_term");
 
   useEffect(async () => {
-    // setItems(null);
     const res = await axios.get(
       `/api/top/${type.toLowerCase()}s?time_range=` + timeRange
     );

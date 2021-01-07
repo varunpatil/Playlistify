@@ -88,10 +88,13 @@ def check_lyrics(lyrics):
 
 
 def add_line_breaks(my_list):
-    out = []
+    if not len(my_list):
+        return my_list
 
-    for line in my_list:
-        if(len(line) and line[0] == '[' and line[-1] == ']'):
+    out = [my_list[0]]
+
+    for line in my_list[1:]:
+        if out[-1] != "" and len(line) and line[0] == '[' and line[-1] == ']':
             out.append("")
         out.append(line)
 
