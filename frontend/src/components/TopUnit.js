@@ -10,6 +10,7 @@ import {
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    position: "relative",
     marginBottom: theme.spacing(3),
     height: theme.spacing(15),
   },
@@ -23,13 +24,25 @@ const useStyles = makeStyles((theme) => ({
   cover: {
     minWidth: theme.spacing(15),
   },
+  rank: {
+    position: "absolute",
+    color: "white",
+    backgroundColor: theme.palette.background.paper,
+    borderTopRightRadius: "5em",
+    borderBottomRightRadius: "5em",
+    paddingRight: "10px",
+    paddingLeft: "5px",
+  },
 }));
 
-export default function TopUnit({ type, unit }) {
+export default function TopUnit({ type, rank, unit }) {
   const classes = useStyles();
 
   return (
     <Card className={classes.root}>
+      <Typography variant="h6" className={classes.rank}>
+        {"#" + rank}
+      </Typography>
       <CardMedia
         className={classes.cover}
         image={type === "Track" ? unit.album.images[1].url : unit.images[1].url}

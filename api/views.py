@@ -1,3 +1,4 @@
+import os
 import json
 import time
 
@@ -6,7 +7,7 @@ from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from spotipy import SpotifyException
 
-from . import utils, helpers
+from . import utils, helpers, lyrics
 
 
 @require_http_methods('POST')
@@ -38,11 +39,32 @@ def login(request):
         auth_url = auth_manager.get_authorize_url()
         return JsonResponse({"auth_url": auth_url})
 
-    return JsonResponse({"message": "Already Logged In"})
+    return JsonResponse({"message": "Success"})
+
+
+def logout(request):
+    cache_path = utils.session_cache_path(request)
+    os.remove(cache_path)
+    request.session.flush()
+    return JsonResponse({"message": "Success"})
 
 
 def me(request):
     return JsonResponse(request.session['me'])
+
+
+def now_playing(request):
+    response = request.sp[0].current_user_playing_track()
+    if response is None:
+        return JsonResponse({'message': 'No track currently playing.'})
+    return JsonResponse(response)
+
+
+def get_lyrics(request):
+    track_name = request.GET['track_name']
+    artist_name = request.GET['artist_name']
+    song = lyrics.get_song(track_name, artist_name)
+    return JsonResponse(song)
 
 
 def top_tracks(request):
@@ -132,6 +154,7 @@ def similar_artists(request):
     body = json.loads(request.body)
     playlist_id = body['playlist_id']
     artist_ids = body['artist_ids'][:20]
+    artist_ids = helpers.remove_duplicates(artist_ids)
 
     similar_artist_ids = []
 
@@ -150,7 +173,7 @@ def similar_artists(request):
 
     tracks = sorted(tracks, key=lambda k: k['popularity'], reverse=True)
     track_ids = [track['id'] for track in tracks]
-    track_ids = helpers.filter_saved_tracks(request, track_ids)
 
-    helpers.add_to_playlist(request, playlist_id, track_ids, limit=50)
+    helpers.add_to_playlist(request, playlist_id, track_ids,
+                            limit=50, allow_saved_tracks=False)
     return JsonResponse({"message": "success"})

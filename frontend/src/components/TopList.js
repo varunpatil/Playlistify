@@ -19,7 +19,6 @@ function TopList({ type }) {
   const [timeRange, setTimeRange] = useState("short_term");
 
   useEffect(async () => {
-    // setItems(null);
     const res = await axios.get(
       `/api/top/${type.toLowerCase()}s?time_range=` + timeRange
     );
@@ -45,7 +44,9 @@ function TopList({ type }) {
       </Paper>
 
       {items.length ? (
-        items.map((item, key) => <TopUnit type={type} key={key} unit={item} />)
+        items.map((item, key) => (
+          <TopUnit type={type} key={key} rank={key + 1} unit={item} />
+        ))
       ) : (
         <Loader />
       )}
