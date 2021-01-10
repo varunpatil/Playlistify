@@ -1,16 +1,17 @@
-import os
 import json
+import os
 import time
 
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_POST
+from django.views.decorators.cache import cache_control, cache_page, never_cache
 from spotipy import SpotifyException
 
-from . import utils, helpers, lyrics
+from . import helpers, lyrics, utils
 
 
-@require_http_methods('POST')
+@require_POST
 def login(request):
     body = json.loads(request.body)
     auth_manager = utils.get_auth_manager(request)
@@ -49,10 +50,12 @@ def logout(request):
     return JsonResponse({"message": "Success"})
 
 
+@cache_control(max_age=3600)
 def me(request):
     return JsonResponse(request.session['me'])
 
 
+@never_cache
 def now_playing(request):
     response = request.sp[0].current_user_playing_track()
     if response is None:
@@ -60,6 +63,7 @@ def now_playing(request):
     return JsonResponse(response)
 
 
+@cache_control(max_age=3600)
 def get_lyrics(request):
     track_name = request.GET['track_name']
     artist_name = request.GET['artist_name']
@@ -67,6 +71,7 @@ def get_lyrics(request):
     return JsonResponse(song)
 
 
+@cache_control(max_age=3600)
 def top_tracks(request):
     time_range = request.GET.get('time_range', 'short_term')
     response = request.sp[0].current_user_top_tracks(
@@ -75,6 +80,7 @@ def top_tracks(request):
     return JsonResponse(response['items'], safe=False)
 
 
+@cache_control(max_age=3600)
 def top_artists(request):
     time_range = request.GET.get('time_range', 'short_term')
     response = request.sp[0].current_user_top_artists(
@@ -83,7 +89,7 @@ def top_artists(request):
     return JsonResponse(response['items'], safe=False)
 
 
-@require_http_methods('POST')
+@require_POST
 def playlist_create(request):
     body = json.loads(request.body)
     name = body['name']
@@ -98,7 +104,7 @@ def playlist_create(request):
     return JsonResponse({"playlist_id": response['id']})
 
 
-@require_http_methods('POST')
+@require_POST
 def playlist_add(request):
     body = json.loads(request.body)
     playlist_id = body['playlist_id']
@@ -108,7 +114,7 @@ def playlist_add(request):
     return JsonResponse({"message": "success"})
 
 
-@require_http_methods('POST')
+@require_POST
 def playlist_top_artists(request):
     body = json.loads(request.body)
     playlist_id = body['playlist_id']
@@ -127,7 +133,7 @@ def playlist_top_artists(request):
     return JsonResponse({"message": "success"})
 
 
-@require_http_methods('POST')
+@require_POST
 def seed_recommendation(request):
     body = json.loads(request.body)
     playlist_id = body['playlist_id']
@@ -149,7 +155,7 @@ def seed_recommendation(request):
     return JsonResponse({"message": "success"})
 
 
-@require_http_methods('POST')
+@require_POST
 def similar_artists(request):
     body = json.loads(request.body)
     playlist_id = body['playlist_id']
