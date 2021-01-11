@@ -56,7 +56,6 @@ MIDDLEWARE = [
 
     'api.middleware.LoginRequiredMiddleware',
     'api.middleware.InitRequestMiddleware',
-    'api.middleware.AddCacheHeaderMiddleware',
     'api.middleware.TimerMiddleware',
 ]
 

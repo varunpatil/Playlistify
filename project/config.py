@@ -7,10 +7,3 @@ MUSIXMATCH_TOKEN = os.environ.get('MUSIXMATCH_API_KEY')
 min = 60
 hr = 60*min
 day = 24*hr
-
-cache_ages = {
-    'me': hr,
-    'lyrics': hr,
-    'top/tracks': hr,
-    'top/artists': hr,
-}

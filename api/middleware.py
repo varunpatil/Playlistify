@@ -6,7 +6,6 @@ from django.urls import reverse
 from spotipy import SpotifyException
 
 from . import utils
-from project.config import cache_ages
 
 
 class LoginRequiredMiddleware:
@@ -45,20 +44,6 @@ class InitRequestMiddleware:
                 request.session['me'] = request.sp[0].me()
 
         response = self.get_response(request)
-        return response
-
-
-class AddCacheHeaderMiddleware:
-    def __init__(self, get_response):
-        self.get_response = get_response
-
-    def __call__(self, request):
-        response = self.get_response(request)
-
-        if request.method == "GET" and request.path.startswith('/api') and response.status_code == 200:
-            cache_age = cache_ages.get(request.path[5:], 0)
-            response['Cache-Control'] = "private, max-age={}".format(cache_age)
-
         return response
 
 

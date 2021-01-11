@@ -7,22 +7,22 @@ import {
   Card,
   CardContent,
   CardMedia,
+  Collapse,
   Divider,
   LinearProgress,
-  Typography,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  Collapse,
+  Typography,
 } from "@material-ui/core";
 
 import {
-  FormatAlignLeft,
   ExpandLess,
   ExpandMore,
-  YouTube,
+  FormatAlignLeft,
   Help,
+  YouTube,
 } from "@material-ui/icons";
 
 export default function HomePage() {
@@ -109,11 +109,11 @@ export default function HomePage() {
         info={songInfo}
       />
 
-      <Divider classes={{ root: classes.divider }} />
+      <Divider className={classes.divider} />
 
       <DropDown name="Meaning" icon={Help} component={Text} info={songInfo} />
 
-      <Divider classes={{ root: classes.divider }} />
+      <Divider className={classes.divider} />
 
       <DropDown
         name="Watch Video"
@@ -156,10 +156,18 @@ function DropDown(props) {
 function Text(props) {
   const classes = useStyles();
   let output = <Loader />;
+
   if (props.info) {
-    if (props.info.found) {
-      const data =
-        props.name === "Lyrics" ? props.info.lyrics : props.info.meaning;
+    output = (
+      <Typography variant="h6" align="center">
+        {props.name} Not Found :(
+      </Typography>
+    );
+
+    const data =
+      props.name === "Lyrics" ? props.info.lyrics : props.info.meaning;
+
+    if (data) {
       output = data.map((line) =>
         line !== "" ? (
           <Typography align="center" className={classes.text}>
@@ -168,12 +176,6 @@ function Text(props) {
         ) : (
           <br />
         )
-      );
-    } else {
-      output = (
-        <Typography variant="h6" align="center">
-          {props.name} Not Found :(
-        </Typography>
       );
     }
   }
