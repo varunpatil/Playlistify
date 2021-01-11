@@ -12,6 +12,8 @@ urlpatterns = [
     path('top/tracks', views.top_tracks),
     path('top/artists', views.top_artists),
 
+    path('playlists/', views.playlists),
+
     path('playlist/create/', views.playlist_create),
     path('playlist/add/', views.playlist_add),
     path('playlist/top/artists/', views.playlist_top_artists),

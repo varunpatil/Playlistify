@@ -89,6 +89,27 @@ def top_artists(request):
     return JsonResponse(response['items'], safe=False)
 
 
+@cache_control(max_age=0)
+def playlists(request):
+    response = request.sp[0].current_user_playlists()
+    playlists = response['items']
+
+    while response['next']:
+        response = request.sp[0].next(response)
+        playlists.extend(response['items'])
+
+    result = [{
+        'name': item['name'],
+        'id': item['id'],
+        'total_tracks': item['tracks']['total'],
+        'owner': item['owner']['id'] == request.session['me']['id'],
+        'public': item['public'],
+        'image_url': item['images'][1]['url'] if (len(item['images']) > 1) else item['images'][0]['url'],
+    } for item in playlists]
+
+    return JsonResponse(result, safe=False)
+
+
 @require_POST
 def playlist_create(request):
     body = json.loads(request.body)
