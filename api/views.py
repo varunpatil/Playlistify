@@ -63,7 +63,7 @@ def now_playing(request):
     return JsonResponse(response)
 
 
-@cache_control(max_age=3600)
+@cache_control(max_age=365*24*3600)
 def get_lyrics(request):
     track_name = request.GET['track_name']
     artist_name = request.GET['artist_name']

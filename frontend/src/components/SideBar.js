@@ -20,6 +20,7 @@ import {
   Home,
   ExpandLess,
   ExpandMore,
+  PlaylistPlay,
   PowerSettingsNew,
 } from "@material-ui/icons";
 
@@ -53,8 +54,13 @@ export default function SideBar({ toggle }) {
   return (
     <List>
       {user ? getUser() : <Loader />}
-      <Base name="Home" path="/" icon={Home} toggle={toggle} />
+
       <Divider />
+
+      <Base name="Home" path="/" icon={Home} toggle={toggle} />
+
+      <Divider />
+
       <Parent
         name="Rankings"
         icon={TrendingUp}
@@ -72,6 +78,16 @@ export default function SideBar({ toggle }) {
           },
         ]}
       />
+
+      <Divider />
+
+      <Base
+        name="Playlists"
+        path="/playlists"
+        icon={PlaylistPlay}
+        toggle={toggle}
+      />
+
       <Divider />
 
       <ListItem button key="logout" onClick={logout}>
@@ -80,6 +96,7 @@ export default function SideBar({ toggle }) {
         </ListItemIcon>
         <ListItemText primary="Logout" />
       </ListItem>
+
       <Divider />
     </List>
   );
