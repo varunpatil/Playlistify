@@ -89,7 +89,7 @@ def top_artists(request):
     return JsonResponse(response['items'], safe=False)
 
 
-@cache_control(max_age=0)
+@cache_control(max_age=3600)
 def playlists(request):
     response = request.sp[0].current_user_playlists()
     playlists = response['items']
