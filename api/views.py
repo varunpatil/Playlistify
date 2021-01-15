@@ -8,13 +8,13 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.cache import cache_control, cache_page, never_cache
 from spotipy import SpotifyException
 
-from . import helpers, lyrics, utils
+from . import helpers, lyrics, spotify
 
 
 @require_POST
 def login(request):
     body = json.loads(request.body)
-    auth_manager = utils.get_auth_manager(request)
+    auth_manager = spotify.get_auth_manager(request)
 
     if body.get("code"):
         # Step 4. After getting redirected from Spotify auth page in Step 3
@@ -44,7 +44,7 @@ def login(request):
 
 
 def logout(request):
-    cache_path = utils.session_cache_path(request)
+    cache_path = spotify.session_cache_path(request)
     os.remove(cache_path)
     request.session.flush()
     return JsonResponse({"message": "Success"})

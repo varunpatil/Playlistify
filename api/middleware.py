@@ -5,7 +5,7 @@ from django.urls import reverse
 from project.settings import TIMER
 from spotipy import SpotifyException
 
-from . import utils
+from . import spotify
 
 
 class LoginRequiredMiddleware:
@@ -14,7 +14,7 @@ class LoginRequiredMiddleware:
 
     def __call__(self, request):
         if request.path.startswith('/api') and request.path != reverse('login'):
-            auth_manager = utils.get_auth_manager(request)
+            auth_manager = spotify.get_auth_manager(request)
 
             try:
                 if not auth_manager.get_cached_token():
@@ -37,8 +37,8 @@ class InitRequestMiddleware:
 
     def __call__(self, request):
         if request.path.startswith('/api') and request.path != reverse('login'):
-            auth_manager = utils.get_auth_manager(request)
-            request.sp = utils.get_spotify_api_clients(request)
+            auth_manager = spotify.get_auth_manager(request)
+            request.sp = spotify.get_spotify_api_clients(request)
 
             if not request.session.get('me'):
                 request.session['me'] = request.sp[0].me()
