@@ -82,9 +82,8 @@ export default function CreatePlaylistMenu(props) {
   ));
 
   return (
-    <Fab aria-label="others" color="primary" className={classes.fab}>
+    <Fab color="primary" className={classes.fab}>
       <IconButton
-        aria-label="more"
         onClick={(event) => {
           setAnchorEl(event.currentTarget);
         }}

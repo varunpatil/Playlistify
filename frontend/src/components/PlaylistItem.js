@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import {
   makeStyles,
@@ -8,7 +9,6 @@ import {
   CardMedia,
   Chip,
   Grid,
-  Link,
   Typography,
   Box,
   Button,
@@ -50,20 +50,24 @@ export default function PlaylistItem({ playlist }) {
   );
 }
 
-const CustomButton = ({ show = true, name, icon }) => {
+const CustomButton = (props) => {
   const classes = useStyles();
   let content = null;
 
-  if (show) {
+  // show is true by default
+  // Show button if props.show is null
+  if (props.show !== false) {
     content = (
       <Grid item>
         <Button
           size="small"
           variant="contained"
+          component={Link}
+          to={props.path}
+          endIcon={props.icon}
           className={classes.button}
-          endIcon={icon}
         >
-          {name}
+          {props.name}
         </Button>
       </Grid>
     );
