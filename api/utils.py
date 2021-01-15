@@ -1,12 +1,26 @@
 import os
 import uuid
 import spotipy
-from django.conf import settings
 
 # <---------------------------Cache and Session-----------------------------------------> #
 
-scope = settings.SCOPE
 caches_folder = './.caches/'
+
+scope = ' '.join([
+    'playlist-read-collaborative',
+    'playlist-modify-private',
+    'playlist-modify-public',
+    'playlist-read-private',
+    'user-read-playback-position',
+    'user-read-recently-played',
+    'user-top-read',
+    'user-read-currently-playing',
+    'user-read-playback-state',
+    'user-read-private',
+    'user-read-email',
+    'user-library-read',
+    'user-modify-playback-state',
+])
 
 if not os.path.exists(caches_folder):
     os.makedirs(caches_folder)

@@ -1,8 +1,8 @@
 import time
 
-from django.conf import settings
 from django.http import JsonResponse
 from django.urls import reverse
+from project.settings import TIMER
 from spotipy import SpotifyException
 
 from . import utils
@@ -55,7 +55,7 @@ class TimerMiddleware:
         start = time.time()
         response = self.get_response(request)
         end = time.time()
-        if settings.TIMER:
+        if TIMER:
             print()
             print()
             print("Took " + str(end - start) + " secs")

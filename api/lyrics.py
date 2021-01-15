@@ -1,7 +1,8 @@
 import json
+
 from lyricsgenius import Genius
 from musixmatch import Musixmatch
-from project.config import GENIUS_TOKEN, MUSIXMATCH_TOKEN
+from project.settings import GENIUS_TOKEN, MUSIXMATCH_TOKEN
 from textdistance import ratcliff_obershelp
 
 
