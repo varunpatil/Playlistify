@@ -59,9 +59,24 @@ def me(request):
 @never_cache
 def now_playing(request):
     response = request.sp[0].current_user_playing_track()
-    if response is None:
-        return JsonResponse({'message': 'No track currently playing.'})
-    return JsonResponse(response)
+    if (
+        response is None or
+        response['currently_playing_type'] != 'track' or
+        response['item']['is_local']
+    ):
+        return JsonResponse({'message': 'No track currently playing'})
+    # Returning only required info because this endpoint is hit every 3 seconds with no cache
+    # 12x less network usage
+    result = {
+        'track_id': response['item']['id'],
+        'track_name': response['item']['name'],
+        'artist_name': response['item']['artists'][0]['name'],
+        'album_name': response['item']['album']['name'],
+        'progress_ms': response['progress_ms'],
+        'duration_ms': response['item']['duration_ms'],
+        'image_url': response['item']['album']['images'][1]['url'],
+    }
+    return JsonResponse(result)
 
 
 @cache_control(max_age=365*24*3600)

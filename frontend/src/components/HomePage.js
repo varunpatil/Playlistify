@@ -34,7 +34,7 @@ export default function HomePage() {
   // fetch now playing
   const getNowPlaying = async () => {
     const res = await axios.get("/api/now_playing");
-    if (res.data.currently_playing_type === "track") {
+    if (res.data.message !== "No track currently playing") {
       setNowPlaying(res.data);
     }
   };
@@ -55,12 +55,12 @@ export default function HomePage() {
   useEffect(async () => {
     if (!nowPlaying) return;
 
-    if (nowPlaying.item.id !== trackId) {
+    if (nowPlaying.track_id !== trackId) {
       console.log("New Track... fetching lyrics etc");
-      setTrackId(nowPlaying.item.id);
+      setTrackId(nowPlaying.track_id);
       setSongInfo(null);
       const res = await axios.get(
-        `/api/lyrics?track_name=${nowPlaying.item.name}&artist_name=${nowPlaying.item.artists[0].name}`
+        `/api/lyrics?track_name=${nowPlaying.track_name}&artist_name=${nowPlaying.artist_name}`
       );
       setSongInfo(res.data);
     } else {
@@ -73,19 +73,19 @@ export default function HomePage() {
       <Card className={classes.card}>
         <CardMedia
           className={classes.cover}
-          alt={nowPlaying ? nowPlaying.item.name : ""}
-          image={nowPlaying ? nowPlaying.item.album.images[1].url : ""}
-          title={nowPlaying ? nowPlaying.item.name : ""}
+          alt={nowPlaying ? nowPlaying.track_name : ""}
+          image={nowPlaying ? nowPlaying.image_url : ""}
+          title={nowPlaying ? nowPlaying.track_name : ""}
         />
         <CardContent className={classes.content}>
           <Typography variant="h5">
-            {nowPlaying ? nowPlaying.item.name : "Loading"}
+            {nowPlaying ? nowPlaying.track_name : "Loading"}
           </Typography>
           <Typography variant="subtitle1" color="textSecondary">
-            {nowPlaying ? nowPlaying.item.artists[0].name : "Loading"}
+            {nowPlaying ? nowPlaying.artist_name : "Loading"}
           </Typography>
           <Typography variant="subtitle2" color="textSecondary">
-            {nowPlaying ? nowPlaying.item.album.name : "Loading"}
+            {nowPlaying ? nowPlaying.album_name : "Loading"}
           </Typography>
         </CardContent>
       </Card>
@@ -95,7 +95,7 @@ export default function HomePage() {
         className={classes.progress}
         value={
           nowPlaying
-            ? 100 * (nowPlaying.progress_ms / nowPlaying.item.duration_ms)
+            ? 100 * (nowPlaying.progress_ms / nowPlaying.duration_ms)
             : 0
         }
       />
