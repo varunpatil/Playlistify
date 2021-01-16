@@ -68,24 +68,22 @@ export default function HomePage() {
     }
   }, [nowPlaying]);
 
-  return (
+  return nowPlaying ? (
     <div className={classes.root}>
       <Card className={classes.card}>
         <CardMedia
           className={classes.cover}
-          alt={nowPlaying ? nowPlaying.track_name : ""}
-          image={nowPlaying ? nowPlaying.image_url : ""}
-          title={nowPlaying ? nowPlaying.track_name : ""}
+          alt={nowPlaying.track_name}
+          image={nowPlaying.image_url}
+          title={nowPlaying.track_name}
         />
         <CardContent className={classes.content}>
-          <Typography variant="h5">
-            {nowPlaying ? nowPlaying.track_name : "Loading"}
-          </Typography>
+          <Typography variant="h5">{nowPlaying.track_name}</Typography>
           <Typography variant="subtitle1" color="textSecondary">
-            {nowPlaying ? nowPlaying.artist_name : "Loading"}
+            {nowPlaying.artist_name}
           </Typography>
           <Typography variant="subtitle2" color="textSecondary">
-            {nowPlaying ? nowPlaying.album_name : "Loading"}
+            {nowPlaying.album_name}
           </Typography>
         </CardContent>
       </Card>
@@ -93,11 +91,7 @@ export default function HomePage() {
       <LinearProgress
         variant="determinate"
         className={classes.progress}
-        value={
-          nowPlaying
-            ? 100 * (nowPlaying.progress_ms / nowPlaying.duration_ms)
-            : 0
-        }
+        value={100 * (nowPlaying.progress_ms / nowPlaying.duration_ms)}
       />
 
       <br />
@@ -122,12 +116,14 @@ export default function HomePage() {
         info={songInfo}
       />
     </div>
+  ) : (
+    <NothingPlaying />
   );
 }
 
 // ------------------- SubComponents -------------------------- //
 
-function DropDown(props) {
+const DropDown = (props) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
@@ -151,9 +147,9 @@ function DropDown(props) {
       </Collapse>
     </List>
   );
-}
+};
 
-function Text(props) {
+const Text = (props) => {
   const classes = useStyles();
   let output = <Loader />;
 
@@ -180,9 +176,9 @@ function Text(props) {
     }
   }
   return output;
-}
+};
 
-function Video(props) {
+const Video = (props) => {
   const classes = useStyles();
   let video = <Loader />;
   if (props.info) {
@@ -206,7 +202,12 @@ function Video(props) {
     }
   }
   return video;
-}
+};
+
+const NothingPlaying = () => {
+  // temporary
+  return <div>Nothing Playing</div>;
+};
 
 // ------------------- Styles -------------------------- //
 
