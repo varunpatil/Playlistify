@@ -5,7 +5,7 @@ import time
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_POST
-from django.views.decorators.cache import cache_control, cache_page, never_cache
+from django.views.decorators.cache import cache_control, never_cache
 from spotipy import SpotifyException
 
 from . import helpers, lyrics, spotify
@@ -43,6 +43,7 @@ def login(request):
     return JsonResponse({"message": "Success"})
 
 
+@require_POST
 def logout(request):
     cache_path = spotify.session_cache_path(request)
     os.remove(cache_path)
