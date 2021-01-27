@@ -5,16 +5,16 @@ import time
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_POST
-from django.views.decorators.cache import cache_control, cache_page, never_cache
+from django.views.decorators.cache import cache_control, never_cache
 from spotipy import SpotifyException
 
-from . import helpers, lyrics, utils
+from . import helpers, lyrics, spotify
 
 
 @require_POST
 def login(request):
     body = json.loads(request.body)
-    auth_manager = utils.get_auth_manager(request)
+    auth_manager = spotify.get_auth_manager(request)
 
     if body.get("code"):
         # Step 4. After getting redirected from Spotify auth page in Step 3
@@ -43,8 +43,9 @@ def login(request):
     return JsonResponse({"message": "Success"})
 
 
+@require_POST
 def logout(request):
-    cache_path = utils.session_cache_path(request)
+    cache_path = spotify.session_cache_path(request)
     os.remove(cache_path)
     request.session.flush()
     return JsonResponse({"message": "Success"})
@@ -58,12 +59,27 @@ def me(request):
 @never_cache
 def now_playing(request):
     response = request.sp[0].current_user_playing_track()
-    if response is None:
-        return JsonResponse({'message': 'No track currently playing.'})
-    return JsonResponse(response)
+    if (
+        response is None or
+        response['currently_playing_type'] != 'track' or
+        response['item']['is_local']
+    ):
+        return JsonResponse({'message': 'No track currently playing'})
+    # Returning only required info because this endpoint is hit every 3 seconds with no cache
+    # 12x less network usage
+    result = {
+        'track_id': response['item']['id'],
+        'track_name': response['item']['name'],
+        'artist_name': response['item']['artists'][0]['name'],
+        'album_name': response['item']['album']['name'],
+        'progress_ms': response['progress_ms'],
+        'duration_ms': response['item']['duration_ms'],
+        'image_url': response['item']['album']['images'][1]['url'],
+    }
+    return JsonResponse(result)
 
 
-@cache_control(max_age=3600)
+@cache_control(max_age=365*24*3600)
 def get_lyrics(request):
     track_name = request.GET['track_name']
     artist_name = request.GET['artist_name']
@@ -87,6 +103,27 @@ def top_artists(request):
         time_range=time_range, limit=50)
 
     return JsonResponse(response['items'], safe=False)
+
+
+@cache_control(max_age=3600)
+def playlists(request):
+    response = request.sp[0].current_user_playlists()
+    playlists = response['items']
+
+    while response['next']:
+        response = request.sp[0].next(response)
+        playlists.extend(response['items'])
+
+    result = [{
+        'name': item['name'],
+        'id': item['id'],
+        'total_tracks': item['tracks']['total'],
+        'owner': item['owner']['id'] == request.session['me']['id'],
+        'public': item['public'],
+        'image_url': item['images'][1]['url'] if (len(item['images']) > 1) else item['images'][0]['url'],
+    } for item in playlists]
+
+    return JsonResponse(result, safe=False)
 
 
 @require_POST

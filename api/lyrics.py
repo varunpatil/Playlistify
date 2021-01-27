@@ -1,7 +1,8 @@
 import json
+
 from lyricsgenius import Genius
 from musixmatch import Musixmatch
-from project.config import GENIUS_TOKEN, MUSIXMATCH_TOKEN
+from project.settings import GENIUS_TOKEN, MUSIXMATCH_TOKEN
 from textdistance import ratcliff_obershelp
 
 
@@ -33,10 +34,6 @@ def get_song_genius(track_name, artist_name):
     if not valid_song(track_name, song['title'], artist_name, song['primary_artist']['name']):
         return None
 
-    lyrics = add_line_breaks(song['lyrics'].split('\n'))
-    if not valid_lyrics(lyrics):
-        return None
-
     try:
         meaning = song['description']['plain'].split('\n')
         assert (meaning != ["?"])
@@ -44,7 +41,7 @@ def get_song_genius(track_name, artist_name):
         meaning = None
 
     response = {
-        'lyrics': lyrics,
+        'lyrics': add_line_breaks(song['lyrics'].split('\n')),
         'meaning': meaning,
         'source': 'Genius',
         'source_url': song['url'],
@@ -69,11 +66,8 @@ def get_song_musixmatch(track_name, artist_name):
     lyrics = add_line_breaks(
         response['message']['body']['lyrics']['lyrics_body'].split('\n'))
 
-    if lyrics == [""]:
-        lyrics = None
-
     return {
-        'lyrics': lyrics,
+        'lyrics': lyrics if lyrics != [""] else None,
         'source': 'Musixmatch',
     }
 
@@ -94,16 +88,11 @@ def valid_song(*input):
 
     score1 = ratcliff_obershelp(names[0], names[1])
     score2 = ratcliff_obershelp(names[2], names[3])
-    
+
     # print(names[0], "and", names[1], " got a score of ", score1)
     # print(names[2], "and", names[3], " got a score of ", score2)
 
     return score1 >= minimum_score[0] and score2 >= minimum_score[1]
-
-
-def valid_lyrics(lyrics):
-    word_count = sum(len(line.split()) for line in lyrics)
-    return (word_count < 2500)
 
 
 def add_line_breaks(my_list):

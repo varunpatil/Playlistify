@@ -1,12 +1,27 @@
 import os
 import uuid
 import spotipy
-from django.conf import settings
+from project.settings import SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI
+
+caches_folder = './.caches/'
+
+scope = ' '.join([
+    'playlist-read-collaborative',
+    'playlist-modify-private',
+    'playlist-modify-public',
+    'playlist-read-private',
+    'user-read-playback-position',
+    'user-read-recently-played',
+    'user-top-read',
+    'user-read-currently-playing',
+    'user-read-playback-state',
+    'user-read-private',
+    'user-read-email',
+    'user-library-read',
+    'user-modify-playback-state',
+])
 
 # <---------------------------Cache and Session-----------------------------------------> #
-
-scope = settings.SCOPE
-caches_folder = './.caches/'
 
 if not os.path.exists(caches_folder):
     os.makedirs(caches_folder)
@@ -22,6 +37,9 @@ def session_cache_path(request):
 
 def get_auth_manager(request):
     auth_manager = spotipy.oauth2.SpotifyOAuth(
+        client_id=SPOTIFY_CLIENT_ID,
+        client_secret=SPOTIFY_CLIENT_SECRET,
+        redirect_uri=SPOTIFY_REDIRECT_URI,
         scope=scope,
         cache_path=session_cache_path(request),
         show_dialog=True,
@@ -42,7 +60,11 @@ def get_spotify_api_clients(request):
 
     sp0 = spotipy.Spotify(auth_manager=get_auth_manager(request))
     sp1 = spotipy.Spotify(
-        auth_manager=spotipy.oauth2.SpotifyClientCredentials())
+        auth_manager=spotipy.oauth2.SpotifyClientCredentials(
+            client_id=SPOTIFY_CLIENT_ID,
+            client_secret=SPOTIFY_CLIENT_SECRET
+        )
+    )
 
     sp = (sp0, sp1)
 
