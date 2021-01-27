@@ -41,9 +41,6 @@ export default function PlaylistItem({ playlist }) {
       <CardActions>
         <Grid container justify="center" alignItems="center" spacing={1}>
           <CustomButton name="analyze" icon={<PieChart />} />
-          <CustomButton name="analyze" icon={<PieChart />} />
-          <CustomButton name="analyze" icon={<PieChart />} />
-          <CustomButton name="analyze" icon={<PieChart />} />
         </Grid>
       </CardActions>
     </Card>
