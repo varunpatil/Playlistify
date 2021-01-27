@@ -32,12 +32,12 @@ export GENIUS_CLIENT_ACCESS_TOKEN = '<your genius token>'
 export MUSIXMATCH_API_KEY = '<your musixmatch api key>'
 ```
 
-- Create virtualenv and activate it
+#### Create virtualenv and activate it
 ```
 python3 -m venv env
 source env/bin/activate
 ```
-- install requirements and start the django server
+#### install requirements and start the django server
 ```
 pip install -r requirements.txt
 python manage.py migrate
