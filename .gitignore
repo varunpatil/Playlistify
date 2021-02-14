@@ -5,4 +5,5 @@ venv/
 
 .caches/
 extras/
+static/
 db.sqlite3
