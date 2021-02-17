@@ -62,7 +62,7 @@ export default function BoilerPlate(props) {
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
+        <Toolbar variant="dense">
           <IconButton
             color="inherit"
             aria-label="open drawer"
