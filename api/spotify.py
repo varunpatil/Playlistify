@@ -1,9 +1,7 @@
 import os
 import uuid
 import spotipy
-from project.settings import SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI
-
-caches_folder = './.caches/'
+from project.settings import CACHE_DIR, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI
 
 scope = ' '.join([
     'playlist-read-collaborative',
@@ -23,14 +21,14 @@ scope = ' '.join([
 
 # <---------------------------Cache and Session-----------------------------------------> #
 
-if not os.path.exists(caches_folder):
-    os.makedirs(caches_folder)
+if not os.path.exists(CACHE_DIR):
+    os.makedirs(CACHE_DIR)
 
 
 def session_cache_path(request):
     if not request.session.get('uuid'):
         request.session['uuid'] = str(uuid.uuid4())
-    return caches_folder + request.session['uuid']
+    return CACHE_DIR + request.session['uuid']
 
 
 # <---------------------------TOKENS-----------------------------------------------------> #

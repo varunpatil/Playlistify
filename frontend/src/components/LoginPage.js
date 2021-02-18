@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Button from "@material-ui/core/Button";
+import { Box, Grid, Button, Typography, withStyles } from "@material-ui/core";
 
 export default function LoginPage() {
   const [authUrl, setAuthUrl] = useState(null);
@@ -20,11 +20,41 @@ export default function LoginPage() {
   };
 
   return (
-    <div>
-      <h1>This is Login page.</h1>
-      <Button variant="contained" color="primary" href={authUrl}>
-        Login
-      </Button>
-    </div>
+    <Box>
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{ minHeight: "100vh" }}
+        backgroundColor="black"
+        spacing={6}
+      >
+        <Grid item>
+          <WhiteTextTypography variant="h2">
+            <strong>APP</strong>
+          </WhiteTextTypography>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="contained"
+            size="large"
+            color="primary"
+            style={{ borderRadius: 25 }}
+            href={authUrl}
+          >
+            <Typography variant="subtitle1">
+              <strong>Login with your Spotify Account</strong>
+            </Typography>
+          </Button>
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
+
+const WhiteTextTypography = withStyles({
+  root: {
+    color: "#FFFFFF",
+  },
+})(Typography);

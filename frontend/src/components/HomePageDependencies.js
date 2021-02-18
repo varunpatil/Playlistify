@@ -3,7 +3,10 @@ import Loader from "./Loader";
 
 import {
   makeStyles,
+  Card,
+  CardContent,
   Collapse,
+  Grid,
   List,
   ListItem,
   ListItemIcon,
@@ -11,7 +14,13 @@ import {
   Typography,
 } from "@material-ui/core";
 
-import { ExpandLess, ExpandMore } from "@material-ui/icons";
+import {
+  Audiotrack,
+  FormatAlignCenter,
+  Help,
+  YouTube,
+  ExpandMore,
+} from "@material-ui/icons";
 
 export const DropDown = (props) => {
   const classes = useStyles();
@@ -29,7 +38,12 @@ export const DropDown = (props) => {
           <props.icon />
         </ListItemIcon>
         <ListItemText primary={props.name} />
-        {open ? <ExpandLess /> : <ExpandMore />}
+        <ExpandMore
+          className={[
+            classes.dropdown,
+            open ? classes.dropdownOpen : classes.dropdownClosed,
+          ]}
+        />
       </ListItem>
 
       <Collapse in={open} timeout="auto" unmountOnExit>
@@ -95,8 +109,41 @@ export const Video = (props) => {
 };
 
 export const NothingPlaying = () => {
-  // temporary
-  return <div>Nothing Playing</div>;
+  const classes = useStyles();
+  const fontsize = 80;
+
+  return (
+    <div>
+      <Card className={classes.root} variant="outlined">
+        <CardContent>
+          <Typography variant="h6" align="center">
+            You're not listening to anything on Spotify.
+            <br />
+            Whenever you're listening, you'll have access to Lyrics, Meaning and
+            video of the track.
+            <br />
+            If you're actually listening, try switching tracks or restarting
+            your Spotify App.
+          </Typography>
+        </CardContent>
+      </Card>
+      <br /> <br /> <br />
+      <Grid container spacing={8} alignItems="center" justify="center">
+        <Grid item>
+          <Audiotrack style={{ fontSize: fontsize }} />
+        </Grid>
+        <Grid item>
+          <FormatAlignCenter style={{ fontSize: fontsize }} />
+        </Grid>
+        <Grid item>
+          <Help style={{ fontSize: fontsize }} />
+        </Grid>
+        <Grid item>
+          <YouTube style={{ fontSize: fontsize }} />
+        </Grid>
+      </Grid>
+    </div>
+  );
 };
 
 // ------------------- Styles -------------------------- //
@@ -118,5 +165,19 @@ const useStyles = makeStyles((theme) => ({
   text: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
+  },
+  root: {
+    minWidth: 275,
+  },
+  dropdown: {
+    transition: theme.transitions.create(["transform"], {
+      duration: theme.transitions.duration.short,
+    }),
+  },
+  dropdownOpen: {
+    transform: "rotate(-180deg)",
+  },
+  dropdownClosed: {
+    transform: "rotate(0)",
   },
 }));

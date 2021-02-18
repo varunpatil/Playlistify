@@ -18,7 +18,6 @@ import {
   Person,
   TrendingUp,
   Home,
-  ExpandLess,
   ExpandMore,
   PlaylistPlay,
   PowerSettingsNew,
@@ -107,9 +106,19 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(4),
   },
   avatar: {
-    height: theme.spacing(6),
-    width: theme.spacing(6),
-    marginRight: theme.spacing(2),
+    height: theme.spacing(5),
+    width: theme.spacing(5),
+  },
+  dropdown: {
+    transition: theme.transitions.create(["transform"], {
+      duration: theme.transitions.duration.short,
+    }),
+  },
+  dropdownOpen: {
+    transform: "rotate(-180deg)",
+  },
+  dropdownClosed: {
+    transform: "rotate(0)",
   },
 }));
 
@@ -147,7 +156,12 @@ const Parent = (props) => {
           <props.icon />
         </ListItemIcon>
         <ListItemText primary={props.name} />
-        {open ? <ExpandLess /> : <ExpandMore />}
+        <ExpandMore
+          className={[
+            classes.dropdown,
+            open ? classes.dropdownOpen : classes.dropdownClosed,
+          ]}
+        />
       </ListItem>
 
       <Collapse in={open} timeout="auto" unmountOnExit>

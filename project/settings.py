@@ -1,10 +1,10 @@
 import os
 from pathlib import Path
 
-
 # <------------------ Configuration ----------------------->
 DEBUG = True
 TIMER = True
+CACHE_DIR = './.caches/'
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
@@ -14,6 +14,8 @@ SPOTIFY_REDIRECT_URI = os.environ.get('SPOTIFY_REDIRECT_URI')
 
 GENIUS_TOKEN = os.environ.get('GENIUS_CLIENT_ACCESS_TOKEN')
 MUSIXMATCH_TOKEN = os.environ.get('MUSIXMATCH_API_KEY')
+
+ALLOWED_HOSTS = []
 
 # <-------------------other settings-------------------------->
 
@@ -28,7 +30,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -97,3 +98,4 @@ USE_I18N = False
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
