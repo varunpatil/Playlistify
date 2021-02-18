@@ -86,11 +86,8 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: "100%",
   },
   root: {
-    maxWidth: 320,
+    width: 320,
     height: 540,
-    margin: "auto",
-    marginTop: 6,
-    marginBottom: 6,
     padding: 16,
   },
   tags: {

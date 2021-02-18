@@ -16,10 +16,10 @@ export default function Playlists() {
   return (
     <div>
       {playlists.length ? (
-        <Grid container spacing={4} justify="center" alignItems="center">
-          {playlists.map((p, key) => (
-            <Grid item key={key} xs={12} md={6} lg={4} xl={3} spaceing={2}>
-              <PlaylistItem key={key} playlist={p} />
+        <Grid container spacing={8} justify="center" alignItems="center">
+          {playlists.map((playlist, key) => (
+            <Grid item key={key} xs={12} sm="auto" md="auto" lg="auto" xl="auto">
+              <PlaylistItem key={key} playlist={playlist} />
             </Grid>
           ))}
         </Grid>
