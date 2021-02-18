@@ -4,7 +4,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import {
   AppBar,
   CssBaseline,
-  Drawer,
+  SwipeableDrawer,
   Hidden,
   IconButton,
   Toolbar,
@@ -56,8 +56,6 @@ export default function BoilerPlate(props) {
     setMobileOpen(!mobileOpen);
   };
 
-  const container = () => document.body;
-
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -65,7 +63,6 @@ export default function BoilerPlate(props) {
         <Toolbar variant="dense">
           <IconButton
             color="inherit"
-            aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
             className={classes.menuButton}
@@ -81,32 +78,32 @@ export default function BoilerPlate(props) {
       <Router>
         <nav className={classes.drawer} aria-label="drawer">
           {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-          <Hidden smUp implementation="css">
-            <Drawer
-              container={container}
+          {/* Mobile version */}
+          <Hidden smUp implementation="js">
+            <SwipeableDrawer
+              container={() => document.body}
               variant="temporary"
               open={mobileOpen}
+              onOpen={handleDrawerToggle}
               onClose={handleDrawerToggle}
-              classes={{
-                paper: classes.drawerPaper,
-              }}
+              classes={{ paper: classes.drawerPaper }}
               ModalProps={{
                 keepMounted: true, // Better open performance on mobile.
               }}
             >
               <SideBar toggle={handleDrawerToggle} />
-            </Drawer>
+            </SwipeableDrawer>
           </Hidden>
-          <Hidden xsDown implementation="css">
-            <Drawer
-              classes={{
-                paper: classes.drawerPaper,
-              }}
+
+          {/* Desktop version */}
+          <Hidden xsDown implementation="js">
+            <SwipeableDrawer
+              classes={{ paper: classes.drawerPaper }}
               variant="permanent"
               open
             >
               <SideBar />
-            </Drawer>
+            </SwipeableDrawer>
           </Hidden>
         </nav>
 
