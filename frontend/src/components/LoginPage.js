@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Box, Grid, Button, Typography } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import { Box, Grid, Button, Typography, withStyles } from "@material-ui/core";
 
 export default function LoginPage() {
   const [authUrl, setAuthUrl] = useState(null);

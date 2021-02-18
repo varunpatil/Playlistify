@@ -5,6 +5,7 @@ from pathlib import Path
 # <------------------ Configuration ----------------------->
 DEBUG = True
 TIMER = True
+CACHE_DIR = './.caches/'
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
