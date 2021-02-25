@@ -12,7 +12,11 @@ import {
 } from "@material-ui/core";
 
 import { FormatAlignLeft, Help, YouTube } from "@material-ui/icons";
-import { DropDown, Text, Video, NothingPlaying } from "./HomePageDependencies";
+
+import DropDown from "./HomePage/DropDown";
+import Text from "./HomePage/Text";
+import Video from "./HomePage/Video";
+import NothingPlaying from "./HomePage/NothingPlaying";
 
 export default function HomePage() {
   const classes = useStyles();
