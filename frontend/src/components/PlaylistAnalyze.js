@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Loader from "./Loader";
-import Header from "./Analyze/Header";
+import Header from "./PlaylistAnalyze/Header";
 
 export default function PlaylistAnalyze(props) {
   const [data, setData] = useState(null);
