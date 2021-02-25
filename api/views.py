@@ -170,6 +170,70 @@ def playlist_top_artists(request):
     return JsonResponse({"message": "success"})
 
 
+@cache_control(max_age=2*60)
+def playlist_analysis(request, playlist_id):
+    # fetching basic playlist details
+    response = request.sp[1].playlist(
+        playlist_id=playlist_id,
+        market=request.session['me']['country'],
+        fields='name,description,followers.total,external_urls.spotify,images,tracks.total'
+    )
+
+    result = {
+        'name': response['name'],
+        'description': response['description'],
+        'followers': response['followers']['total'],
+        'url': response['external_urls']['spotify'],
+        'image_url': response['images'][0]['url'],
+        'no_of_tracks': response['tracks']['total'],
+    }
+
+    # fetching playlist tracks and their basic details
+    response = request.sp[1].playlist_items(
+        playlist_id=playlist_id,
+        fields="next,items(added_at,track(album.release_date,artists(id),duration_ms,id,is_local,popularity,type))",
+        market=request.session['me']['country'],
+        additional_types=("track",)
+    )
+
+    items = response['items']
+
+    while response['next']:
+        response = request.sp[1].next(response)
+        items.extend(response['items'])
+
+    # filtering out local tracks and podcast episodes from items
+    items = [
+        item for item in items
+        if (not item['track']['is_local'] and item['track']['type'] == 'track')
+    ]
+
+    added_at_dates = sorted([item['added_at'][:10] for item in items])
+    duration_mss = sorted([item['track']['duration_ms'] for item in items])
+    popularities = sorted([item['track']['popularity'] for item in items])
+    release_years = sorted([item['track']['album']['release_date'][:4]
+                            for item in items])
+
+    track_ids = [item['track']['id'] for item in items]
+    artist_ids = [item['track']['artists'][0]['id'] for item in items]
+
+    audio_features = helpers.get_audio_features(request, track_ids)
+    artist_freq, genre_freq = helpers.get_artist_genre_frequency(
+        request, artist_ids)
+
+    result.update({
+        'added_at_dates': added_at_dates,
+        'release_years': release_years,
+        'duration_mss': duration_mss,
+        'popularities': popularities,
+        'audio_feaures': audio_features,
+        'artist_frequency': artist_freq,
+        'genre_frequency': genre_freq,
+    })
+
+    return JsonResponse(result)
+
+
 @require_POST
 def seed_recommendation(request):
     body = json.loads(request.body)

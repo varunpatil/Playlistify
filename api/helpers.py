@@ -1,5 +1,5 @@
 import random
-from collections import OrderedDict
+from collections import defaultdict, OrderedDict
 
 
 def remove_duplicates(my_list):
@@ -31,3 +31,53 @@ def add_to_playlist(request, playlist_id, track_ids, limit=10000, shuffle=False,
 
     for i in range(0, len(track_ids), 100):
         request.sp[0].playlist_add_items(playlist_id, track_ids[i:i+100])
+
+
+def get_audio_features(request, track_ids):
+    features = []
+    size = len(track_ids)
+
+    for i in range(0, len(track_ids), 50):
+        response = request.sp[1].audio_features(track_ids[i:i + 50])
+        features.extend(response)
+
+    return {
+        'bpm_list': sorted([item['tempo'] for item in features]),
+
+        # Average across all tracks (score out of 100)
+        'energy': (100 * sum(item['energy'] for item in features) / size) // 1,
+        'valence': (100 * sum(item['valence'] for item in features) / size) // 1,
+        'liveness': (100 * sum(item['liveness'] for item in features) / size) // 1,
+        'speechiness': (100 * sum(item['speechiness'] for item in features) / size) // 1,
+        'acousticness': (100 * sum(item['acousticness'] for item in features) / size) // 1,
+        'danceability': (100 * sum(item['danceability'] for item in features) / size) // 1,
+        'instrumentalness': (100 * sum(item['instrumentalness'] for item in features) / size) // 1,
+    }
+
+
+def get_artist_genre_frequency(request, artist_ids):
+    artist_freq = defaultdict(lambda: {'name': None, 'count': 0})
+    genre_freq = defaultdict(lambda: 0)
+
+    for a_id in artist_ids:
+        artist_freq[a_id]['count'] += 1
+
+    unique_artist_ids = remove_duplicates(artist_ids)
+
+    for i in range(0, len(unique_artist_ids), 50):
+        response = request.sp[1].artists(artist_ids[i:i + 50])
+        for artist in response['artists']:
+            artist_freq[artist['id']]['name'] = artist['name']
+            if len(artist['genres']):
+                genre_freq[artist['genres'][0]] += 1
+
+    # flatten out artist_freq into a dictionary
+    artist_freq = {val['name']: val['count'] for val in artist_freq.values()}
+
+    # sort according to frequency
+    artist_freq = {k: v for k, v in sorted(
+        artist_freq.items(), key=lambda x: x[1], reverse=True)}
+    genre_freq = {k: v for k, v in sorted(
+        genre_freq.items(), key=lambda x: x[1], reverse=True)}
+
+    return artist_freq, genre_freq
