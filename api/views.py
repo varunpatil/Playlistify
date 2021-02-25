@@ -188,6 +188,8 @@ def playlist_analysis(request, playlist_id):
         'no_of_tracks': response['tracks']['total'],
     }
 
+    return JsonResponse(result)
+
     # fetching playlist tracks and their basic details
     response = request.sp[1].playlist_items(
         playlist_id=playlist_id,

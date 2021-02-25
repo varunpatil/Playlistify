@@ -40,7 +40,11 @@ export default function PlaylistItem({ playlist }) {
 
       <CardActions>
         <Grid container justify="center" alignItems="center" spacing={1}>
-          <CustomButton name="analyze" icon={<PieChart />} />
+          <CustomButton
+            name="analyze"
+            icon={<PieChart />}
+            path={`/playlist/analyze/${playlist.id}`}
+          />
         </Grid>
       </CardActions>
     </Card>
@@ -72,6 +76,8 @@ const CustomButton = (props) => {
 
   return content;
 };
+
+// ------------------- Styles -------------------------- //
 
 const useStyles = makeStyles((theme) => ({
   button: {
