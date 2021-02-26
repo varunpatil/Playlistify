@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Grid } from "@material-ui/core";
+import { Container, Grid } from "@material-ui/core";
 
 import Loader from "./Loader";
 import PlaylistItem from "./PlaylistItem";
@@ -14,18 +14,18 @@ export default function Playlists() {
   }, []);
 
   return (
-    <div>
+    <Container maxWidth={false}>
       {playlists.length ? (
         <Grid container spacing={8} justify="center" alignItems="center">
-          {playlists.map((playlist, key) => (
-            <Grid item key={key} xs={12} sm="auto" md="auto" lg="auto" xl="auto">
-              <PlaylistItem key={key} playlist={playlist} />
+          {playlists.map((playlist) => (
+            <Grid item xs={12} sm="auto" md="auto" lg="auto" xl="auto">
+              <PlaylistItem playlist={playlist} />
             </Grid>
           ))}
         </Grid>
       ) : (
         <Loader />
       )}
-    </div>
+    </Container>
   );
 }
