@@ -15,7 +15,7 @@ import {
   YouTube,
 } from "@material-ui/icons";
 
-export default function NothingPlaying(){
+export default function NothingPlaying() {
   const classes = useStyles();
   const fontsize = 80;
 
@@ -35,7 +35,13 @@ export default function NothingPlaying(){
         </CardContent>
       </Card>
       <br /> <br /> <br />
-      <Grid container spacing={8} alignItems="center" justify="center">
+      <Grid
+        container
+        spacing={8}
+        alignItems="center"
+        justify="center"
+        style={{ margin: 0, width: "100%" }}
+      >
         <Grid item>
           <Audiotrack style={{ fontSize: fontsize }} />
         </Grid>
@@ -51,7 +57,7 @@ export default function NothingPlaying(){
       </Grid>
     </div>
   );
-};
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
