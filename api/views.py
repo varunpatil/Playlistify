@@ -10,6 +10,9 @@ from spotipy import SpotifyException
 
 from . import helpers, lyrics, spotify
 
+# Saving api json response for speed
+from extras.response import resp
+
 
 @require_POST
 def login(request):
@@ -180,15 +183,15 @@ def playlist_analysis(request, playlist_id):
     )
 
     result = {
-        'name': response['name'],
-        'description': response['description'],
-        'followers': response['followers']['total'],
-        'url': response['external_urls']['spotify'],
-        'image_url': response['images'][0]['url'],
-        'no_of_tracks': response['tracks']['total'],
+        'header': {
+            'name': response['name'],
+            'description': response['description'],
+            'followers': response['followers']['total'],
+            'url': response['external_urls']['spotify'],
+            'image_url': response['images'][0]['url'],
+            'no_of_tracks': response['tracks']['total'],
+        }
     }
-
-    return JsonResponse(result)
 
     # fetching playlist tracks and their basic details
     response = request.sp[1].playlist_items(
