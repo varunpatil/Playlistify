@@ -5,6 +5,7 @@ import { Divider, useTheme } from "@material-ui/core";
 import Loader from "./Loader";
 import Header from "./PlaylistAnalyze/Header";
 import PieChart from "./PlaylistAnalyze/PieChart";
+import Calendar from "./PlaylistAnalyze/Calendar";
 
 export default function PlaylistAnalyze(props) {
   const [data, setData] = useState(null);
@@ -29,6 +30,8 @@ export default function PlaylistAnalyze(props) {
         type="Genre"
         colorScheme="category10"
       />
+      <CustomDivider />
+      <Calendar data={data.added_at_dates} />
       <CustomDivider />
     </div>
   ) : (

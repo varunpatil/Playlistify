@@ -42,6 +42,6 @@ export default function PieChart({ data, type, colorScheme }) {
 
 const adjustData = (data) => {
   return Object.keys(data).map((key) => {
-    return { id: key, label: key, value: data[key] };
+    return { id: key, value: data[key] };
   });
 };

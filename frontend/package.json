@@ -11,8 +11,8 @@
   "author": "Varun Patil",
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.13.1",
-    "@babel/preset-env": "^7.13.5",
+    "@babel/core": "^7.13.8",
+    "@babel/preset-env": "^7.13.8",
     "@babel/preset-react": "^7.12.13",
     "babel-loader": "^8.2.2",
     "react": "^17.0.1",
@@ -25,10 +25,11 @@
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@nivo/bar": "^0.67.0",
+    "@nivo/calendar": "^0.67.0",
     "@nivo/core": "^0.67.0",
     "@nivo/pie": "^0.67.0",
     "axios": "^0.21.1",
-    "query-string": "^6.14.0",
+    "query-string": "^6.14.1",
     "react-router-dom": "^5.2.0"
   }
 }

@@ -1,13 +1,13 @@
 import json
 import os
-import time
+from collections import Counter
 
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.views.decorators.http import require_POST
 from django.views.decorators.cache import cache_control, never_cache
-from spotipy import SpotifyException
+from django.views.decorators.http import require_POST
 
+from spotipy import SpotifyException
 from . import helpers, lyrics, spotify
 
 # Saving api json response for speed
@@ -213,7 +213,7 @@ def playlist_analysis(request, playlist_id):
         if (bool(item['track']) and not item['track']['is_local'] and item['track']['type'] == 'track')
     ]
 
-    added_at_dates = sorted([item['added_at'][:10] for item in items])
+    added_at_dates = Counter([item['added_at'][:10] for item in items])
     duration_mss = sorted([item['track']['duration_ms'] for item in items])
     popularities = sorted([item['track']['popularity'] for item in items])
     release_years = sorted([item['track']['album']['release_date'][:4]
