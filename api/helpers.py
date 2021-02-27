@@ -65,11 +65,19 @@ def get_artist_genre_frequency(request, artist_ids):
     unique_artist_ids = remove_duplicates(artist_ids)
 
     for i in range(0, len(unique_artist_ids), 50):
-        response = request.sp[1].artists(artist_ids[i:i + 50])
+        response = request.sp[1].artists(unique_artist_ids[i:i + 50])
         for artist in response['artists']:
             artist_freq[artist['id']]['name'] = artist['name']
-            if len(artist['genres']):
-                genre_freq[artist['genres'][0]] += 1
+
+            # Calculating genre weightage
+            n = len(artist['genres'])
+            if n > 0:
+                artist_weight = artist_freq[artist['id']]['count'] / (2**n - 1)
+                for i, genre in enumerate(artist['genres'], start=1):
+                    genre_freq[genre] += artist_weight * (2 ** (n-i))
+
+    # filtering and rounding off
+    genre_freq = {k: round(v) for k, v in genre_freq.items() if round(v) >= 1}
 
     # flatten out artist_freq into a dictionary
     artist_freq = {val['name']: val['count'] for val in artist_freq.values()}
