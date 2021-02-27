@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Divider, useTheme } from "@material-ui/core";
+
 import Loader from "./Loader";
 import Header from "./PlaylistAnalyze/Header";
-import ArtistPieChart from "./PlaylistAnalyze/ArtistPieChart";
+import PieChart from "./PlaylistAnalyze/PieChart";
 
 export default function PlaylistAnalyze(props) {
   const [data, setData] = useState(null);
@@ -16,11 +18,30 @@ export default function PlaylistAnalyze(props) {
   return data ? (
     <div style={{ maxWidth: "100vw" }}>
       <Header data={data.header} />
-      <ArtistPieChart data={data.artist_frequency} />
-      <br /> <br/>
-      <ArtistPieChart data={data.artist_frequency} />
+      <PieChart
+        data={data.artist_frequency}
+        type="Artist"
+        colorScheme="paired"
+      />
+      <CustomDivider />
+      <PieChart
+        data={data.genre_frequency}
+        type="Genre"
+        colorScheme="category10"
+      />
+      <CustomDivider />
     </div>
   ) : (
     <Loader />
   );
 }
+
+const CustomDivider = () => {
+  const theme = useTheme();
+  return (
+    <div>
+      <br /> <br />
+      <Divider style={{ background: theme.palette.background.divider }} />
+    </div>
+  );
+};

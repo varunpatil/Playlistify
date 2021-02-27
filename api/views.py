@@ -210,7 +210,7 @@ def playlist_analysis(request, playlist_id):
     # filtering out local tracks and podcast episodes from items
     items = [
         item for item in items
-        if (not item['track']['is_local'] and item['track']['type'] == 'track')
+        if (bool(item['track']) and not item['track']['is_local'] and item['track']['type'] == 'track')
     ]
 
     added_at_dates = sorted([item['added_at'][:10] for item in items])
