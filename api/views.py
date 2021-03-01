@@ -123,7 +123,7 @@ def playlists(request):
         'total_tracks': item['tracks']['total'],
         'owner': item['owner']['id'] == request.session['me']['id'],
         'public': item['public'],
-        'image_url': item['images'][1]['url'] if (len(item['images']) > 1) else item['images'][0]['url'],
+        'image_url': item['images'][0]['url'] if item['images'] else "",
     } for item in playlists]
 
     return JsonResponse(result, safe=False)
@@ -188,10 +188,13 @@ def playlist_analysis(request, playlist_id):
             'description': response['description'],
             'followers': response['followers']['total'],
             'url': response['external_urls']['spotify'],
-            'image_url': response['images'][0]['url'],
+            'image_url': response['images'][0]['url'] if response['images'] else "",
             'no_of_tracks': response['tracks']['total'],
         }
     }
+
+    if result['header']['no_of_tracks'] == 0:
+        return JsonResponse(result)
 
     # fetching playlist tracks and their basic details
     response = request.sp[1].playlist_items(

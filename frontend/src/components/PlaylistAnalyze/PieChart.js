@@ -3,7 +3,9 @@ import { ResponsivePie } from "@nivo/pie";
 import { Paper, Typography } from "@material-ui/core";
 
 export default function PieChart({ data, type, colorScheme }) {
+  if (!data) return null;
   const smallScreen = screen.width <= 600;
+  
   return (
     <div style={{ height: smallScreen ? "40vh" : "70vh" }}>
       <Typography

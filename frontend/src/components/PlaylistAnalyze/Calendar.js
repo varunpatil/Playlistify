@@ -4,6 +4,7 @@ import { Paper, Typography } from "@material-ui/core";
 import green from "@material-ui/core/colors/green";
 
 export default function Calendar({ data }) {
+  if (!data) return null;
   const sortedDates = Object.keys(data).sort();
   const from = sortedDates[0];
   const to = sortedDates[sortedDates.length - 1];
