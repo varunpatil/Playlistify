@@ -193,9 +193,6 @@ def playlist_analysis(request, playlist_id):
         }
     }
 
-    if result['header']['no_of_tracks'] == 0:
-        return JsonResponse(result)
-
     # fetching playlist tracks and their basic details
     response = request.sp[1].playlist_items(
         playlist_id=playlist_id,
@@ -215,6 +212,9 @@ def playlist_analysis(request, playlist_id):
         item for item in items
         if (bool(item['track']) and not item['track']['is_local'] and item['track']['type'] == 'track')
     ]
+
+    if len(items) == 0:
+        return JsonResponse(result)
 
     added_at_dates = Counter([item['added_at'][:10] for item in items])
     duration_mss = [item['track']['duration_ms'] for item in items]
