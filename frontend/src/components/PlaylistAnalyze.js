@@ -7,6 +7,7 @@ import Header from "./PlaylistAnalyze/Header";
 import PieChart from "./PlaylistAnalyze/PieChart";
 import Calendar from "./PlaylistAnalyze/Calendar";
 import Bar from "./PlaylistAnalyze/Bar";
+import Line from "./PlaylistAnalyze/Line";
 
 export default function PlaylistAnalyze(props) {
   const [data, setData] = useState(null);
@@ -36,6 +37,11 @@ export default function PlaylistAnalyze(props) {
       <CustomDivider />
       <Bar data={data.audio_features} />
       <CustomDivider />
+      <Line type={1} data={data.release_years} />
+      <CustomDivider />
+      <Line type={2} data={data.popularities} />
+      <CustomDivider />
+      <Line type={3} data={data.durations} />
     </div>
   ) : (
     <Loader />

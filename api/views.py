@@ -217,7 +217,7 @@ def playlist_analysis(request, playlist_id):
         return JsonResponse(result)
 
     added_at_dates = Counter([item['added_at'][:10] for item in items])
-    duration_mss = [item['track']['duration_ms'] for item in items]
+    durations = [item['track']['duration_ms']//1000 for item in items]
     popularities = [item['track']['popularity'] for item in items]
     release_years = Counter([item['track']['album']['release_date'][:4]
                              for item in items])
@@ -230,13 +230,13 @@ def playlist_analysis(request, playlist_id):
         request, artist_ids)
 
     result.update({
-        'artist_frequency': artist_freq,    # pie chart
-        'genre_frequency': genre_freq,      # pie chart
+        'artist_frequency': artist_freq,    # pie
+        'genre_frequency': genre_freq,      # pie
         'added_at_dates': added_at_dates,   # calendar
-        'audio_features': audio_features,    # bar chart
-        'release_years': release_years,     # histogram
-        'duration_mss': duration_mss,       # histogram
-        'popularities': popularities,       # histogram
+        'audio_features': audio_features,   # bar
+        'release_years': release_years,     # line
+        'durations': durations,               # line
+        'popularities': popularities,       # line
     })
 
     return JsonResponse(result)
