@@ -7,11 +7,11 @@ from textdistance import ratcliff_obershelp
 
 
 def get_song(track_name, artist_name):
-    song = get_song_genius(sanitize(track_name), artist_name)
+    song = get_song_genius(track_name, artist_name)
     if song:
         return song
 
-    song = get_song_genius(track_name, artist_name)
+    song = get_song_genius(sanitize(track_name), artist_name)
     if song:
         return song
 
