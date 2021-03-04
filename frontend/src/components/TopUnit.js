@@ -45,7 +45,13 @@ export default function TopUnit({ type, rank, unit }) {
       </Typography>
       <CardMedia
         className={classes.cover}
-        image={type === "Track" ? unit.album.images[1].url : unit.images[1].url}
+        image={
+          type === "Track"
+            ? unit.album.images[1].url
+            : unit.images[1]
+            ? unit.images[1].url
+            : ""
+        }
         title={unit.name}
       />
       <div className={classes.details}>

@@ -1,14 +1,17 @@
 import json
 import os
-import time
+from collections import Counter
 
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.views.decorators.http import require_POST
 from django.views.decorators.cache import cache_control, never_cache
-from spotipy import SpotifyException
+from django.views.decorators.http import require_POST
 
+from spotipy import SpotifyException
 from . import helpers, lyrics, spotify
+
+# Saving api json response for speed
+from extras.response import resp
 
 
 @require_POST
@@ -120,7 +123,7 @@ def playlists(request):
         'total_tracks': item['tracks']['total'],
         'owner': item['owner']['id'] == request.session['me']['id'],
         'public': item['public'],
-        'image_url': item['images'][1]['url'] if (len(item['images']) > 1) else item['images'][0]['url'],
+        'image_url': item['images'][0]['url'] if item['images'] else "",
     } for item in playlists]
 
     return JsonResponse(result, safe=False)
@@ -168,6 +171,75 @@ def playlist_top_artists(request):
     helpers.add_to_playlist(request, playlist_id,
                             track_ids, limit=100, shuffle=True)
     return JsonResponse({"message": "success"})
+
+
+@cache_control(max_age=2*60)
+def playlist_analysis(request, playlist_id):
+    # fetching basic playlist details
+    response = request.sp[1].playlist(
+        playlist_id=playlist_id,
+        market=request.session['me']['country'],
+        fields='name,description,followers.total,external_urls.spotify,images,tracks.total'
+    )
+
+    result = {
+        'header': {
+            'name': response['name'],
+            'description': response['description'],
+            'followers': response['followers']['total'],
+            'url': response['external_urls']['spotify'],
+            'image_url': response['images'][0]['url'] if response['images'] else "",
+            'no_of_tracks': response['tracks']['total'],
+        }
+    }
+
+    # fetching playlist tracks and their basic details
+    response = request.sp[1].playlist_items(
+        playlist_id=playlist_id,
+        fields="next,items(added_at,track(album.release_date,artists(id),duration_ms,id,is_local,popularity,type))",
+        market=request.session['me']['country'],
+        additional_types=("track",)
+    )
+
+    items = response['items']
+
+    while response['next']:
+        response = request.sp[1].next(response)
+        items.extend(response['items'])
+
+    # filtering out local tracks and podcast episodes from items
+    items = [
+        item for item in items
+        if (bool(item['track']) and not item['track']['is_local'] and item['track']['type'] == 'track')
+    ]
+
+    if len(items) == 0:
+        return JsonResponse(result)
+
+    added_at_dates = Counter([item['added_at'][:10] for item in items])
+    durations = [item['track']['duration_ms']//1000 for item in items]
+    popularities = [item['track']['popularity'] for item in items]
+    release_years = Counter([item['track']['album']['release_date'][:4]
+                             for item in items])
+
+    track_ids = [item['track']['id'] for item in items]
+    artist_ids = [item['track']['artists'][0]['id'] for item in items]
+
+    audio_features = helpers.get_audio_features(request, track_ids)
+    artist_freq, genre_freq = helpers.get_artist_genre_frequency(
+        request, artist_ids)
+
+    result.update({
+        'artist_frequency': artist_freq,    # pie
+        'genre_frequency': genre_freq,      # pie
+        'added_at_dates': added_at_dates,   # calendar
+        'audio_features': audio_features,   # bar
+        'release_years': release_years,     # line
+        'durations': durations,               # line
+        'popularities': popularities,       # line
+    })
+
+    return JsonResponse(result)
 
 
 @require_POST

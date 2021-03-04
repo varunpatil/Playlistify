@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Box, Grid, Button, Typography, withStyles } from "@material-ui/core";
+import { Box, Grid, Button, Typography } from "@material-ui/core";
 
 export default function LoginPage() {
   const [authUrl, setAuthUrl] = useState(null);
@@ -26,15 +26,15 @@ export default function LoginPage() {
         direction="column"
         alignItems="center"
         justify="center"
-        style={{ minHeight: "100vh" }}
+        style={{ minHeight: "100vh", maxWidth: "100vw" }}
         backgroundColor="black"
-        spacing={6}
       >
         <Grid item>
-          <WhiteTextTypography variant="h2">
+          <Typography variant="h2" style={{ color: "#FFFFFF" }}>
             <strong>APP</strong>
-          </WhiteTextTypography>
+          </Typography>
         </Grid>
+        <br />
         <Grid item>
           <Button
             variant="contained"
@@ -52,9 +52,3 @@ export default function LoginPage() {
     </Box>
   );
 }
-
-const WhiteTextTypography = withStyles({
-  root: {
-    color: "#FFFFFF",
-  },
-})(Typography);
