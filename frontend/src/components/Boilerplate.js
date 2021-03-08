@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core";
 import SideBar from "./SideBar";
 
-const drawerWidth = 240;
+const drawerWidth = 260;
 
 const useStyles = makeStyles((theme) => ({
   root: {
