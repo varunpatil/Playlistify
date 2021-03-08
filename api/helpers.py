@@ -42,7 +42,7 @@ def get_audio_features(request, track_ids):
         features.extend(response)
 
     return {
-        'bpm_list': sorted([item['tempo'] for item in features]),
+        'bpms': [item['tempo']//1 for item in features],
 
         # Average across all tracks (score out of 100)
         'energy': (100 * sum(item['energy'] for item in features) / size) // 1,

@@ -33,8 +33,6 @@ export default function PlaylistAnalyze(props) {
         colorScheme="category10"
       />
       <CustomDivider />
-      <Calendar data={data.added_at_dates} />
-      <CustomDivider />
       <Bar data={data.audio_features} />
       <CustomDivider />
       <Line type={1} data={data.release_years} />
@@ -42,6 +40,10 @@ export default function PlaylistAnalyze(props) {
       <Line type={2} data={data.popularities} />
       <CustomDivider />
       <Line type={3} data={data.durations} />
+      <CustomDivider />
+      <Line type={4} data={data.audio_features.bpms} />
+      <CustomDivider />
+      <Calendar data={data.added_at_dates} />
     </div>
   ) : (
     <Loader />

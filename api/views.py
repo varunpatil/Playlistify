@@ -235,7 +235,7 @@ def playlist_analysis(request, playlist_id):
         'added_at_dates': added_at_dates,   # calendar
         'audio_features': audio_features,   # bar
         'release_years': release_years,     # line
-        'durations': durations,               # line
+        'durations': durations,             # line
         'popularities': popularities,       # line
     })
 
