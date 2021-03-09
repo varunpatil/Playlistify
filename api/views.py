@@ -11,7 +11,7 @@ from spotipy import SpotifyException
 from . import helpers, lyrics, spotify
 
 # Saving api json response for speed
-from extras.response import resp
+# from extras.response import resp
 
 
 @require_POST
