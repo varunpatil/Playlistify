@@ -68,12 +68,12 @@ export default function SideBar({ toggle }) {
         toggle={toggle}
         children={[
           {
-            name: "Friend Rec.",
+            name: "Friend",
             path: "/recommendation/friend",
             icon: PeopleAlt,
           },
           {
-            name: "Mood Rec.",
+            name: "Mood",
             path: "/recommendation/mood",
             icon: EmojiEmotions,
           },
