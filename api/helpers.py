@@ -84,10 +84,8 @@ def get_artist_genre_frequency(request, artist_ids):
     artist_freq = {val['name']: val['count'] for val in artist_freq.values()}
 
     # sort according to frequency
-    artist_freq = {k: v for k, v in sorted(
-        artist_freq.items(), key=lambda x: x[1], reverse=True)}
-    genre_freq = {k: v for k, v in sorted(
-        genre_freq.items(), key=lambda x: x[1], reverse=True)}
+    artist_freq = {k: v for k, v in sorted(artist_freq.items(), key=lambda x: x[1], reverse=True)}
+    genre_freq = {k: v for k, v in sorted(genre_freq.items(), key=lambda x: x[1], reverse=True)}
 
     return artist_freq, genre_freq
 
@@ -147,9 +145,7 @@ def get_recommendation_track_ids(request, items):
 
     while len(filtered_track_ids) < 100 and idx < len(track_ids):
         mask = request.sp[0].current_user_saved_tracks_contains(track_ids[idx:idx+50])
-        filtered_track_ids.extend(
-            [item for item, is_saved in zip(track_ids[idx:idx+50], mask) if not is_saved]
-        )
+        filtered_track_ids.extend([item for item, is_saved in zip(track_ids[idx:idx+50], mask) if not is_saved])
         idx += 50
 
     return filtered_track_ids

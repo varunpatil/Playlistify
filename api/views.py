@@ -26,8 +26,7 @@ def login(request):
         # Step 4. After getting redirected from Spotify auth page in Step 3
         try:
             auth_manager.get_access_token(body["code"])
-            request.session['refresh_token'] = auth_manager.get_cached_token()[
-                'refresh_token']
+            request.session['refresh_token'] = auth_manager.get_cached_token()['refresh_token']
             return JsonResponse({"message": "Success"})
         except Exception as e:
             return JsonResponse({"Error": str(e)}, status=400)
@@ -96,18 +95,14 @@ def get_lyrics(request):
 @cache_control(max_age=3600)
 def top_tracks(request):
     time_range = request.GET.get('time_range', 'short_term')
-    response = request.sp[0].current_user_top_tracks(
-        time_range=time_range, limit=50)
-
+    response = request.sp[0].current_user_top_tracks(time_range=time_range, limit=50)
     return JsonResponse(response['items'], safe=False)
 
 
 @cache_control(max_age=3600)
 def top_artists(request):
     time_range = request.GET.get('time_range', 'short_term')
-    response = request.sp[0].current_user_top_artists(
-        time_range=time_range, limit=50)
-
+    response = request.sp[0].current_user_top_artists(time_range=time_range, limit=50)
     return JsonResponse(response['items'], safe=False)
 
 
@@ -140,8 +135,10 @@ def playlist_create(request):
     public = body.get('public', public_playlists)
 
     response = request.sp[0].user_playlist_create(
-        user=request.session['me']['id'], name=name,
-        public=public, description=description
+        user=request.session['me']['id'],
+        name=name,
+        public=public,
+        description=description
     )
 
     return JsonResponse({"playlist_id": response['id']})
@@ -171,8 +168,7 @@ def playlist_top_artists(request):
         tracks.extend(response['tracks'][:5])
 
     track_ids = [track['id'] for track in tracks]
-    helpers.add_to_playlist(request, playlist_id,
-                            track_ids, limit=100, shuffle=True)
+    helpers.add_to_playlist(request, playlist_id, track_ids, limit=100, shuffle=True)
     return JsonResponse({"message": "success"})
 
 
@@ -222,15 +218,13 @@ def playlist_analysis(request, playlist_id):
     added_at_dates = Counter([item['added_at'][:10] for item in items])
     durations = [item['track']['duration_ms']//1000 for item in items]
     popularities = [item['track']['popularity'] for item in items]
-    release_years = Counter([item['track']['album']['release_date'][:4]
-                             for item in items])
+    release_years = Counter([item['track']['album']['release_date'][:4] for item in items])
 
     track_ids = [item['track']['id'] for item in items]
     artist_ids = [item['track']['artists'][0]['id'] for item in items]
 
     audio_features = helpers.get_audio_features(request, track_ids)
-    artist_freq, genre_freq = helpers.get_artist_genre_frequency(
-        request, artist_ids)
+    artist_freq, genre_freq = helpers.get_artist_genre_frequency(request, artist_ids)
 
     result.update({
         'artist_frequency': artist_freq,    # pie
