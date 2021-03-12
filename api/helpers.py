@@ -1,5 +1,6 @@
 import random
-from collections import defaultdict, OrderedDict
+from collections import Counter, defaultdict, OrderedDict
+from spotipy import SpotifyException
 
 
 def remove_duplicates(my_list):
@@ -89,3 +90,66 @@ def get_artist_genre_frequency(request, artist_ids):
         genre_freq.items(), key=lambda x: x[1], reverse=True)}
 
     return artist_freq, genre_freq
+
+
+def get_user(request, user_id):
+    if user_id.startswith('spotify:user:'):
+        user_id = user_id.split(':')[2]
+    elif user_id.startswith('https://open.spotify.com/user/'):
+        user_id = user_id.split('?')[0]
+        user_id = user_id[len('https://open.spotify.com/user/'):]
+
+    try:
+        user = request.sp[1].user(user_id)
+        return {
+            'id': user['id'],
+            'name': user['display_name']
+        }
+    except SpotifyException:
+        return {'is_invalid': True}
+
+
+def is_user_playlist(item, user_id):
+    return (
+        item['owner']['id'] == user_id or
+        item['name'].startswith('Your Top Songs') or
+        item['name'] == 'On Repeat' or
+        item['name'] == 'Repeat Rewind'
+    )
+
+
+def get_recommendation_track_ids(request, items):
+    # filtering out local tracks and podcast episodes from items
+    # creating list of tuples (id,pop)
+    tracks = [
+        (item['track']['id'], item['track']['popularity']) for item in items
+        if (bool(item['track']) and not item['track']['is_local'] and item['track']['type'] == 'track')
+    ]
+
+    counts = dict(Counter(tracks))
+    tracks.clear()
+
+    for (id, popularity), count in counts.items():
+        try:
+            boosted_popularity = popularity * (1.15 ** (count-1))
+        except OverflowError:
+            boosted_popularity = float('inf')
+        tracks.append({
+            'id': id,
+            'popularity': boosted_popularity
+        })
+
+    track_ids = [track['id'] for track in sorted(tracks, key=lambda x: x['popularity'], reverse=True)]
+
+    # filter saved tracks only until we get 100 tracks
+    filtered_track_ids = []
+    idx = 0
+
+    while len(filtered_track_ids) < 100 and idx < len(track_ids):
+        mask = request.sp[0].current_user_saved_tracks_contains(track_ids[idx:idx+50])
+        filtered_track_ids.extend(
+            [item for item, is_saved in zip(track_ids[idx:idx+50], mask) if not is_saved]
+        )
+        idx += 50
+
+    return filtered_track_ids

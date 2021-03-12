@@ -13,6 +13,9 @@ from . import helpers, lyrics, spotify
 # Saving api json response for speed
 # from extras.response import resp
 
+public_playlists = False
+default_description = 'Created using APP :)'
+
 
 @require_POST
 def login(request):
@@ -133,8 +136,8 @@ def playlists(request):
 def playlist_create(request):
     body = json.loads(request.body)
     name = body['name']
-    description = body.get('description', '') + ' - Created using APP :)'
-    public = body.get('public', False)
+    description = body.get('description', '') + ' - ' + default_description
+    public = body.get('public', public_playlists)
 
     response = request.sp[0].user_playlist_create(
         user=request.session['me']['id'], name=name,
@@ -262,6 +265,52 @@ def seed_recommendation(request):
 
     helpers.add_to_playlist(request, playlist_id, track_ids)
     return JsonResponse({"message": "success"})
+
+
+@require_POST
+def friend_recommendation(request):
+    body = json.loads(request.body)
+    user = helpers.get_user(request, body['user_id'])
+
+    if user.get('is_invalid'):
+        return JsonResponse({'Error': 'Invalid User ID Provided'}, status=400)
+
+    if user['id'] == request.session['me']['id']:
+        return JsonResponse({'Error': 'Own User ID Provided'}, status=400)
+
+    # Only top 50 playlists will be considered
+    response = request.sp[1].user_playlists(user['id'])
+    playlist_ids = [item['id'] for item in response['items'] if helpers.is_user_playlist(item, user['id'])]
+
+    all_playlists_items = []
+
+    for playlist_id in playlist_ids:
+        response = request.sp[1].playlist_items(
+            playlist_id=playlist_id,
+            fields='next,items(track(id,is_local,popularity,type))',
+            market=request.session['me']['country'],
+            additional_types=("track",)
+        )
+        all_playlists_items.extend(response['items'])
+
+        while response['next']:
+            response = request.sp[1].next(response)
+            all_playlists_items.extend(response['items'])
+
+    track_ids = helpers.get_recommendation_track_ids(request, all_playlists_items)
+
+    if len(track_ids) == 0:
+        return JsonResponse({'Error': 'No tracks to recommend'}, status=400)
+
+    response = request.sp[0].user_playlist_create(
+        user=request.session['me']['id'],
+        name=user['name'] + ' recommends',
+        description=default_description,
+        public=public_playlists,
+    )
+
+    helpers.add_to_playlist(request, response['id'], track_ids, limit=100)
+    return JsonResponse({"playlist_id": response['id']})
 
 
 @require_POST

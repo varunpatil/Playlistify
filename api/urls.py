@@ -20,5 +20,6 @@ urlpatterns = [
     path('playlist/analyze/<playlist_id>', views.playlist_analysis),
 
     path('recommendation/seed/', views.seed_recommendation),
+    path('recommendation/friend/', views.friend_recommendation),
     path('similar_artists/', views.similar_artists),
 ]
