@@ -6,8 +6,8 @@ import HomePage from "./HomePage";
 import { TopTracks, TopArtists } from "./Rankings/TopList";
 import Playlists from "./Playlists";
 import PlaylistAnalyze from "./PlaylistAnalyze";
-import RecMood from "./RecMood";
-import RecFriend from "./RecFriend";
+import Mood from "./Recommendations/Mood";
+import Friend from "./Recommendations/Friend";
 import About from "./About";
 
 export default function Home() {
@@ -19,8 +19,8 @@ export default function Home() {
         <Route path="/top/artists" component={TopArtists} />
         <Route path="/playlists" component={Playlists} />
         <Route path="/playlist/analyze/:id" component={PlaylistAnalyze} />
-        <Route path="/recommendation/friend" component={RecFriend} />
-        <Route path="/recommendation/mood" component={RecMood} />
+        <Route path="/recommendation/friend" component={Friend} />
+        <Route path="/recommendation/mood" component={Mood} />
         <Route path="/about" component={About} />
       </Switch>
     </Boilerplate>
