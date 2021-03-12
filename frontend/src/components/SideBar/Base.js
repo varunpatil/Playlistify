@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
+  Divider,
   ListItem,
   ListItemIcon,
   ListItemText,
@@ -10,19 +11,22 @@ import {
 export default function Base(props) {
   const classes = useStyles();
   return (
-    <ListItem
-      button
-      key={props.name}
-      component={Link}
-      to={props.path}
-      className={props.nested ? classes.nested : null}
-      onClick={props.toggle}
-    >
-      <ListItemIcon>
-        <props.icon />
-      </ListItemIcon>
-      <ListItemText primary={props.name} />
-    </ListItem>
+    <div>
+      {props.hideDivider ? null : <Divider />}
+      <ListItem
+        button
+        key={props.name}
+        component={Link}
+        to={props.path}
+        className={props.nested ? classes.nested : null}
+        onClick={props.toggle}
+      >
+        <ListItemIcon>
+          <props.icon />
+        </ListItemIcon>
+        <ListItemText primary={props.name} />
+      </ListItem>
+    </div>
   );
 }
 

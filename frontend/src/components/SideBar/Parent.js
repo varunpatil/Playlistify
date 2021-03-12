@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   Collapse,
+  Divider,
   List,
   ListItem,
   ListItemIcon,
@@ -16,6 +17,7 @@ export default function Parent(props) {
   const [open, setOpen] = useState(true);
   return (
     <div>
+      <Divider />
       <ListItem
         button
         key={props.name}
@@ -44,7 +46,8 @@ export default function Parent(props) {
                 path={child.path}
                 icon={child.icon}
                 toggle={props.toggle}
-                nested={true}
+                hideDivider
+                nested
               />
             );
           })}

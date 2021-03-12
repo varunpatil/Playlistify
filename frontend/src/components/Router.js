@@ -8,6 +8,9 @@ import Playlists from "./Playlists";
 import PlaylistAnalyze from "./Playlists/PlaylistAnalyze";
 import Mood from "./Recommendations/Mood";
 import Friend from "./Recommendations/Friend";
+import RecentlyPlayed from "./RecentlyPlayed";
+import Survey from "./Survey";
+import Feedback from "./Feedback";
 import About from "./About";
 
 export default function Home() {
@@ -21,6 +24,9 @@ export default function Home() {
         <Route path="/playlist/analyze/:id" component={PlaylistAnalyze} />
         <Route path="/recommendation/friend" component={Friend} />
         <Route path="/recommendation/mood" component={Mood} />
+        <Route path="/recently_played" component={RecentlyPlayed} />
+        <Route path="/survey" component={Survey} />
+        <Route path="/feedback" component={Feedback} />
         <Route path="/about" component={About} />
       </Switch>
     </Boilerplate>

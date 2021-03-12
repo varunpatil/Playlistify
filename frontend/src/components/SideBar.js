@@ -13,11 +13,14 @@ import {
   Info,
   TrendingUp,
   Home,
+  Email,
   EmojiEmotions,
+  Forum,
   PeopleAlt,
   PlaylistPlay,
   PowerSettingsNew,
   Radio,
+  Restore,
 } from "@material-ui/icons";
 
 import Avatar from "./SideBar/Avatar";
@@ -29,9 +32,8 @@ export default function SideBar({ toggle }) {
   return (
     <List>
       <Avatar />
-      <Divider />
+
       <Base name="Home" path="/" icon={Home} toggle={toggle} />
-      <Divider />
 
       <Parent
         name="Rankings"
@@ -46,12 +48,10 @@ export default function SideBar({ toggle }) {
           {
             name: "Top Artists",
             path: "/top/artists",
-            icon: Person,
+            icon: PeopleAlt,
           },
         ]}
       />
-
-      <Divider />
 
       <Base
         name="Playlists"
@@ -59,8 +59,6 @@ export default function SideBar({ toggle }) {
         icon={PlaylistPlay}
         toggle={toggle}
       />
-
-      <Divider />
 
       <Parent
         name="Recommendations"
@@ -70,7 +68,7 @@ export default function SideBar({ toggle }) {
           {
             name: "Friend",
             path: "/recommendation/friend",
-            icon: PeopleAlt,
+            icon: Person,
           },
           {
             name: "Mood",
@@ -80,17 +78,23 @@ export default function SideBar({ toggle }) {
         ]}
       />
 
-      <Divider />
+      <Base
+        name="Recently Played"
+        path="/recently_played"
+        icon={Restore}
+        toggle={toggle}
+      />
+      <Base name="Survey" path="/survey" icon={Forum} toggle={toggle} />
+      <Base name="Feedback" path="/feedback" icon={Email} toggle={toggle} />
       <Base name="About" path="/about" icon={Info} toggle={toggle} />
-      <Divider />
 
+      <Divider />
       <ListItem button key="logout" onClick={logout}>
         <ListItemIcon>
           <PowerSettingsNew />
         </ListItemIcon>
         <ListItemText primary="Logout" />
       </ListItem>
-
       <Divider />
     </List>
   );
