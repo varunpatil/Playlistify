@@ -5,7 +5,7 @@ import Boilerplate from "./Boilerplate";
 import HomePage from "./HomePage";
 import { TopTracks, TopArtists } from "./Rankings/TopList";
 import Playlists from "./Playlists";
-import PlaylistAnalyze from "./PlaylistAnalyze";
+import PlaylistAnalyze from "./Playlists/PlaylistAnalyze";
 import Mood from "./Recommendations/Mood";
 import Friend from "./Recommendations/Friend";
 import About from "./About";

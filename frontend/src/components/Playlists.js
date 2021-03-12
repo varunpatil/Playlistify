@@ -3,7 +3,7 @@ import axios from "axios";
 import { Container, Grid } from "@material-ui/core";
 
 import Loader from "./Loader";
-import PlaylistItem from "./PlaylistItem";
+import PlaylistItem from "./Playlists/PlaylistItem";
 
 export default function Playlists() {
   const [playlists, setPlaylists] = useState([]);
