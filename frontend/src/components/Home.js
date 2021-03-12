@@ -3,7 +3,7 @@ import { Switch, Route } from "react-router-dom";
 
 import Boilerplate from "./Boilerplate";
 import HomePage from "./HomePage";
-import { TopTracks, TopArtists } from "./TopList";
+import { TopTracks, TopArtists } from "./Rankings/TopList";
 import Playlists from "./Playlists";
 import PlaylistAnalyze from "./PlaylistAnalyze";
 import RecMood from "./RecMood";
