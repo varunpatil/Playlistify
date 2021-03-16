@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Paper, Tab, Tabs, makeStyles } from "@material-ui/core";
 
-import CreatePlaylistMenu from "./CreatePlaylistMenu";
-import Loader from "./Loader";
+import CreatePlaylistMenu from "../CreatePlaylistMenu";
+import Loader from "../Loader";
 import TopUnit from "./TopUnit";
 
 const useStyles = makeStyles((theme) => ({

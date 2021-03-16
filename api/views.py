@@ -11,7 +11,10 @@ from spotipy import SpotifyException
 from . import helpers, lyrics, spotify
 
 # Saving api json response for speed
-from extras.response import resp
+# from extras.response import resp
+
+public_playlists = False
+default_description = 'Created using APP :)'
 
 
 @require_POST
@@ -23,8 +26,7 @@ def login(request):
         # Step 4. After getting redirected from Spotify auth page in Step 3
         try:
             auth_manager.get_access_token(body["code"])
-            request.session['refresh_token'] = auth_manager.get_cached_token()[
-                'refresh_token']
+            request.session['refresh_token'] = auth_manager.get_cached_token()['refresh_token']
             return JsonResponse({"message": "Success"})
         except Exception as e:
             return JsonResponse({"Error": str(e)}, status=400)
@@ -93,18 +95,14 @@ def get_lyrics(request):
 @cache_control(max_age=3600)
 def top_tracks(request):
     time_range = request.GET.get('time_range', 'short_term')
-    response = request.sp[0].current_user_top_tracks(
-        time_range=time_range, limit=50)
-
+    response = request.sp[0].current_user_top_tracks(time_range=time_range, limit=50)
     return JsonResponse(response['items'], safe=False)
 
 
 @cache_control(max_age=3600)
 def top_artists(request):
     time_range = request.GET.get('time_range', 'short_term')
-    response = request.sp[0].current_user_top_artists(
-        time_range=time_range, limit=50)
-
+    response = request.sp[0].current_user_top_artists(time_range=time_range, limit=50)
     return JsonResponse(response['items'], safe=False)
 
 
@@ -133,15 +131,20 @@ def playlists(request):
 def playlist_create(request):
     body = json.loads(request.body)
     name = body['name']
-    description = body.get('description', '') + ' - Created using APP :)'
-    public = body.get('public', False)
+    description = body.get('description', '') + ' - ' + default_description
+    public = body.get('public', public_playlists)
 
     response = request.sp[0].user_playlist_create(
-        user=request.session['me']['id'], name=name,
-        public=public, description=description
+        user=request.session['me']['id'],
+        name=name,
+        public=public,
+        description=description
     )
 
-    return JsonResponse({"playlist_id": response['id']})
+    return JsonResponse({
+        "playlist_id": response['id'],
+        "url": response['external_urls']['spotify']
+    })
 
 
 @require_POST
@@ -168,8 +171,7 @@ def playlist_top_artists(request):
         tracks.extend(response['tracks'][:5])
 
     track_ids = [track['id'] for track in tracks]
-    helpers.add_to_playlist(request, playlist_id,
-                            track_ids, limit=100, shuffle=True)
+    helpers.add_to_playlist(request, playlist_id, track_ids, limit=100, shuffle=True)
     return JsonResponse({"message": "success"})
 
 
@@ -219,15 +221,13 @@ def playlist_analysis(request, playlist_id):
     added_at_dates = Counter([item['added_at'][:10] for item in items])
     durations = [item['track']['duration_ms']//1000 for item in items]
     popularities = [item['track']['popularity'] for item in items]
-    release_years = Counter([item['track']['album']['release_date'][:4]
-                             for item in items])
+    release_years = Counter([item['track']['album']['release_date'][:4] for item in items])
 
     track_ids = [item['track']['id'] for item in items]
     artist_ids = [item['track']['artists'][0]['id'] for item in items]
 
     audio_features = helpers.get_audio_features(request, track_ids)
-    artist_freq, genre_freq = helpers.get_artist_genre_frequency(
-        request, artist_ids)
+    artist_freq, genre_freq = helpers.get_artist_genre_frequency(request, artist_ids)
 
     result.update({
         'artist_frequency': artist_freq,    # pie
@@ -235,7 +235,7 @@ def playlist_analysis(request, playlist_id):
         'added_at_dates': added_at_dates,   # calendar
         'audio_features': audio_features,   # bar
         'release_years': release_years,     # line
-        'durations': durations,               # line
+        'durations': durations,             # line
         'popularities': popularities,       # line
     })
 
@@ -262,6 +262,55 @@ def seed_recommendation(request):
 
     helpers.add_to_playlist(request, playlist_id, track_ids)
     return JsonResponse({"message": "success"})
+
+
+@require_POST
+def friend_recommendation(request):
+    body = json.loads(request.body)
+    user = helpers.get_user(request, body['user_id'])
+
+    if user.get('is_invalid'):
+        return JsonResponse({'Error': 'Invalid Link Provided'}, status=400)
+
+    if user['id'] == request.session['me']['id']:
+        return JsonResponse({'Error': 'Link matches your own profile'}, status=400)
+
+    # Only top 50 playlists will be considered
+    response = request.sp[1].user_playlists(user['id'])
+    playlist_ids = [item['id'] for item in response['items'] if helpers.is_user_playlist(item, user['id'])]
+
+    all_playlists_items = []
+
+    for playlist_id in playlist_ids:
+        response = request.sp[1].playlist_items(
+            playlist_id=playlist_id,
+            fields='next,items(track(id,is_local,popularity,type))',
+            market=request.session['me']['country'],
+            additional_types=("track",)
+        )
+        all_playlists_items.extend(response['items'])
+
+        while response['next']:
+            response = request.sp[1].next(response)
+            all_playlists_items.extend(response['items'])
+
+    track_ids = helpers.get_recommendation_track_ids(request, all_playlists_items)
+
+    if len(track_ids) == 0:
+        return JsonResponse({'Error': 'No tracks to recommend'}, status=400)
+
+    response = request.sp[0].user_playlist_create(
+        user=request.session['me']['id'],
+        name=user['name'] + ' recommends',
+        description=default_description,
+        public=public_playlists,
+    )
+
+    helpers.add_to_playlist(request, response['id'], track_ids, limit=100)
+    return JsonResponse({
+        "playlist_id": response['id'],
+        "url": response['external_urls']['spotify']
+    })
 
 
 @require_POST

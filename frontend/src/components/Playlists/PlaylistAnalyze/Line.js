@@ -16,7 +16,7 @@ export default function Line({ data, type }) {
         align="center"
         style={{ paddingTop: 25 }}
       >
-        {options[type].title}
+        {titles[type]}
       </Typography>
       <div style={{ height: smallScreen ? "40vh" : "80vh" }}>
         <ResponsiveLine
@@ -47,7 +47,7 @@ export default function Line({ data, type }) {
             legendPosition: "middle",
           }}
           axisBottom={
-            type !== 3 || data[0].data.length <= 10
+            type < 3 || data[0].data.length <= 10
               ? {
                   orient: "bottom",
                   tickSize: 5,
@@ -130,12 +130,40 @@ const adjustData = (data, type) => {
 
     return result;
   }
+
+  // BPM in buckets of 10 starting from lowerst to highest
+  else if (type === 4) {
+    const max = Math.max(...data);
+    const bucketSize = 10;
+    let flag = false;
+    let result = [{ data: [] }];
+
+    for (let i = 0; i < max; i += bucketSize) {
+      const filteredArray = data.filter((x) => {
+        return i < x && x <= i + bucketSize;
+      });
+
+      if (filteredArray.length > 0) {
+        flag = true;
+      }
+
+      if (flag) {
+        result[0].data.push({
+          x: `[${i + 1} to ${i + bucketSize}]`,
+          y: filteredArray.length,
+        });
+      }
+    }
+
+    return result;
+  }
 };
 
-const options = {
-  1: { title: "Track Release Years" },
-  2: { title: "Track Popularities" },
-  3: { title: "Track Durations" },
+const titles = {
+  1: "Track Release Years",
+  2: "Track Popularities",
+  3: "Track Durations",
+  4: "Track BPMs",
 };
 
 const fun = (x) => {
