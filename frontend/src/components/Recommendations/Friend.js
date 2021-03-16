@@ -14,7 +14,7 @@ export default function RecFriend() {
     const key = SnackBar({
       variant: "info",
       message: "Creating Playlist...",
-      autoHideDuration: 20 * 1000,
+      persist: true,
       enqueue: enqueueSnackbar,
       close: closeSnackbar
     })

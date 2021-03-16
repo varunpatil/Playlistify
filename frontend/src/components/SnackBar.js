@@ -2,14 +2,15 @@ import React from 'react'
 import { IconButton, Button, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close"
 
-export default function SnackBar({ variant, message, url, autoHideDuration = 5000, enqueue, close, }) {
+export default function SnackBar({ variant, message, url, autoHideDuration = 5000, persist = false, enqueue, close, }) {
     return enqueue(message, {
         variant: variant,
         anchorOrigin: {
             vertical: 'bottom',
             horizontal: 'left',
         },
-        autoHideDuration: autoHideDuration,
+        persist: persist,
+        autoHideDuration: persist ? null : autoHideDuration,
         action: ((key) =>
             <>
                 {url ? <Button
