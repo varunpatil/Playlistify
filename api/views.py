@@ -141,7 +141,10 @@ def playlist_create(request):
         description=description
     )
 
-    return JsonResponse({"playlist_id": response['id']})
+    return JsonResponse({
+        "playlist_id": response['id'],
+        "url": response['external_urls']['spotify']
+    })
 
 
 @require_POST
@@ -304,7 +307,10 @@ def friend_recommendation(request):
     )
 
     helpers.add_to_playlist(request, response['id'], track_ids, limit=100)
-    return JsonResponse({"playlist_id": response['id']})
+    return JsonResponse({
+        "playlist_id": response['id'],
+        "url": response['external_urls']['spotify']
+    })
 
 
 @require_POST

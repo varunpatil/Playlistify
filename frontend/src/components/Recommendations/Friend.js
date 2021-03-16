@@ -1,18 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Box, Button, Paper, Typography, TextField } from "@material-ui/core";
+import { useSnackbar } from 'notistack';
+import SnackBar from "../SnackBar"
 
 export default function RecFriend() {
   const [input, setInput] = useState("");
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const submit = async () => {
     try {
-      const res = await axios.post("/api/recommendation/friend/", {
-        user_id: input,
+      // const res = await axios.post("/api/recommendation/friend/", {
+      //   user_id: input,
+      // });
+
+      SnackBar({
+        variant: 'success',
+        message: 'Playlist Created',
+        url: 'https://www.google.co.in',
+        enqueue: enqueueSnackbar,
+        close: closeSnackbar
       });
 
-      const playlist_id = res.data.playlist_id;
-      console.log(playlist_id);
+      SnackBar({
+        variant: "error",
+        message: "something went wrong :(",
+        enqueue: enqueueSnackbar,
+        close: closeSnackbar
+      })
+
     } catch (error) {
       console.log(error.response.data.Error);
     }
