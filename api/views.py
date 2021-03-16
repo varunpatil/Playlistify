@@ -270,10 +270,10 @@ def friend_recommendation(request):
     user = helpers.get_user(request, body['user_id'])
 
     if user.get('is_invalid'):
-        return JsonResponse({'Error': 'Invalid User ID Provided'}, status=400)
+        return JsonResponse({'Error': 'Invalid Link Provided'}, status=400)
 
     if user['id'] == request.session['me']['id']:
-        return JsonResponse({'Error': 'Own User ID Provided'}, status=400)
+        return JsonResponse({'Error': 'Link matches your own profile'}, status=400)
 
     # Only top 50 playlists will be considered
     response = request.sp[1].user_playlists(user['id'])

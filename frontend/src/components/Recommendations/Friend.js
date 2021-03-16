@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { Box, Button, Paper, Typography, TextField } from "@material-ui/core";
 import { useSnackbar } from 'notistack';
@@ -9,29 +10,38 @@ export default function RecFriend() {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const submit = async () => {
-    try {
-      // const res = await axios.post("/api/recommendation/friend/", {
-      //   user_id: input,
-      // });
+    // instant info snackbar
+    const key = SnackBar({
+      variant: "info",
+      message: "Creating Playlist...",
+      autoHideDuration: 20 * 1000,
+      enqueue: enqueueSnackbar,
+      close: closeSnackbar
+    })
 
+    try {
+      const res = await axios.post("/api/recommendation/friend/", { user_id: input });
+
+      // Success snackbar
       SnackBar({
         variant: 'success',
         message: 'Playlist Created',
-        url: 'https://www.google.co.in',
+        url: res.data.url,
         enqueue: enqueueSnackbar,
         close: closeSnackbar
       });
-
+    } catch (error) {
+      // Error snackbar
       SnackBar({
         variant: "error",
-        message: "something went wrong :(",
+        message: error.response.data.Error,
         enqueue: enqueueSnackbar,
         close: closeSnackbar
       })
-
-    } catch (error) {
-      console.log(error.response.data.Error);
     }
+
+    // closing info snackbar
+    closeSnackbar(key);
   };
 
   return (
@@ -41,7 +51,7 @@ export default function RecFriend() {
           Enter link to your friend's profile
         </Typography>
 
-        <Typography align="center">
+        <Typography component="subtitle1" align="center">
           Make sure the link resembles{" "}
           <code>https://open.spotify.com/user/xyz</code> or{"  "}
           <code>spotify:user:xyz</code>
@@ -70,6 +80,25 @@ export default function RecFriend() {
       >
         <strong>Create recommendation playlist</strong>
       </Button>
+
+      <Box m={4} />
+
+      <div align="left">
+        <Paper style={{ padding: 5 }}>
+          <Typography component="subtitle1">
+            <ul>
+              <li>Uses tracks in your friend's public playlists to create a recommendation playlist.</li>
+              <li>Works best when there are multiple playlist.</li>
+              <li>This feature is under constant improvement</li>
+              <li>Complete the <Button component={Link} color="primary" to={'/survey'}>Survey</Button> to help improve the recommendations</li>
+            </ul>
+          </Typography>
+        </Paper>
+      </div>
     </div>
   );
 }
+
+
+
+
