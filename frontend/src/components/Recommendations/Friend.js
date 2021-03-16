@@ -88,9 +88,9 @@ export default function RecFriend() {
           <Typography component="subtitle1">
             <ul>
               <li>Uses tracks in your friend's public playlists to create a recommendation playlist.</li>
-              <li>Works best when there are multiple playlist.</li>
-              <li>This feature is under constant improvement</li>
-              <li>Complete the <Button component={Link} color="primary" to={'/survey'}>Survey</Button> to help improve the recommendations</li>
+              <li>Works best when there are multiple playlists.</li>
+              <li>This feature is under constant improvement.</li>
+              <li>Complete the <Button component={Link} color="primary" to={'/survey'}>Survey</Button> to help improve the recommendations.</li>
             </ul>
           </Typography>
         </Paper>

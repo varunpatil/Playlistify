@@ -18,6 +18,7 @@ module.exports = {
       },
     ],
   },
+  cache: true,
   optimization: {
     minimize: true,
   },
