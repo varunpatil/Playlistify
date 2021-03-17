@@ -300,13 +300,59 @@ def friend_recommendation(request):
         description=default_description,
     )
     helpers.add_to_playlist(request, response['id'], track_ids, limit=100)
-    return JsonResponse({
-        "playlist_id": response['id'],
-        "url": response['external_urls']['spotify']
-    })
+    return JsonResponse({"url": response['external_urls']['spotify']})
 
 
 @require_POST
+def mood_recommendation(request):
+    body = json.loads(request.body)
+    mood = body['mood']
+    params = body['params']
+
+    # input_artist_ids = [item['id'] for item in request.sp[0].current_user_top_artists(limit=5, time_range='short_term')['items']]
+    input_artist_ids = body['artist_ids'][:5]
+
+    response = request.sp[1].recommendations(
+        seed_artists=input_artist_ids,
+        country=request.session['me']['country'],
+        limit=30,
+        **params,
+    )
+    track_ids = [track['id'] for track in response['tracks']]
+
+    response = helpers.create_playlist(
+        request,
+        name="MOOD " + mood.capitalize(),
+        description=default_description,
+    )
+    helpers.add_to_playlist(request, response['id'], track_ids)
+    return JsonResponse({"url": response['external_urls']['spotify']})
+
+
+@cache_control(max_age=3600)
+def all_top_artists(request):
+    # return all top artists for mood recommendations UI
+    result = {}
+
+    for t, time_range in enumerate(['short_term', 'medium_term', 'long_term']):
+        response = request.sp[0].current_user_top_artists(limit=50, time_range=time_range)
+
+        for pos, item in enumerate(response['items'], 1):
+            if item['id'] in result:
+                result[item['id']]['priority'] = min((1+t/2)*pos, result[item['id']]['priority'])
+            else:
+                result[item['id']] = {
+                    'id': item['id'],
+                    'name': item['name'],
+                    'images': item['images'][1]['url'] if len(item['images']) >= 2 else None,
+                    'priority': (1+t/2)*pos,
+                }
+
+    result = sorted(result.values(), key=lambda k: k['priority'])
+    return JsonResponse(result, safe=False)
+
+
+@ require_POST
 def similar_artists(request):
     body = json.loads(request.body)
     playlist_id = body['playlist_id']
