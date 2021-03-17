@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { Box, Button, Paper, Typography, TextField } from "@material-ui/core";
-import { useSnackbar } from 'notistack';
-import SnackBar from "../../SnackBar"
+import { useSnackbar } from "notistack";
+import SnackBar from "../../SnackBar";
 
-export default function RecFriend() {
+export default function Friend() {
   const [input, setInput] = useState("");
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
@@ -16,19 +16,21 @@ export default function RecFriend() {
       message: "Creating Playlist...",
       persist: true,
       enqueue: enqueueSnackbar,
-      close: closeSnackbar
-    })
+      close: closeSnackbar,
+    });
 
     try {
-      const res = await axios.post("/api/recommendation/friend/", { user_id: input });
+      const res = await axios.post("/api/recommendation/friend/", {
+        user_id: input,
+      });
 
       // Success snackbar
       SnackBar({
-        variant: 'success',
-        message: 'Playlist Created',
+        variant: "success",
+        message: "Playlist Created",
         url: res.data.url,
         enqueue: enqueueSnackbar,
-        close: closeSnackbar
+        close: closeSnackbar,
       });
     } catch (error) {
       // Error snackbar
@@ -36,8 +38,8 @@ export default function RecFriend() {
         variant: "error",
         message: error.response.data.Error,
         enqueue: enqueueSnackbar,
-        close: closeSnackbar
-      })
+        close: closeSnackbar,
+      });
     }
 
     // closing info snackbar
@@ -87,10 +89,19 @@ export default function RecFriend() {
         <Paper style={{ padding: 5 }}>
           <Typography component="subtitle1">
             <ul>
-              <li>Uses tracks in your friend's public playlists to create a recommendation playlist.</li>
+              <li>
+                Uses tracks in your friend's public playlists to create a
+                recommendation playlist.
+              </li>
               <li>Works best when there are multiple playlists.</li>
               <li>This feature is under constant improvement.</li>
-              <li>Complete the <Button component={Link} color="primary" to={'/survey'}>Survey</Button> to help improve the recommendations.</li>
+              <li>
+                Complete the{" "}
+                <Button component={Link} color="primary" to={"/survey"}>
+                  Survey
+                </Button>{" "}
+                to help improve the recommendations.
+              </li>
             </ul>
           </Typography>
         </Paper>
@@ -98,7 +109,3 @@ export default function RecFriend() {
     </div>
   );
 }
-
-
-
-
