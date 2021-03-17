@@ -18,6 +18,17 @@ def filter_saved_tracks(request, track_ids):
     return [item for item, is_saved in zip(track_ids, mask) if not is_saved]
 
 
+def create_playlist(request, name, description, public=False):
+    response = request.sp[0].user_playlist_create(
+        user=request.session['me']['id'],
+        name=name,
+        public=public,
+        description=description
+    )
+
+    return response
+
+
 def add_to_playlist(request, playlist_id, track_ids, limit=10000, shuffle=False, allow_duplicates=False, allow_saved_tracks=True):
     if not allow_duplicates:
         track_ids = remove_duplicates(track_ids)

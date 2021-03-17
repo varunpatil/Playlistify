@@ -13,7 +13,6 @@ from . import helpers, lyrics, spotify
 # Saving api json response for speed
 # from extras.response import resp
 
-public_playlists = False
 default_description = 'Created using APP :)'
 
 
@@ -130,15 +129,11 @@ def playlists(request):
 @require_POST
 def playlist_create(request):
     body = json.loads(request.body)
-    name = body['name']
-    description = body.get('description', '') + ' - ' + default_description
-    public = body.get('public', public_playlists)
 
-    response = request.sp[0].user_playlist_create(
-        user=request.session['me']['id'],
-        name=name,
-        public=public,
-        description=description
+    response = helpers.create_playlist(
+        request,
+        name=body['name'],
+        description=body.get('description', '') + ' - ' + default_description
     )
 
     return JsonResponse({
@@ -299,13 +294,11 @@ def friend_recommendation(request):
     if len(track_ids) == 0:
         return JsonResponse({'Error': 'No tracks to recommend'}, status=400)
 
-    response = request.sp[0].user_playlist_create(
-        user=request.session['me']['id'],
+    response = helpers.create_playlist(
+        request,
         name=user['name'] + ' recommends',
         description=default_description,
-        public=public_playlists,
     )
-
     helpers.add_to_playlist(request, response['id'], track_ids, limit=100)
     return JsonResponse({
         "playlist_id": response['id'],
