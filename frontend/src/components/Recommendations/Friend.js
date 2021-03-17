@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import { Box, Button, Paper, Typography, TextField } from "@material-ui/core";
 import { useSnackbar } from 'notistack';
-import SnackBar from "../SnackBar"
+import SnackBar from "../../SnackBar"
 
 export default function RecFriend() {
   const [input, setInput] = useState("");
