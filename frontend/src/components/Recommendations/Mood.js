@@ -4,24 +4,36 @@ import {
   CardActionArea,
   CardMedia,
   CardContent,
-  makeStyles,
-  Typography,
   Container,
   Grid,
+  makeStyles,
+  Paper,
+  Typography,
 } from "@material-ui/core";
 
+import DropDown from "./Mood/DropDown";
+import Navigate from "./Mood/Navigate";
+
 export default function Mood() {
-  const [select, setSelect] = useState(null);
   const classes = useStyles();
+  const [select, setSelect] = useState(null);
 
   return (
     <Container maxWidth={false}>
+      <Paper style={{ padding: 20 }}>
+        <Typography variant="title" component="h1" align="center">
+          What Is Your Mood?
+        </Typography>
+      </Paper>
+
+      <Box m={4} />
+
       <Grid container spacing={8} justify="center" alignItems="center">
         {moods.map((mood) => (
           <Grid item xs={12} sm="auto" md="auto" lg="auto" xl="auto">
             <Box
-              borderColor={select === mood.title ? "primary.main" : "black"}
               border={4}
+              borderColor={select === mood.title ? "primary.main" : "#ffffff00"} // 0 opacity
             >
               <CardActionArea
                 className={classes.root}
@@ -40,6 +52,17 @@ export default function Mood() {
           </Grid>
         ))}
       </Grid>
+
+      <Box m={4} />
+
+      {select ? (
+        <>
+          <DropDown />
+          <Navigate title="Proceed" />
+        </>
+      ) : null}
+
+      <Box m={4} />
     </Container>
   );
 }
