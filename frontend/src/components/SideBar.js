@@ -13,7 +13,6 @@ import {
   Info,
   TrendingUp,
   Home,
-  Email,
   EmojiEmotions,
   Forum,
   PeopleAlt,
@@ -84,8 +83,7 @@ export default function SideBar({ toggle }) {
         icon={Restore}
         toggle={toggle}
       />
-      <Base name="Survey" path="/survey" icon={Forum} toggle={toggle} />
-      <Base name="Feedback" path="/feedback" icon={Email} toggle={toggle} />
+      <Base name="Survey & Feedback" path="/survey" icon={Forum} toggle={toggle} />
       <Base name="About" path="/about" icon={Info} toggle={toggle} />
 
       <Divider />
