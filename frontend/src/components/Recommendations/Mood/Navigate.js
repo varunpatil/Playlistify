@@ -14,7 +14,7 @@ export default function Navigate({ goto, title, setPage }) {
       variant="extended"
       size="large"
       color="primary"
-      // onClick={() => setPage(goto)}
+      onClick={() => setPage(goto)}
       className={classes.fab}
     >
       <strong>{title}</strong>

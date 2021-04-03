@@ -2,7 +2,7 @@
 // a given mood and averaging and adjusting features of all tracks
 
 export const MOOD_PARAMS = {
-    dance: {
+    Dance: {
         acousticness: 0.10,
         danceability: 0.80,
         energy: 0.75,
@@ -12,7 +12,7 @@ export const MOOD_PARAMS = {
         tempo: 125,
         valence: 0.50,
     },
-    energy: {
+    Energy: {
         acousticness: 0.10,
         danceability: 0.70,
         energy: 0.85,
@@ -22,7 +22,7 @@ export const MOOD_PARAMS = {
         tempo: 125,
         valence: 0.55,
     },
-    happy: {
+    Happy: {
         acousticness: 0.25,
         danceability: 0.70,
         energy: 0.70,
@@ -32,7 +32,7 @@ export const MOOD_PARAMS = {
         tempo: 120,
         valence: 0.70,
     },
-    relax: {
+    Relax: {
         acousticness: 0.55,
         danceability: 0.50,
         energy: 0.35,
@@ -42,7 +42,7 @@ export const MOOD_PARAMS = {
         tempo: 105,
         valence: 0.35,
     },
-    sad: {
+    Sad: {
         acousticness: 0.55,
         danceability: 0.55,
         energy: 0.35,
