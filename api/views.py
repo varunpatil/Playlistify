@@ -344,7 +344,7 @@ def all_top_artists(request):
                 result[item['id']] = {
                     'id': item['id'],
                     'name': item['name'],
-                    'images': item['images'][1]['url'] if len(item['images']) >= 2 else None,
+                    'image_url': item['images'][1]['url'] if len(item['images']) >= 2 else None,
                     'priority': (1+t/2)*pos,
                 }
 

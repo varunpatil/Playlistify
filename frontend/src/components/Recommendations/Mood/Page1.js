@@ -30,7 +30,15 @@ export default function Page1(props) {
 
       <Grid container spacing={8} justify="center" alignItems="center">
         {moods.map((mood) => (
-          <Grid item xs={12} sm="auto" md="auto" lg="auto" xl="auto">
+          <Grid
+            item
+            key={mood.title}
+            xs={12}
+            sm="auto"
+            md="auto"
+            lg="auto"
+            xl="auto"
+          >
             <Box
               border={4}
               borderColor={
