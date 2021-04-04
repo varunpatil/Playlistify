@@ -11,6 +11,7 @@ import {
 
 import Navigate from "./Navigate";
 import CreatePlaylistButton from "./CreatePlaylistButton";
+import Loader from "../../Loader";
 
 export default function Page2(props) {
   const [artistIds, setArtistIds] = useState(new Set());
@@ -24,6 +25,8 @@ export default function Page2(props) {
           Choose 5 Artists To Match Your Mood
         </Typography>
       </Paper>
+
+      {props.artists.length === 0 ? <Loader /> : null}
 
       <Grid
         container
