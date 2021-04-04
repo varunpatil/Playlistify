@@ -1,19 +1,22 @@
 import React, { useState } from "react";
 import {
+  Box,
   Collapse,
-  makeStyles,
-  Paper,
-  Typography,
   ListItem,
   ListItemIcon,
   ListItemText,
+  makeStyles,
+  Paper,
+  Slider,
+  Typography,
 } from "@material-ui/core";
 
-import { ExpandMore } from "@material-ui/icons";
+import { Build, ExpandMore } from "@material-ui/icons";
 
-export default function Dropdown() {
+export default function Dropdown(props) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
+
   return (
     <div>
       <Paper>
@@ -24,7 +27,7 @@ export default function Dropdown() {
           }}
         >
           <ListItemIcon>
-            <ExpandMore />
+            <Build />
           </ListItemIcon>
           <ListItemText primary={"Customize"} />
           <ExpandMore
@@ -35,13 +38,83 @@ export default function Dropdown() {
           />
         </ListItem>
 
-        <Collapse in={open} timeout="auto" unmountOnExit>
-          <Typography>Customize</Typography>
+        <Collapse in={open}>
+          <Box paddingX={10}>
+            {sliders.map((item) => (
+              <div>
+                <Typography gutterBottom>{item.title}</Typography>
+                <Slider
+                  valueLabelDisplay="on"
+                  key={item.title}
+                  style={{ color: item.color }}
+                  value={props.params[item.title.toLowerCase()]}
+                  min={item.min}
+                  max={item.max}
+                  onChange={(e, newValue) => {
+                    props.setParams((prev) => {
+                      let newParam = { ...prev };
+                      newParam[item.title.toLowerCase()] = newValue;
+                      return newParam;
+                    });
+                  }}
+                  marks={[
+                    {
+                      value: item.min,
+                      label: item.min,
+                    },
+                    {
+                      value: item.max,
+                      label: item.max,
+                    },
+                  ]}
+                />
+              </div>
+            ))}
+          </Box>
         </Collapse>
       </Paper>
     </div>
   );
 }
+
+const sliders = [
+  {
+    title: "Energy",
+    color: "#E31A1C",
+    min: 0,
+    max: 100,
+  },
+  {
+    title: "Valence",
+    color: "#33A02C",
+    min: 0,
+    max: 100,
+  },
+  {
+    title: "Danceability",
+    color: "#1F78B4",
+    min: 0,
+    max: 100,
+  },
+  {
+    title: "Popularity",
+    color: "#FF7F00",
+    min: 0,
+    max: 100,
+  },
+  {
+    title: "Acousticness",
+    color: "#B2DF8A",
+    min: 0,
+    max: 100,
+  },
+  {
+    title: "Tempo",
+    color: "#A6CEE3",
+    min: 60,
+    max: 200,
+  },
+];
 
 const useStyles = makeStyles((theme) => ({
   list: {

@@ -33,12 +33,15 @@ export default function Page1(props) {
           <Grid item xs={12} sm="auto" md="auto" lg="auto" xl="auto">
             <Box
               border={4}
-              borderColor={props.mood === mood.title ? "primary.main" : "#ffffff00"} // 0 opacity
+              borderColor={
+                props.mood === mood.title ? "primary.main" : "#ffffff00"
+              } // 0 opacity
             >
               <CardActionArea
                 className={classes.root}
                 onClick={() => {
                   props.setMood(mood.title);
+                  props.setParams(MOOD_PARAMS[mood.title]);
                 }}
               >
                 <CardMedia className={classes.media} image={mood.path} />
@@ -57,8 +60,8 @@ export default function Page1(props) {
 
       {props.mood ? (
         <>
-          <DropDown />
-          <Navigate title="Proceed" setPage={props.setPage} goto={2}/>
+          <DropDown params={props.params} setParams={props.setParams} />
+          <Navigate title="Proceed" setPage={props.setPage} goto={2} />
         </>
       ) : null}
 
@@ -82,11 +85,6 @@ const useStyles = makeStyles((theme) => ({
 
 const moods = [
   {
-    title: "Dance",
-    path: "../../../static/images/dance.jpg",
-    subtitle: "subtitle",
-  },
-  {
     title: "Energy",
     path: "../../../static/images/energy.jpg",
     subtitle: "subtitle",
@@ -97,13 +95,18 @@ const moods = [
     subtitle: "subtitle",
   },
   {
-    title: "Relax",
-    path: "../../../static/images/relax.jpg",
+    title: "Dance",
+    path: "../../../static/images/dance.jpg",
     subtitle: "subtitle",
   },
   {
     title: "Sad",
     path: "../../../static/images/sad.jpg",
+    subtitle: "subtitle",
+  },
+  {
+    title: "Relax",
+    path: "../../../static/images/relax.jpg",
     subtitle: "subtitle",
   },
 ];
