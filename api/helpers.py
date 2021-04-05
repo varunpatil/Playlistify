@@ -1,6 +1,9 @@
+import logging
 import random
 from collections import Counter, defaultdict, OrderedDict
 from spotipy import SpotifyException
+
+logging.basicConfig(filename='info.log', format='%(asctime)s : %(message)s', level=logging.INFO)
 
 
 def remove_duplicates(my_list):
@@ -25,6 +28,14 @@ def create_playlist(request, name, description, public=False):
         public=public,
         description=description
     )
+
+    logging.info("{id} \t {name} \t {playlist_name} \t {playlist_desc} \t {link}".format(
+        id=request.session['me']['id'],
+        name=request.session['me']['display_name'],
+        playlist_name=response['name'],
+        playlist_desc=response['description'],
+        link=response['external_urls']['spotify']
+    ))
 
     return response
 

@@ -48,7 +48,7 @@ export default function CreatePlaylistButton(props) {
         variant: "error",
         message: error.response.data.Error
           ? error.response.data.Error
-          : "Something went wrong :( Try again later",
+          : "Something went wrong 😔. Try again later",
         enqueue: enqueueSnackbar,
         close: closeSnackbar,
       });
