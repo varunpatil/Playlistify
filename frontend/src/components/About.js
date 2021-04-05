@@ -44,7 +44,7 @@ const links = [
   },
   {
     icon: GitHub,
-    href: "https://github.com/varunpatil",
+    href: "https://github.com/varunpatil/sp-project",
   },
   {
     icon: Facebook,
