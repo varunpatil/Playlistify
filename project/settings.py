@@ -99,3 +99,5 @@ USE_I18N = False
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
+SESSION_COOKIE_AGE = 365 * 24 * 3600
