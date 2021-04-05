@@ -311,6 +311,7 @@ def mood_recommendation(request):
 
     # input_artist_ids = [item['id'] for item in request.sp[0].current_user_top_artists(limit=5, time_range='short_term')['items']]
     input_artist_ids = body['artist_ids'][:5]
+    input_artist_names = body['artist_names'][:5]
 
     response = request.sp[1].recommendations(
         seed_artists=input_artist_ids,
@@ -323,7 +324,7 @@ def mood_recommendation(request):
     response = helpers.create_playlist(
         request,
         name="MOOD " + mood.capitalize(),
-        description=default_description,
+        description='artists: ' + ', '.join(input_artist_names) + ' - ' + default_description,
     )
     helpers.add_to_playlist(request, response['id'], track_ids)
     return JsonResponse({"url": response['external_urls']['spotify']})

@@ -5,7 +5,8 @@ import { Fab } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 import SnackBar from "../../../SnackBar";
 
-export default function CreatePlaylistButton({ mood, params, artistIds }) {
+export default function CreatePlaylistButton(props) {
+  const { mood, artistIds, artistNames, params } = props;
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const CreatePlaylist = async () => {
@@ -22,6 +23,7 @@ export default function CreatePlaylistButton({ mood, params, artistIds }) {
       const res = await axios.post("/api/recommendation/mood/", {
         mood: mood,
         artist_ids: artistIds,
+        artist_names: artistNames,
         params: {
           target_acousticness: params.acousticness / 100,
           target_danceability: params.danceability / 100,

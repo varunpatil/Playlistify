@@ -81,6 +81,9 @@ export default function Page2(props) {
           mood={props.mood}
           params={props.params}
           artistIds={[...artistIds]}
+          artistNames={props.artists
+            .filter((artist) => artistIds.has(artist.id))
+            .map((artist) => artist.name)}
         />
       ) : null}
       <Navigate title="Back" setPage={props.setPage} goto={1} left={true} />
