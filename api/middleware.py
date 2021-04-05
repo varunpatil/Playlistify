@@ -13,7 +13,7 @@ class LoginRequiredMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.path.startswith('/api') and request.path != reverse('login'):
+        if request.path.startswith('/api') and request.path not in [reverse('login'), reverse('logout')]:
             auth_manager = spotify.get_auth_manager(request)
 
             try:
@@ -36,7 +36,7 @@ class InitRequestMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.path.startswith('/api') and request.path != reverse('login'):
+        if request.path.startswith('/api') and request.path not in [reverse('login'), reverse('logout')]:
             auth_manager = spotify.get_auth_manager(request)
             request.sp = spotify.get_spotify_api_clients(request)
 
@@ -56,8 +56,5 @@ class TimerMiddleware:
         response = self.get_response(request)
         end = time.time()
         if TIMER:
-            print()
-            print()
-            print("Took " + str(end - start) + " secs")
-            # print(request.path + " took " + str(end - start) + " secs")
+            print("\n\nTook " + str(end - start) + " secs")
         return response
