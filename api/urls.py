@@ -21,5 +21,7 @@ urlpatterns = [
 
     path('recommendation/seed/', views.seed_recommendation),
     path('recommendation/friend/', views.friend_recommendation),
+    path('recommendation/mood/', views.mood_recommendation),
+    path('recommendation/all-top-artists', views.all_top_artists),
     path('similar_artists/', views.similar_artists),
 ]

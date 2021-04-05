@@ -1,6 +1,9 @@
+import logging
 import random
 from collections import Counter, defaultdict, OrderedDict
 from spotipy import SpotifyException
+
+logging.basicConfig(filename='info.log', format='%(asctime)s : %(message)s', level=logging.INFO)
 
 
 def remove_duplicates(my_list):
@@ -16,6 +19,25 @@ def filter_saved_tracks(request, track_ids):
         mask.extend(response)
 
     return [item for item, is_saved in zip(track_ids, mask) if not is_saved]
+
+
+def create_playlist(request, name, description, public=False):
+    response = request.sp[0].user_playlist_create(
+        user=request.session['me']['id'],
+        name=name,
+        public=public,
+        description=description
+    )
+
+    logging.info("{id} \t {name} \t {playlist_name} \t {playlist_desc} \t {link}".format(
+        id=request.session['me']['id'],
+        name=request.session['me']['display_name'],
+        playlist_name=response['name'],
+        playlist_desc=response['description'],
+        link=response['external_urls']['spotify']
+    ))
+
+    return response
 
 
 def add_to_playlist(request, playlist_id, track_ids, limit=10000, shuffle=False, allow_duplicates=False, allow_saved_tracks=True):

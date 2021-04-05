@@ -1,9 +1,9 @@
 **/__pycache__/
-.idea/
-.vscode/
-venv/
+*.log
+/.vscode
+/venv
 
-.caches/
-extras/
-static/
+/.caches
+/extras
+/static
 db.sqlite3
