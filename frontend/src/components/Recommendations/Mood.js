@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 import Page1 from "./Mood/Page1";
 import Page2 from "./Mood/Page2";
@@ -12,7 +13,7 @@ export default function Mood() {
   useEffect(async () => {
     const res = await axios.get("/api/recommendation/all-top-artists");
     setArtists(res.data);
-  });
+  }, []);
 
   return (
     <div>
