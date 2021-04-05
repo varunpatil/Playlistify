@@ -1,36 +1,13 @@
 import React, { useState } from "react";
-import {
-  Fab,
-  makeStyles,
-  Menu,
-  MenuItem,
-  IconButton,
-  Typography,
-  Box,
-} from "@material-ui/core";
-import { PlaylistAdd } from "@material-ui/icons";
 import axios from "axios";
+import { Fab, IconButton, Menu, MenuItem, Typography } from "@material-ui/core";
+import { PlaylistAdd } from "@material-ui/icons";
 
-const label = {
-  short_term: "Last month",
-  medium_term: "Last 6 months",
-  long_term: "All Time",
-};
-
-const useStyles = makeStyles((theme) => ({
-  fab: {
-    position: "fixed",
-    spacing: 10,
-    bottom: theme.spacing(3),
-    right: theme.spacing(3),
-  },
-  iconButton: {
-    color: "black",
-  },
-}));
+import { useSnackbar } from "notistack";
+import SnackBar from "../SnackBar";
 
 export default function CreatePlaylistMenu(props) {
-  const classes = useStyles();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const optionsList = [
@@ -62,7 +39,7 @@ export default function CreatePlaylistMenu(props) {
 
   const menuItemClick = (event) => {
     const option = JSON.parse(event.currentTarget.dataset.value);
-    CreatePlaylist(props, option);
+    CreatePlaylist(props, option, enqueueSnackbar, closeSnackbar);
     setAnchorEl(null);
   };
 
@@ -72,30 +49,32 @@ export default function CreatePlaylistMenu(props) {
       onClick={menuItemClick}
       data-value={JSON.stringify(option)}
     >
-      <Box>
+      <div>
         <Typography variant="h6">{option.title}</Typography>
         <Typography variant="subtitle2" color="textSecondary">
           {option.subtitle}
         </Typography>
-      </Box>
+      </div>
     </MenuItem>
   ));
 
   return (
-    <Fab color="primary" className={classes.fab}>
+    <Fab
+      color="primary"
+      style={{ position: "fixed", bottom: "24px", right: "24px" }}
+    >
       <IconButton
+        style={{ color: "black" }}
         onClick={(event) => {
           setAnchorEl(event.currentTarget);
         }}
-        className={classes.iconButton}
       >
         <PlaylistAdd />
       </IconButton>
 
       <Menu
-        id="long-menu"
-        disableScrollLock
         keepMounted
+        disableScrollLock
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={() => {
@@ -116,7 +95,13 @@ export default function CreatePlaylistMenu(props) {
   );
 }
 
-const CreatePlaylist = async (props, option) => {
+const label = {
+  short_term: "Last month",
+  medium_term: "Last 6 months",
+  long_term: "All Time",
+};
+
+const CreatePlaylist = async (props, option, enqueue, close) => {
   let apiPath = "";
   let data1 = {
     name: "",
@@ -160,7 +145,42 @@ const CreatePlaylist = async (props, option) => {
     "'" +
     (d.getFullYear() % 100);
 
-  const res1 = await axios.post("/api/playlist/create/", data1);
-  data2.playlist_id = res1.data.playlist_id;
-  const res2 = await axios.post(apiPath, data2);
+  // API CALLS AND SNACKBAR
+
+  // instant info snackbar
+  const key = SnackBar({
+    variant: "info",
+    message: "Creating Playlist...",
+    persist: true,
+    enqueue: enqueue,
+    close: close,
+  });
+
+  try {
+    const res1 = await axios.post("/api/playlist/create/", data1);
+    data2.playlist_id = res1.data.playlist_id;
+    const res2 = await axios.post(apiPath, data2);
+
+    // Success snackbar
+    SnackBar({
+      variant: "success",
+      message: "Playlist Created",
+      url: res1.data.url,
+      enqueue: enqueue,
+      close: close,
+    });
+  } catch (error) {
+    // Error snackbar
+    SnackBar({
+      variant: "error",
+      message: error.response.data.Error
+        ? error.response.data.Error
+        : "Something went wrong :( Try again later",
+      enqueue: enqueue,
+      close: close,
+    });
+  }
+
+  // closing info snackbar
+  close(key);
 };
