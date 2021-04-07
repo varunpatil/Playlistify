@@ -30,7 +30,9 @@ export default function Header({ data }) {
               {data.description !== "" ? <br /> : null}
               {`${data.no_of_tracks} Tracks`}
               <br />
-              {`${data.followers} Followers`}
+              {data.followers !== 1
+                ? `${data.followers} Followers`
+                : "1 Follower"}
             </Typography>
             <div className={classes.controls}>
               <Button
