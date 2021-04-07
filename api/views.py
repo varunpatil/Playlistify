@@ -40,7 +40,7 @@ def login(request):
     except (KeyError, SpotifyException):
         # This will be encountered if the user removes access from the
         # spotify apps page thus making the refresh token useless
-        # Step 3. Display sign in link when no token
+        # Step 3. return sign in link when no token
         auth_url = auth_manager.get_authorize_url()
         return JsonResponse({"auth_url": auth_url})
 
@@ -50,7 +50,10 @@ def login(request):
 @require_POST
 def logout(request):
     cache_path = spotify.session_cache_path(request)
-    os.remove(cache_path)
+    try:
+        os.remove(cache_path)
+    except FileNotFoundError:
+        pass
     request.session.flush()
     return JsonResponse({"message": "Success"})
 
