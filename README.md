@@ -18,3 +18,5 @@
 - [Webpack](https://github.com/webpack/webpack)
 - [LyricsGenius](https://github.com/johnwmillr/LyricsGenius)
 - [Axios](https://github.com/axios/axios)
+
+### [Contributing Guidelines](/CONTRIBUTING.md)

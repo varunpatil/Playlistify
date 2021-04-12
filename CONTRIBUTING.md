@@ -1,4 +1,9 @@
-# Steps to run on your machine
+# Contributing guidelines
+
+### If you wish to contribute to this project in any form, please contact me on [Linkedin](https://www.linkedin.com/in/varunpatil27/) before sending any pull requests
+<br/>
+
+# Steps to setup your dev environment
 
 ```
 git clone https://github.com/varunpatil/sp-project.git && cd sp-project
