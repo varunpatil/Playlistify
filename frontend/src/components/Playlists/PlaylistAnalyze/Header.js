@@ -28,7 +28,9 @@ export default function Header({ data }) {
             <Typography variant="subtitle1" color="textSecondary">
               {data.description}
               {data.description !== "" ? <br /> : null}
-              {`${data.no_of_tracks} Tracks`}
+              {data.no_of_tracks !== 1
+                ? `${data.no_of_tracks} Tracks`
+                : "1 Track"}
               <br />
               {data.followers !== 1
                 ? `${data.followers} Followers`
