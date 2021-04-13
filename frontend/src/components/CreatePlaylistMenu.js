@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Fab, IconButton, Menu, MenuItem, Typography } from "@material-ui/core";
+import { Fab, Menu, MenuItem, Typography } from "@material-ui/core";
 import { PlaylistAdd } from "@material-ui/icons";
 
 import { useSnackbar } from "notistack";
@@ -45,7 +45,7 @@ export default function CreatePlaylistMenu(props) {
 
   const options = optionsList.map((option) => (
     <MenuItem
-      key={option}
+      key={option.title}
       onClick={menuItemClick}
       data-value={JSON.stringify(option)}
     >
@@ -63,14 +63,12 @@ export default function CreatePlaylistMenu(props) {
       color="primary"
       style={{ position: "fixed", bottom: "24px", right: "24px" }}
     >
-      <IconButton
+      <PlaylistAdd
         style={{ color: "black" }}
         onClick={(event) => {
           setAnchorEl(event.currentTarget);
         }}
-      >
-        <PlaylistAdd />
-      </IconButton>
+      />
 
       <Menu
         keepMounted

@@ -11,7 +11,7 @@ import {
 
 import { ExpandMore } from "@material-ui/icons";
 
-export default function DropDown(props){
+export default function DropDown(props) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
@@ -28,10 +28,7 @@ export default function DropDown(props){
         </ListItemIcon>
         <ListItemText primary={props.name} />
         <ExpandMore
-          className={[
-            classes.dropdown,
-            open ? classes.dropdownOpen : classes.dropdownClosed,
-          ]}
+          className={open ? classes.dropdownOpen : classes.dropdownClosed}
         />
       </ListItem>
 
@@ -40,21 +37,22 @@ export default function DropDown(props){
       </Collapse>
     </List>
   );
-};
+}
 
 const useStyles = makeStyles((theme) => ({
   list: {
     backgroundColor: theme.palette.background.paper,
   },
-  dropdown: {
+  dropdownOpen: {
+    transform: "rotate(-180deg)",
     transition: theme.transitions.create(["transform"], {
       duration: theme.transitions.duration.short,
     }),
   },
-  dropdownOpen: {
-    transform: "rotate(-180deg)",
-  },
   dropdownClosed: {
     transform: "rotate(0)",
+    transition: theme.transitions.create(["transform"], {
+      duration: theme.transitions.duration.short,
+    }),
   },
 }));

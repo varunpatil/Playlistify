@@ -15,7 +15,6 @@ export default function Base(props) {
       {props.hideDivider ? null : <Divider />}
       <ListItem
         button
-        key={props.name}
         component={Link}
         to={props.path}
         className={props.nested ? classes.nested : null}

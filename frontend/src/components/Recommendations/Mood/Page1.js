@@ -21,7 +21,7 @@ export default function Page1(props) {
   return (
     <Container maxWidth={false}>
       <Paper style={{ padding: 20 }}>
-        <Typography variant="title" component="h1" align="center">
+        <Typography variant="h4" component="h1" align="center">
           What Is Your Mood?
         </Typography>
       </Paper>

@@ -30,10 +30,7 @@ export default function Parent(props) {
         </ListItemIcon>
         <ListItemText primary={props.name} />
         <ExpandMore
-          className={[
-            classes.dropdown,
-            open ? classes.dropdownOpen : classes.dropdownClosed,
-          ]}
+          className={open ? classes.dropdownOpen : classes.dropdownClosed}
         />
       </ListItem>
 
@@ -43,6 +40,7 @@ export default function Parent(props) {
             return (
               <Base
                 name={child.name}
+                key={child.name}
                 path={child.path}
                 icon={child.icon}
                 toggle={props.toggle}
@@ -58,15 +56,16 @@ export default function Parent(props) {
 }
 
 const useStyles = makeStyles((theme) => ({
-  dropdown: {
+  dropdownOpen: {
+    transform: "rotate(-180deg)",
     transition: theme.transitions.create(["transform"], {
       duration: theme.transitions.duration.short,
     }),
   },
-  dropdownOpen: {
-    transform: "rotate(-180deg)",
-  },
   dropdownClosed: {
     transform: "rotate(0)",
+    transition: theme.transitions.create(["transform"], {
+      duration: theme.transitions.duration.short,
+    }),
   },
 }));

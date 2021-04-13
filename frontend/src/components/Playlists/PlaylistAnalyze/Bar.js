@@ -9,7 +9,7 @@ export default function Bar({ data }) {
   return (
     <div style={{ height: smallScreen ? "40vh" : "70vh" }}>
       <Typography
-        variant="title"
+        variant="h5"
         component="h1"
         align="center"
         style={{ paddingTop: 20 }}

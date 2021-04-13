@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { SnackbarProvider } from 'notistack';
+import { SnackbarProvider } from "notistack";
 import MenuIcon from "@material-ui/icons/Menu";
 import {
   AppBar,
   CssBaseline,
+  Drawer,
   SwipeableDrawer,
   Hidden,
   IconButton,
@@ -64,13 +65,13 @@ export default function BoilerPlate(props) {
 
           {/* Desktop version */}
           <Hidden xsDown>
-            <SwipeableDrawer
+            <Drawer
               classes={{ paper: classes.drawerPaper }}
               variant="permanent"
               open
             >
               <SideBar />
-            </SwipeableDrawer>
+            </Drawer>
           </Hidden>
         </nav>
 

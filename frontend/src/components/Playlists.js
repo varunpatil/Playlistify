@@ -15,17 +15,23 @@ export default function Playlists() {
 
   return (
     <Container maxWidth={false}>
-      {playlists.length ? (
-        <Grid container spacing={8} justify="center" alignItems="center">
-          {playlists.map((playlist) => (
-            <Grid item xs={12} sm="auto" md="auto" lg="auto" xl="auto">
-              <PlaylistItem playlist={playlist} />
-            </Grid>
-          ))}
-        </Grid>
-      ) : (
-        <Loader />
-      )}
+      {playlists.length === 0 ? <Loader /> : null}
+
+      <Grid container spacing={8} justify="center" alignItems="center">
+        {playlists.map((playlist) => (
+          <Grid
+            item
+            key={playlist.id}
+            xs={12}
+            sm="auto"
+            md="auto"
+            lg="auto"
+            xl="auto"
+          >
+            <PlaylistItem playlist={playlist} />
+          </Grid>
+        ))}
+      </Grid>
     </Container>
   );
 }

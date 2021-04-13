@@ -6,13 +6,6 @@ import CreatePlaylistMenu from "../CreatePlaylistMenu";
 import Loader from "../Loader";
 import TopUnit from "./TopUnit";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    marginBottom: theme.spacing(3),
-  },
-}));
-
 function TopList({ type }) {
   const classes = useStyles();
   const [items, setItems] = useState([]);
@@ -43,13 +36,11 @@ function TopList({ type }) {
         </Tabs>
       </Paper>
 
-      {items.length ? (
-        items.map((item, key) => (
-          <TopUnit type={type} key={key} rank={key + 1} unit={item} />
-        ))
-      ) : (
-        <Loader />
-      )}
+      {items.length === 0 ? <Loader /> : null}
+
+      {items.map((item, rank) => (
+        <TopUnit type={type} key={item.id} rank={rank + 1} unit={item} />
+      ))}
 
       {type === "Track" ? (
         <CreatePlaylistMenu
@@ -76,3 +67,10 @@ export function TopTracks() {
 export function TopArtists() {
   return <TopList type="Artist" />;
 }
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    marginBottom: theme.spacing(3),
+  },
+}));

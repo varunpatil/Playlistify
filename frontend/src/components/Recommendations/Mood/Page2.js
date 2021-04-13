@@ -21,7 +21,7 @@ export default function Page2(props) {
   return (
     <Container maxWidth={false}>
       <Paper style={{ padding: 20, marginBottom: 20 }}>
-        <Typography variant="title" component="h1" align="center">
+        <Typography variant="h4" component="h1" align="center">
           Choose 5 Artists To Match Your Mood
         </Typography>
       </Paper>

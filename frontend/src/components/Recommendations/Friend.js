@@ -49,11 +49,11 @@ export default function Friend() {
   return (
     <div align="center">
       <Paper style={{ padding: 20 }}>
-        <Typography variant="title" component="h1" align="center">
+        <Typography variant="h4" component="h1" align="center">
           Enter link to your friend's profile
         </Typography>
 
-        <Typography component="subtitle1" align="center">
+        <Typography variant="subtitle1" align="center">
           Make sure the link resembles{" "}
           <code>https://open.spotify.com/user/xyz</code> or{"  "}
           <code>spotify:user:xyz</code>
@@ -87,7 +87,7 @@ export default function Friend() {
 
       <div align="left">
         <Paper style={{ padding: 5 }}>
-          <Typography component="subtitle1">
+          <Typography variant="subtitle1">
             <ul>
               <li>
                 Uses tracks in your friend's public playlists to create a
