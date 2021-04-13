@@ -13,7 +13,7 @@ from . import helpers, lyrics, spotify
 # Saving api json response for speed
 # from extras.response import resp
 
-default_description = 'Created using APP :)'
+default_description = 'Created using APP (http://ec2-13-126-98-132.ap-south-1.compute.amazonaws.com)'
 
 
 @require_POST
