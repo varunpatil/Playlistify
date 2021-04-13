@@ -13,6 +13,7 @@ import {
 
 import { FormatAlignLeft, Help, YouTube } from "@material-ui/icons";
 
+import Controller from "./HomePage/Controller";
 import DropDown from "./HomePage/DropDown";
 import Text from "./HomePage/Text";
 import Video from "./HomePage/Video";
@@ -81,9 +82,11 @@ export default function HomePage() {
         </CardContent>
       </Card>
 
+      <Controller />
+
       <LinearProgress
         variant="determinate"
-        className={classes.progress}
+        style={{ height: "6px" }}
         value={100 * (nowPlaying.progress_ms / nowPlaying.duration_ms)}
       />
 
@@ -130,9 +133,6 @@ const useStyles = makeStyles((theme) => ({
   },
   divider: {
     background: theme.palette.background.divider,
-  },
-  progress: {
-    height: "6px",
   },
   root: {
     marginBottom: theme.spacing(3),
