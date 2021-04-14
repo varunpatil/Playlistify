@@ -108,6 +108,13 @@ def playback_next(request):
     return JsonResponse({"message": "Success"})
 
 
+@require_POST
+def playback_repeat(request):
+    body = json.loads(request.body)
+    request.sp[0].repeat(state=body['state'])
+    return JsonResponse({"message": "Success"})
+
+
 @cache_control(max_age=365*24*3600)
 def get_lyrics(request):
     track_name = request.GET['track_name']

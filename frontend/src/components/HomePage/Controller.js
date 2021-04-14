@@ -47,6 +47,20 @@ export default function Controller({ playback, refresh }) {
     }
   };
 
+  const repeat = async () => {
+    // off -> context -> track -> off
+    let state = "track";
+    if (playback.repeat === "track") state = "off";
+    else if (playback.repeat === "off") state = "context";
+
+    try {
+      await axios.post("/api/playback/repeat/", { state: state });
+      refresh();
+    } catch {
+      errorSnackBar(enqueueSnackbar, closeSnackbar);
+    }
+  };
+
   return (
     <Paper className={classes.controls}>
       <IconButton
@@ -69,8 +83,12 @@ export default function Controller({ playback, refresh }) {
         <SkipNext />
       </IconButton>
 
-      <IconButton className={classes.button} color="primary">
-        <Repeat />
+      <IconButton
+        className={classes.button}
+        color={playback.repeat !== "off" ? "primary" : "default"}
+        onClick={repeat}
+      >
+        {playback.repeat !== "track" ? <Repeat /> : <RepeatOne />}
       </IconButton>
     </Paper>
   );
