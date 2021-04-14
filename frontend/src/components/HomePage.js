@@ -23,6 +23,7 @@ export default function HomePage() {
   const classes = useStyles();
   const [trackId, setTrackId] = useState(null);
   const [nowPlaying, setNowPlaying] = useState(null);
+  const [playback, setPlayback] = useState(null);
   const [songInfo, setSongInfo] = useState(null);
 
   // fetch now playing
@@ -30,6 +31,7 @@ export default function HomePage() {
     const res = await axios.get("/api/now_playing");
     if (res.data.message !== "No track currently playing") {
       setNowPlaying(res.data);
+      setPlayback(res.data.playback);
     }
   };
 
@@ -82,7 +84,9 @@ export default function HomePage() {
         </CardContent>
       </Card>
 
-      <Controller />
+      {playback ? (
+        <Controller playback={playback} setPlayback={setPlayback} />
+      ) : null}
 
       <LinearProgress
         variant="determinate"

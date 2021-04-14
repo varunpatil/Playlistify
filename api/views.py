@@ -65,15 +65,13 @@ def me(request):
 
 @never_cache
 def now_playing(request):
-    response = request.sp[0].current_user_playing_track()
+    response = request.sp[0].current_playback()
     if (
         response is None or
         response['currently_playing_type'] != 'track' or
         response['item']['is_local']
     ):
         return JsonResponse({'message': 'No track currently playing'})
-    # Returning only required info because this endpoint is hit every 3 seconds with no cache
-    # 12x less network usage
     result = {
         'track_id': response['item']['id'],
         'track_name': response['item']['name'],
@@ -82,8 +80,20 @@ def now_playing(request):
         'progress_ms': response['progress_ms'],
         'duration_ms': response['item']['duration_ms'],
         'image_url': response['item']['album']['images'][1]['url'],
+        'playback': {
+            'shuffle': response['shuffle_state'],
+            'repeat': response['repeat_state'],
+            'is_playing': response['is_playing']
+        }
     }
     return JsonResponse(result)
+
+
+@require_POST
+def playback_shuffle(request):
+    body = json.loads(request.body)
+    response = request.sp[0].shuffle(state=body['state'])
+    return JsonResponse({"message": "Success"})
 
 
 @cache_control(max_age=365*24*3600)

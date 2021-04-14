@@ -13,11 +13,35 @@ import {
   Pause,
 } from "@material-ui/icons";
 
-export default function Controller(props) {
+import { useSnackbar } from "notistack";
+import { errorSnackBar } from "../../SnackBar";
+
+export default function Controller({ playback, setPlayback }) {
   const classes = useStyles();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+  const shuffle = async () => {
+    const shuffleState = playback.shuffle;
+    setPlayback({
+      ...playback,
+      shuffle: !shuffleState,
+    });
+
+    try {
+      await axios.post("/api/playback/shuffle/", { state: !shuffleState });
+    } catch {
+      console.log("error hua bhai");
+      errorSnackBar(enqueueSnackbar, closeSnackbar);
+    }
+  };
+
   return (
     <Paper className={classes.controls}>
-      <IconButton className={classes.button} color="primary">
+      <IconButton
+        className={classes.button}
+        color={playback.shuffle ? "primary" : "default"}
+        onClick={shuffle}
+      >
         <Shuffle />
       </IconButton>
       <IconButton className={classes.button}>
