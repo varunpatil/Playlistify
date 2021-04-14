@@ -40,3 +40,16 @@ export default function SnackBar({
     ),
   });
 }
+
+export function errorSnackBar(
+  enqueueSnackbar,
+  closeSnackbar,
+  message = "Something went wrong 😔. Try again later"
+) {
+  SnackBar({
+    variant: "error",
+    message: message,
+    enqueue: enqueueSnackbar,
+    close: closeSnackbar,
+  });
+}
