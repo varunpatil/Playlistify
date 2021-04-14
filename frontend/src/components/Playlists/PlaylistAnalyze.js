@@ -33,7 +33,8 @@ export default function PlaylistAnalyze(props) {
       <CustomDivider />
       <Line type={3} data={data.durations} />
       <CustomDivider />
-      <Line type={4} data={data.audio_features.bpms} />
+      {/* Optional chaining. audio_features is {} when number of trcks is 0*/}
+      <Line type={4} data={data.audio_features?.bpms} />
       <CustomDivider />
       <Calendar data={data.added_at_dates} />
     </div>

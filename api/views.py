@@ -13,7 +13,7 @@ from . import helpers, lyrics, spotify
 # Saving api json response for speed
 # from extras.response import resp
 
-default_description = 'Created using APP :)'
+default_description = 'Created using APP (http://ec2-13-126-98-132.ap-south-1.compute.amazonaws.com)'
 
 
 @require_POST
@@ -40,7 +40,7 @@ def login(request):
     except (KeyError, SpotifyException):
         # This will be encountered if the user removes access from the
         # spotify apps page thus making the refresh token useless
-        # Step 3. Display sign in link when no token
+        # Step 3. return sign in link when no token
         auth_url = auth_manager.get_authorize_url()
         return JsonResponse({"auth_url": auth_url})
 
@@ -50,7 +50,10 @@ def login(request):
 @require_POST
 def logout(request):
     cache_path = spotify.session_cache_path(request)
-    os.remove(cache_path)
+    try:
+        os.remove(cache_path)
+    except FileNotFoundError:
+        pass
     request.session.flush()
     return JsonResponse({"message": "Success"})
 
@@ -62,15 +65,13 @@ def me(request):
 
 @never_cache
 def now_playing(request):
-    response = request.sp[0].current_user_playing_track()
+    response = request.sp[0].current_playback()
     if (
         response is None or
         response['currently_playing_type'] != 'track' or
         response['item']['is_local']
     ):
         return JsonResponse({'message': 'No track currently playing'})
-    # Returning only required info because this endpoint is hit every 3 seconds with no cache
-    # 12x less network usage
     result = {
         'track_id': response['item']['id'],
         'track_name': response['item']['name'],
@@ -79,8 +80,62 @@ def now_playing(request):
         'progress_ms': response['progress_ms'],
         'duration_ms': response['item']['duration_ms'],
         'image_url': response['item']['album']['images'][1]['url'],
+        'playback': {
+            'shuffle': response['shuffle_state'],
+            'repeat': response['repeat_state'],
+            'is_playing': response['is_playing']
+        }
     }
     return JsonResponse(result)
+
+
+@require_POST
+def playback_shuffle(request):
+    body = json.loads(request.body)
+    request.sp[0].shuffle(state=body['state'])
+    return JsonResponse({"message": "Success"})
+
+
+@require_POST
+def playback_previous(request):
+    request.sp[0].previous_track()
+    return JsonResponse({"message": "Success"})
+
+
+@require_POST
+def playback_next(request):
+    request.sp[0].next_track()
+    return JsonResponse({"message": "Success"})
+
+
+@require_POST
+def playback_repeat(request):
+    body = json.loads(request.body)
+    request.sp[0].repeat(state=body['state'])
+    return JsonResponse({"message": "Success"})
+
+
+@require_POST
+def playback_pause(request):
+    body = json.loads(request.body)
+    try:
+        request.sp[0].pause_playback()
+    except SpotifyException:
+        pass
+    return JsonResponse({"message": "Success"})
+
+
+@require_POST
+def playback_play(request):
+    body = json.loads(request.body)
+    kwargs = {}
+    if body.get('track_ids'):
+        kwargs['uris'] = ['spotify:track:' + id for id in body['track_ids']]
+    try:
+        request.sp[0].start_playback(**kwargs)
+    except SpotifyException:
+        pass
+    return JsonResponse({"message": "Success"})
 
 
 @cache_control(max_age=365*24*3600)
@@ -149,7 +204,7 @@ def playlist_add(request):
     track_ids = body['track_ids']
 
     helpers.add_to_playlist(request, playlist_id, track_ids)
-    return JsonResponse({"message": "success"})
+    return JsonResponse({"message": "Success"})
 
 
 @require_POST
@@ -167,7 +222,7 @@ def playlist_top_artists(request):
 
     track_ids = [track['id'] for track in tracks]
     helpers.add_to_playlist(request, playlist_id, track_ids, limit=100, shuffle=True)
-    return JsonResponse({"message": "success"})
+    return JsonResponse({"message": "Success"})
 
 
 @cache_control(max_age=2*60)
@@ -256,7 +311,7 @@ def seed_recommendation(request):
         track_ids.extend([track['id'] for track in response['tracks']])
 
     helpers.add_to_playlist(request, playlist_id, track_ids)
-    return JsonResponse({"message": "success"})
+    return JsonResponse({"message": "Success"})
 
 
 @require_POST
@@ -380,4 +435,4 @@ def similar_artists(request):
 
     helpers.add_to_playlist(request, playlist_id, track_ids,
                             limit=50, allow_saved_tracks=False)
-    return JsonResponse({"message": "success"})
+    return JsonResponse({"message": "Success"})

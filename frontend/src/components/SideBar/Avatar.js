@@ -21,7 +21,6 @@ export default function Avatar() {
     <ListItem>
       <ListItemAvatar>
         <AV
-          alt={user.display_name}
           src={user.images.length > 0 ? user.images[0].url : ""}
           className={classes.avatar}
         />

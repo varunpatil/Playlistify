@@ -31,17 +31,14 @@ export default function Dropdown(props) {
           </ListItemIcon>
           <ListItemText primary={"Customize"} />
           <ExpandMore
-            className={[
-              classes.dropdown,
-              open ? classes.dropdownOpen : classes.dropdownClosed,
-            ]}
+            className={open ? classes.dropdownOpen : classes.dropdownClosed}
           />
         </ListItem>
 
         <Collapse in={open}>
           <Box paddingX={10}>
             {sliders.map((item) => (
-              <div>
+              <div key={item.title}>
                 <Typography gutterBottom>{item.title}</Typography>
                 <Slider
                   valueLabelDisplay="on"
@@ -120,15 +117,16 @@ const useStyles = makeStyles((theme) => ({
   list: {
     backgroundColor: theme.palette.background.paper,
   },
-  dropdown: {
+  dropdownOpen: {
+    transform: "rotate(-180deg)",
     transition: theme.transitions.create(["transform"], {
       duration: theme.transitions.duration.short,
     }),
   },
-  dropdownOpen: {
-    transform: "rotate(-180deg)",
-  },
   dropdownClosed: {
     transform: "rotate(0)",
+    transition: theme.transitions.create(["transform"], {
+      duration: theme.transitions.duration.short,
+    }),
   },
 }));

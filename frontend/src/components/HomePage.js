@@ -13,6 +13,7 @@ import {
 
 import { FormatAlignLeft, Help, YouTube } from "@material-ui/icons";
 
+import Controller from "./HomePage/Controller";
 import DropDown from "./HomePage/DropDown";
 import Text from "./HomePage/Text";
 import Video from "./HomePage/Video";
@@ -22,6 +23,7 @@ export default function HomePage() {
   const classes = useStyles();
   const [trackId, setTrackId] = useState(null);
   const [nowPlaying, setNowPlaying] = useState(null);
+  const [premiumUser, setPremiumUser] = useState(false);
   const [songInfo, setSongInfo] = useState(null);
 
   // fetch now playing
@@ -61,29 +63,51 @@ export default function HomePage() {
     }
   }, [nowPlaying]);
 
-  return nowPlaying ? (
+  useEffect(async () => {
+    const res = await axios.get("/api/me");
+    if (res.data.product === "premium") {
+      setPremiumUser(true);
+    }
+  }, []);
+
+  // ----------------------------------------------- //
+
+  if (!nowPlaying) return <NothingPlaying />;
+
+  return (
     <div className={classes.root}>
       <Card className={classes.card}>
         <CardMedia
           className={classes.cover}
-          alt={nowPlaying.track_name}
           image={nowPlaying.image_url}
           title={nowPlaying.track_name}
         />
         <CardContent className={classes.content}>
           <Typography variant="h5">{nowPlaying.track_name}</Typography>
-          <Typography variant="subtitle1" color="textSecondary">
+
+          <Typography
+            variant="subtitle1"
+            color="textSecondary"
+            style={{ paddingTop: "4px", paddingBottom: "4px" }}
+          >
             {nowPlaying.artist_name}
           </Typography>
+
           <Typography variant="subtitle2" color="textSecondary">
             {nowPlaying.album_name}
           </Typography>
         </CardContent>
       </Card>
 
+      <Divider className={classes.divider} />
+
+      {premiumUser ? (
+        <Controller playback={nowPlaying.playback} refresh={getNowPlaying} />
+      ) : null}
+
       <LinearProgress
         variant="determinate"
-        className={classes.progress}
+        style={{ height: "6px" }}
         value={100 * (nowPlaying.progress_ms / nowPlaying.duration_ms)}
       />
 
@@ -109,8 +133,6 @@ export default function HomePage() {
         info={songInfo}
       />
     </div>
-  ) : (
-    <NothingPlaying />
   );
 }
 
@@ -130,9 +152,6 @@ const useStyles = makeStyles((theme) => ({
   },
   divider: {
     background: theme.palette.background.divider,
-  },
-  progress: {
-    height: "6px",
   },
   root: {
     marginBottom: theme.spacing(3),

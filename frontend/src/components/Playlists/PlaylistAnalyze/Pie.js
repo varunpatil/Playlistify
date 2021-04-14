@@ -5,11 +5,11 @@ import { Paper, Typography } from "@material-ui/core";
 export default function PieChart({ data, type, colorScheme }) {
   if (!data) return null;
   const smallScreen = screen.width <= 600;
-  
+
   return (
     <div style={{ height: smallScreen ? "40vh" : "70vh" }}>
       <Typography
-        variant="title"
+        variant="h5"
         component="h1"
         align="center"
         style={{ paddingTop: 20 }}

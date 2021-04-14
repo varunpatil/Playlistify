@@ -11,7 +11,7 @@ export default function Line({ data, type }) {
   return (
     <div>
       <Typography
-        variant="title"
+        variant="h5"
         component="h1"
         align="center"
         style={{ paddingTop: 25 }}

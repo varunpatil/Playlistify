@@ -24,7 +24,6 @@ export default function PlaylistItem({ playlist }) {
       <CardMedia
         className={classes.media}
         image={playlist.image_url}
-        alt={playlist.name}
       />
 
       <CardContent className={classes.content}>

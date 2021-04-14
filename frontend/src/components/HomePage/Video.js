@@ -1,35 +1,33 @@
 import React from "react";
-import Loader from "../Loader"
-
+import Loader from "../Loader";
 import { makeStyles, Typography } from "@material-ui/core";
 
-export default function Video(props){
+export default function Video(props) {
   const classes = useStyles();
-  let video = <Loader />;
-  if (props.info) {
-    if (props.info.youtube_embed_url) {
-      video = (
-        <div className={classes.iframeWrapper}>
-          <iframe
-            src={props.info.youtube_embed_url}
-            className={classes.iframe}
-            frameborder="0"
-            allowfullscreen
-          />
-        </div>
-      );
-    } else {
-      video = (
-        <Typography variant="h6" align="center">
-          Video Not Found :(
-        </Typography>
-      );
-    }
-  }
-  return video;
-};
 
-const useStyles = makeStyles((theme) => ({
+  if (!props.info) return <Loader />;
+
+  if (!props.info.youtube_embed_url) {
+    return (
+      <Typography variant="h6" align="center">
+        Video Not Found :(
+      </Typography>
+    );
+  }
+
+  return (
+    <div className={classes.iframeWrapper}>
+      <iframe
+        src={props.info.youtube_embed_url}
+        className={classes.iframe}
+        frameBorder="0"
+        allowFullScreen
+      />
+    </div>
+  );
+}
+
+const useStyles = makeStyles(() => ({
   iframe: {
     width: "100%",
     height: "100%",

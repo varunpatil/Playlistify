@@ -21,7 +21,7 @@ export default function Page2(props) {
   return (
     <Container maxWidth={false}>
       <Paper style={{ padding: 20, marginBottom: 20 }}>
-        <Typography variant="title" component="h1" align="center">
+        <Typography variant="h4" component="h1" align="center">
           Choose 5 Artists To Match Your Mood
         </Typography>
       </Paper>
@@ -52,7 +52,6 @@ export default function Page2(props) {
             >
               <Avatar
                 component={Button}
-                alt={artist.name}
                 src={artist.image_url}
                 style={{
                   width: smallScreen ? "calc(50vw - 4em)" : "240px",

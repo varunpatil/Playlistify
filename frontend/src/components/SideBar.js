@@ -83,7 +83,12 @@ export default function SideBar({ toggle }) {
         icon={Restore}
         toggle={toggle}
       />
-      <Base name="Survey & Feedback" path="/survey" icon={Forum} toggle={toggle} />
+      <Base
+        name="Survey & Feedback"
+        path="/survey"
+        icon={Forum}
+        toggle={toggle}
+      />
       <Base name="About" path="/about" icon={Info} toggle={toggle} />
 
       <Divider />

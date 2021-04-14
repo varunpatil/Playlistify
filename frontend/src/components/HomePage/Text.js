@@ -1,40 +1,26 @@
 import React from "react";
 import Loader from "../Loader";
+import { Typography } from "@material-ui/core";
 
-import { makeStyles, Typography } from "@material-ui/core";
+export default function Text(props) {
+  if (!props.info) return <Loader />;
 
-export default function Text(props){
-  const classes = useStyles();
-  let output = <Loader />;
+  const data = props.name === "Lyrics" ? props.info.lyrics : props.info.meaning;
 
-  if (props.info) {
-    output = (
+  if (!data)
+    return (
       <Typography variant="h6" align="center">
         {props.name} Not Found :(
       </Typography>
     );
 
-    const data =
-      props.name === "Lyrics" ? props.info.lyrics : props.info.meaning;
-
-    if (data) {
-      output = data.map((line) =>
-        line !== "" ? (
-          <Typography align="center" className={classes.text}>
-            {line}
-          </Typography>
-        ) : (
-          <br />
-        )
-      );
-    }
-  }
-  return output;
-};
-
-const useStyles = makeStyles((theme) => ({
-  text: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-  },
-}));
+  return (
+    <div align="center" style={{ marginLeft: "6px", marginRight: "6px" }}>
+      {data.map((line, key) => (
+        <div key={key}>
+          {line !== "" ? <Typography>{line}</Typography> : <br />}
+        </div>
+      ))}
+    </div>
+  );
+}

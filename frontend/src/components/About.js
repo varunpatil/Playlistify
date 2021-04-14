@@ -13,7 +13,7 @@ export default function About() {
         style={{ margin: 0, width: "100%" }}
       >
         {links.map((item) => (
-          <Grid item>
+          <Grid item key={item.href}>
             <IconButton href={item.href} target="_blank">
               <item.icon style={{ fontSize: 40 }} />
             </IconButton>
