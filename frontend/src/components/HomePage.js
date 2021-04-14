@@ -23,7 +23,7 @@ export default function HomePage() {
   const classes = useStyles();
   const [trackId, setTrackId] = useState(null);
   const [nowPlaying, setNowPlaying] = useState(null);
-  const [playback, setPlayback] = useState(null);
+  const [premiumUser, setPremiumUser] = useState(false);
   const [songInfo, setSongInfo] = useState(null);
 
   // fetch now playing
@@ -31,7 +31,6 @@ export default function HomePage() {
     const res = await axios.get("/api/now_playing");
     if (res.data.message !== "No track currently playing") {
       setNowPlaying(res.data);
-      setPlayback(res.data.playback);
     }
   };
 
@@ -64,7 +63,18 @@ export default function HomePage() {
     }
   }, [nowPlaying]);
 
-  return nowPlaying ? (
+  useEffect(async () => {
+    const res = await axios.get("/api/me");
+    if (res.data.product === "premium") {
+      setPremiumUser(true);
+    }
+  }, []);
+
+  // ----------------------------------------------- //
+
+  if (!nowPlaying) return <NothingPlaying />;
+
+  return (
     <div className={classes.root}>
       <Card className={classes.card}>
         <CardMedia
@@ -84,8 +94,10 @@ export default function HomePage() {
         </CardContent>
       </Card>
 
-      {playback ? (
-        <Controller playback={playback} setPlayback={setPlayback} />
+      <Divider className={classes.divider} />
+
+      {premiumUser ? (
+        <Controller playback={nowPlaying.playback} refresh={getNowPlaying} />
       ) : null}
 
       <LinearProgress
@@ -116,8 +128,6 @@ export default function HomePage() {
         info={songInfo}
       />
     </div>
-  ) : (
-    <NothingPlaying />
   );
 }
 

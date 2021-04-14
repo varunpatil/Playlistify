@@ -6,8 +6,11 @@ urlpatterns = [
     path('logout', views.logout, name='logout'),
 
     path('me', views.me),
+    
     path('now_playing', views.now_playing),
     path('playback/shuffle/', views.playback_shuffle),
+    path('playback/previous/', views.playback_previous),
+    path('playback/next/', views.playback_next),
     path('lyrics', views.get_lyrics),
 
     path('top/tracks', views.top_tracks),

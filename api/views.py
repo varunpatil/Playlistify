@@ -92,7 +92,19 @@ def now_playing(request):
 @require_POST
 def playback_shuffle(request):
     body = json.loads(request.body)
-    response = request.sp[0].shuffle(state=body['state'])
+    request.sp[0].shuffle(state=body['state'])
+    return JsonResponse({"message": "Success"})
+
+
+@require_POST
+def playback_previous(request):
+    request.sp[0].previous_track()
+    return JsonResponse({"message": "Success"})
+
+
+@require_POST
+def playback_next(request):
+    request.sp[0].next_track()
     return JsonResponse({"message": "Success"})
 
 

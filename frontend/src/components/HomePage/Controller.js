@@ -16,21 +16,33 @@ import {
 import { useSnackbar } from "notistack";
 import { errorSnackBar } from "../../SnackBar";
 
-export default function Controller({ playback, setPlayback }) {
+export default function Controller({ playback, refresh }) {
   const classes = useStyles();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   const shuffle = async () => {
-    const shuffleState = playback.shuffle;
-    setPlayback({
-      ...playback,
-      shuffle: !shuffleState,
-    });
-
     try {
-      await axios.post("/api/playback/shuffle/", { state: !shuffleState });
+      await axios.post("/api/playback/shuffle/", { state: !playback.shuffle });
+      refresh();
     } catch {
-      console.log("error hua bhai");
+      errorSnackBar(enqueueSnackbar, closeSnackbar);
+    }
+  };
+
+  const previous = async () => {
+    try {
+      await axios.post("/api/playback/previous/", {});
+      refresh();
+    } catch {
+      errorSnackBar(enqueueSnackbar, closeSnackbar);
+    }
+  };
+
+  const next = async () => {
+    try {
+      await axios.post("/api/playback/next/", {});
+      refresh();
+    } catch {
       errorSnackBar(enqueueSnackbar, closeSnackbar);
     }
   };
@@ -44,15 +56,19 @@ export default function Controller({ playback, setPlayback }) {
       >
         <Shuffle />
       </IconButton>
-      <IconButton className={classes.button}>
+
+      <IconButton className={classes.button} onClick={previous}>
         <SkipPrevious />
       </IconButton>
+
       <IconButton className={classes.button}>
         <Pause style={{ fontSize: 40 }} />
       </IconButton>
-      <IconButton className={classes.button}>
+
+      <IconButton className={classes.button} onClick={next}>
         <SkipNext />
       </IconButton>
+
       <IconButton className={classes.button} color="primary">
         <Repeat />
       </IconButton>
@@ -60,7 +76,9 @@ export default function Controller({ playback, setPlayback }) {
   );
 }
 
-const useStyles = makeStyles((theme) => ({
+// ------------------- Styles -------------------------- //
+
+const useStyles = makeStyles(() => ({
   controls: {
     display: "flex",
     flexDirection: "row",
