@@ -12,6 +12,8 @@ urlpatterns = [
     path('playback/previous/', views.playback_previous),
     path('playback/next/', views.playback_next),
     path('playback/repeat/', views.playback_repeat),
+    path('playback/pause/', views.playback_pause),
+    path('playback/play/', views.playback_play),
     path('lyrics', views.get_lyrics),
 
     path('top/tracks', views.top_tracks),

@@ -61,6 +61,17 @@ export default function Controller({ playback, refresh }) {
     }
   };
 
+  const togglePlayPause = async () => {
+    const action = playback.is_playing ? "pause" : "play";
+
+    try {
+      await axios.post(`/api/playback/${action}/`, {});
+      refresh();
+    } catch {
+      errorSnackBar(enqueueSnackbar, closeSnackbar);
+    }
+  };
+
   return (
     <Paper className={classes.controls}>
       <IconButton
@@ -75,8 +86,12 @@ export default function Controller({ playback, refresh }) {
         <SkipPrevious />
       </IconButton>
 
-      <IconButton className={classes.button}>
-        <Pause style={{ fontSize: 40 }} />
+      <IconButton className={classes.button} onClick={togglePlayPause}>
+        {playback.is_playing ? (
+          <Pause style={{ fontSize: 40 }} />
+        ) : (
+          <PlayArrow style={{ fontSize: 40 }} />
+        )}
       </IconButton>
 
       <IconButton className={classes.button} onClick={next}>

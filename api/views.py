@@ -115,6 +115,29 @@ def playback_repeat(request):
     return JsonResponse({"message": "Success"})
 
 
+@require_POST
+def playback_pause(request):
+    body = json.loads(request.body)
+    try:
+        request.sp[0].pause_playback()
+    except SpotifyException:
+        pass
+    return JsonResponse({"message": "Success"})
+
+
+@require_POST
+def playback_play(request):
+    body = json.loads(request.body)
+    kwargs = {}
+    if body.get('track_ids'):
+        kwargs['uris'] = ['spotify:track:' + id for id in body['track_ids']]
+    try:
+        request.sp[0].start_playback(**kwargs)
+    except SpotifyException:
+        pass
+    return JsonResponse({"message": "Success"})
+
+
 @cache_control(max_age=365*24*3600)
 def get_lyrics(request):
     track_name = request.GET['track_name']
@@ -181,7 +204,7 @@ def playlist_add(request):
     track_ids = body['track_ids']
 
     helpers.add_to_playlist(request, playlist_id, track_ids)
-    return JsonResponse({"message": "success"})
+    return JsonResponse({"message": "Success"})
 
 
 @require_POST
@@ -199,7 +222,7 @@ def playlist_top_artists(request):
 
     track_ids = [track['id'] for track in tracks]
     helpers.add_to_playlist(request, playlist_id, track_ids, limit=100, shuffle=True)
-    return JsonResponse({"message": "success"})
+    return JsonResponse({"message": "Success"})
 
 
 @cache_control(max_age=2*60)
@@ -288,7 +311,7 @@ def seed_recommendation(request):
         track_ids.extend([track['id'] for track in response['tracks']])
 
     helpers.add_to_playlist(request, playlist_id, track_ids)
-    return JsonResponse({"message": "success"})
+    return JsonResponse({"message": "Success"})
 
 
 @require_POST
@@ -412,4 +435,4 @@ def similar_artists(request):
 
     helpers.add_to_playlist(request, playlist_id, track_ids,
                             limit=50, allow_saved_tracks=False)
-    return JsonResponse({"message": "success"})
+    return JsonResponse({"message": "Success"})
