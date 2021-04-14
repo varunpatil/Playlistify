@@ -79,15 +79,20 @@ export default function HomePage() {
       <Card className={classes.card}>
         <CardMedia
           className={classes.cover}
-          alt={nowPlaying.track_name}
           image={nowPlaying.image_url}
           title={nowPlaying.track_name}
         />
         <CardContent className={classes.content}>
           <Typography variant="h5">{nowPlaying.track_name}</Typography>
-          <Typography variant="subtitle1" color="textSecondary">
+
+          <Typography
+            variant="subtitle1"
+            color="textSecondary"
+            style={{ paddingTop: "4px", paddingBottom: "4px" }}
+          >
             {nowPlaying.artist_name}
           </Typography>
+
           <Typography variant="subtitle2" color="textSecondary">
             {nowPlaying.album_name}
           </Typography>

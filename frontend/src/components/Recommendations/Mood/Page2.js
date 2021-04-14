@@ -52,7 +52,6 @@ export default function Page2(props) {
             >
               <Avatar
                 component={Button}
-                alt={artist.name}
                 src={artist.image_url}
                 style={{
                   width: smallScreen ? "calc(50vw - 4em)" : "240px",
