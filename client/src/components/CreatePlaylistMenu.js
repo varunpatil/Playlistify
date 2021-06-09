@@ -155,15 +155,15 @@ const CreatePlaylist = async (props, option, enqueue, close) => {
   });
 
   try {
-    const res1 = await axios.post("/api/playlist/create/", data1);
-    data2.playlist_id = res1.data.playlist_id;
-    const res2 = await axios.post(apiPath, data2);
+    const res = await axios.post("/api/playlist/create/", data1);
+    data2.playlist_id = res.data.playlist_id;
+    await axios.post(apiPath, data2);
 
     // Success snackbar
     SnackBar({
       variant: "success",
       message: "Playlist Created",
-      url: res1.data.url,
+      url: res.data.url,
       enqueue: enqueue,
       close: close,
     });

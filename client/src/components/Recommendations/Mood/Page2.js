@@ -15,7 +15,7 @@ import Loader from "../../Loader";
 
 export default function Page2(props) {
   const [artistIds, setArtistIds] = useState(new Set());
-  const smallScreen = screen.width <= 600;
+  const smallScreen = window.screen.width <= 600;
   const artistSelectionComplete = Boolean(artistIds.size === 5);
 
   return (

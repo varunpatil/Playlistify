@@ -10,7 +10,7 @@ export default function Navigate({ goto, title, setPage, left }) {
   };
 
   if (left) {
-    style.left = screen.width <= 600 ? "24px" : "284px"; // drawerWidth(260) + 3*8px
+    style.left = window.screen.width <= 600 ? "24px" : "284px"; // drawerWidth(260) + 3*8px
   } else {
     style.right = "24px";
   }

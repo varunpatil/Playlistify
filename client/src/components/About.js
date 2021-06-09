@@ -1,5 +1,5 @@
 import React from "react";
-import { Grid, IconButton, SvgIcon, Typography } from "@material-ui/core";
+import { Grid, IconButton, SvgIcon } from "@material-ui/core";
 import { LinkedIn, GitHub, Facebook } from "@material-ui/icons";
 
 export default function About() {

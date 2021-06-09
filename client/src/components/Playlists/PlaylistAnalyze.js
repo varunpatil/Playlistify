@@ -12,10 +12,15 @@ import Line from "./PlaylistAnalyze/Line";
 export default function PlaylistAnalyze(props) {
   const [data, setData] = useState(null);
 
-  useEffect(async () => {
-    const id = props.match.params.id;
-    const res = await axios.get(`/api/playlist/analyze/${id}`);
-    setData(res.data);
+  useEffect(() => {
+    const getPlaylistData = async () => {
+      const id = props.match.params.id;
+      const res = await axios.get(`/api/playlist/analyze/${id}`);
+      setData(res.data);
+    };
+
+    getPlaylistData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return data ? (

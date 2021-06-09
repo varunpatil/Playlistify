@@ -3,9 +3,10 @@ import { ResponsiveLine } from "@nivo/line";
 import { Paper, Typography, useTheme } from "@material-ui/core";
 
 export default function Line({ data, type }) {
-  if (!data) return null;
-  const smallScreen = screen.width <= 600;
+  const smallScreen = window.screen.width <= 600;
   const theme = useTheme();
+
+  if (!data) return null;
   data = adjustData(data, type);
 
   return (

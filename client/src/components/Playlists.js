@@ -8,9 +8,13 @@ import PlaylistItem from "./Playlists/PlaylistItem";
 export default function Playlists() {
   const [playlists, setPlaylists] = useState([]);
 
-  useEffect(async () => {
-    const res = await axios.get("/api/playlists/");
-    setPlaylists(res.data);
+  useEffect(() => {
+    const getPlaylists = async () => {
+      const res = await axios.get("/api/playlists/");
+      setPlaylists(res.data);
+    };
+
+    getPlaylists();
   }, []);
 
   return (

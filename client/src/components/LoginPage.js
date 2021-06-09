@@ -15,7 +15,7 @@ export default function LoginPage() {
       setAuthUrl(res.data.auth_url);
     } else if (res.data.message === "Success") {
       localStorage.setItem("isLoggedIn", "true");
-      location.reload();
+      window.location.reload();
     }
   };
 

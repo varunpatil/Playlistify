@@ -46,28 +46,38 @@ export default function HomePage() {
     return () => clearInterval(refreshNowPlaying);
   }, []);
 
-  // fetch song info which includes Lyrics, Meaning and Youtube URL
-  useEffect(async () => {
-    if (!nowPlaying) return;
+  // refresh song info
+  useEffect(() => {
+    // fetch song info which includes Lyrics, Meaning and Youtube URL
+    const getSongInfo = async () => {
+      if (!nowPlaying) return;
 
-    if (nowPlaying.track_id !== trackId) {
-      console.log("New Track... fetching lyrics etc");
-      setTrackId(nowPlaying.track_id);
-      setSongInfo(null);
-      const res = await axios.get(
-        `/api/lyrics?track_name=${nowPlaying.track_name}&artist_name=${nowPlaying.artist_name}`
-      );
-      setSongInfo(res.data);
-    } else {
-      console.log("No new Track... updating progress bar");
-    }
+      if (nowPlaying.track_id !== trackId) {
+        console.log("New Track... fetching lyrics etc");
+        setTrackId(nowPlaying.track_id);
+        setSongInfo(null);
+        const res = await axios.get(
+          `/api/lyrics?track_name=${nowPlaying.track_name}&artist_name=${nowPlaying.artist_name}`
+        );
+        setSongInfo(res.data);
+      } else {
+        console.log("No new Track... updating progress bar");
+      }
+    };
+
+    getSongInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nowPlaying]);
 
-  useEffect(async () => {
-    const res = await axios.get("/api/me");
-    if (res.data.product === "premium") {
-      setPremiumUser(true);
-    }
+  // get user to check if premium is available
+  useEffect(() => {
+    const getUser = async () => {
+      const res = await axios.get("/api/me");
+      if (res.data.product === "premium") {
+        setPremiumUser(true);
+      }
+    };
+    getUser();
   }, []);
 
   // ----------------------------------------------- //

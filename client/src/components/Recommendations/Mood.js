@@ -10,14 +10,18 @@ export default function Mood() {
   const [params, setParams] = useState(null);
   const [artists, setArtists] = useState([]);
 
-  useEffect(async () => {
-    const res = await axios.get("/api/recommendation/all-top-artists");
-    setArtists(res.data);
+  useEffect(() => {
+    const getAllTopArtists = async () => {
+      const res = await axios.get("/api/recommendation/all-top-artists");
+      setArtists(res.data);
+    };
+
+    getAllTopArtists();
   }, []);
 
   return (
     <div>
-      {page == 1 ? (
+      {page === 1 ? (
         <Page1
           setPage={setPage}
           mood={mood}

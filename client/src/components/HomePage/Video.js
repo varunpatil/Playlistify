@@ -18,6 +18,7 @@ export default function Video(props) {
   return (
     <div className={classes.iframeWrapper}>
       <iframe
+        title="youtube-video"
         src={props.info.youtube_embed_url}
         className={classes.iframe}
         frameBorder="0"

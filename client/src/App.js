@@ -12,13 +12,13 @@ export default function App() {
     return <Router />;
   }
 
-  const queryParams = parseUrl(location.search);
-  if (location.pathname == "/login" && "code" in queryParams) {
+  const queryParams = parseUrl(window.location.search);
+  if (window.location.pathname === "/login" && "code" in queryParams) {
     showLoader = true;
     axios.post("/api/login", { code: queryParams["code"] }).then((res) => {
       if (res.data.message === "Success") {
         localStorage.setItem("isLoggedIn", true);
-        location.replace("/");
+        window.location.replace("/");
       }
     });
   }

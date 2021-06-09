@@ -11,11 +11,16 @@ function TopList({ type }) {
   const [items, setItems] = useState([]);
   const [timeRange, setTimeRange] = useState("short_term");
 
-  useEffect(async () => {
-    const res = await axios.get(
-      `/api/top/${type.toLowerCase()}s?time_range=` + timeRange
-    );
-    setItems(res.data);
+  useEffect(() => {
+    const getTopList = async () => {
+      const res = await axios.get(
+        `/api/top/${type.toLowerCase()}s?time_range=` + timeRange
+      );
+      setItems(res.data);
+    };
+
+    getTopList();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timeRange]);
 
   return (

@@ -12,9 +12,13 @@ export default function Avatar() {
   const classes = useStyles();
   const [user, setUser] = useState(null);
 
-  useEffect(async () => {
-    const res = await axios.get("/api/me");
-    setUser(res.data);
+  useEffect(() => {
+    const getUser = async () => {
+      const res = await axios.get("/api/me");
+      setUser(res.data);
+    };
+
+    getUser();
   }, []);
 
   return user ? (

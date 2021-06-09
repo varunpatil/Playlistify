@@ -9,7 +9,7 @@ export default function Calendar({ data }) {
   const from = sortedDates[0];
   const to = sortedDates[sortedDates.length - 1];
   const years = 1 + parseInt(to.slice(0, 4)) - parseInt(from.slice(0, 4));
-  const smallScreen = screen.width <= 600;
+  const smallScreen = window.screen.width <= 600;
   const height = years * (smallScreen ? 10 : 25);
 
   return (
