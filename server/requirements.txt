@@ -1,4 +1,5 @@
 Django==3.2.4
+django-cors-headers==3.7.0
 lyricsgenius==3.0.1
 pymusixmatch==0.3
 spotipy==2.18.0

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import { Fab, Menu, MenuItem, Typography } from "@material-ui/core";
 import { PlaylistAdd } from "@material-ui/icons";
 
@@ -109,16 +109,16 @@ const CreatePlaylist = async (props, option, enqueue, close) => {
 
   if (option.type === "create_playlist") {
     if (props.type === "Track") {
-      apiPath = "/api/playlist/add/";
+      apiPath = "/playlist/add/";
       data1.name = "🎵 Top 50 Tracks";
       data2.track_ids = props.trackIds;
     } else {
-      apiPath = "/api/playlist/top/artists/";
+      apiPath = "/playlist/top/artists/";
       data1.name = "🎵 Top 20 Artists";
       data2.artist_ids = props.artistIds;
     }
   } else if (option.type === "recommendation_playlist") {
-    apiPath = "/api/recommendation/seed/";
+    apiPath = "/recommendation/seed/";
     data1.name = "👌 Recommendations based on your Top 20 " + props.type + "s";
 
     if (props.type === "Track") {
@@ -127,7 +127,7 @@ const CreatePlaylist = async (props, option, enqueue, close) => {
       data2.artist_ids = props.artistIds;
     }
   } else if (option.type === "similar_artists") {
-    apiPath = "/api/similar_artists/";
+    apiPath = "/similar_artists/";
     data1.name = "👯 Similar artists for your Top 20 " + props.type + "s";
     data2.artist_ids = props.artistIds;
   }
@@ -155,7 +155,7 @@ const CreatePlaylist = async (props, option, enqueue, close) => {
   });
 
   try {
-    const res = await axios.post("/api/playlist/create/", data1);
+    const res = await axios.post("/playlist/create/", data1);
     data2.playlist_id = res.data.playlist_id;
     await axios.post(apiPath, data2);
 

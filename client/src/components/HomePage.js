@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 
 import {
   makeStyles,
@@ -28,7 +28,7 @@ export default function HomePage() {
 
   // fetch now playing
   const getNowPlaying = async () => {
-    const res = await axios.get("/api/now_playing");
+    const res = await axios.get("/now_playing");
     if (res.data.message !== "No track currently playing") {
       setNowPlaying(res.data);
     }
@@ -57,7 +57,7 @@ export default function HomePage() {
         setTrackId(nowPlaying.track_id);
         setSongInfo(null);
         const res = await axios.get(
-          `/api/lyrics?track_name=${nowPlaying.track_name}&artist_name=${nowPlaying.artist_name}`
+          `/lyrics?track_name=${nowPlaying.track_name}&artist_name=${nowPlaying.artist_name}`
         );
         setSongInfo(res.data);
       } else {
@@ -72,7 +72,7 @@ export default function HomePage() {
   // get user to check if premium is available
   useEffect(() => {
     const getUser = async () => {
-      const res = await axios.get("/api/me");
+      const res = await axios.get("/me");
       if (res.data.product === "premium") {
         setPremiumUser(true);
       }

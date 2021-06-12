@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios from "./axiosConfig";
 
 import Router from "./components/Router";
 import LoginPage from "./components/LoginPage";
@@ -15,7 +15,7 @@ export default function App() {
   const queryParams = parseUrl(window.location.search);
   if (window.location.pathname === "/login" && "code" in queryParams) {
     showLoader = true;
-    axios.post("/api/login", { code: queryParams["code"] }).then((res) => {
+    axios.post("/login", { code: queryParams["code"] }).then((res) => {
       if (res.data.message === "Success") {
         localStorage.setItem("isLoggedIn", true);
         window.location.replace("/");

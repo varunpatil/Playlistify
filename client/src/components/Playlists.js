@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import { Container, Grid } from "@material-ui/core";
 
 import Loader from "./Loader";
@@ -10,7 +10,7 @@ export default function Playlists() {
 
   useEffect(() => {
     const getPlaylists = async () => {
-      const res = await axios.get("/api/playlists/");
+      const res = await axios.get("/playlists/");
       setPlaylists(res.data);
     };
 

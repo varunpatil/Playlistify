@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import axios from "../../axiosConfig";
 import { Box, Button, Paper, Typography, TextField } from "@material-ui/core";
 import { useSnackbar } from "notistack";
 import SnackBar from "../../SnackBar";
@@ -20,7 +20,7 @@ export default function Friend() {
     });
 
     try {
-      const res = await axios.post("/api/recommendation/friend/", {
+      const res = await axios.post("/recommendation/friend/", {
         user_id: input,
       });
 

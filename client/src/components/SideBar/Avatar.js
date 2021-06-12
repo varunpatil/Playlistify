@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../../axiosConfig";
 import {
   Avatar as AV,
   ListItem,
@@ -14,7 +14,7 @@ export default function Avatar() {
 
   useEffect(() => {
     const getUser = async () => {
-      const res = await axios.get("/api/me");
+      const res = await axios.get("/me");
       setUser(res.data);
     };
 

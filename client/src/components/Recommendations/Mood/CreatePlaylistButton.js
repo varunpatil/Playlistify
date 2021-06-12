@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios from "../../../axiosConfig";
 import { Fab } from "@material-ui/core";
 
 import { useSnackbar } from "notistack";
@@ -20,7 +20,7 @@ export default function CreatePlaylistButton(props) {
     });
 
     try {
-      const res = await axios.post("/api/recommendation/mood/", {
+      const res = await axios.post("/recommendation/mood/", {
         mood: mood,
         artist_ids: artistIds,
         artist_names: artistNames,

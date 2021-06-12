@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../../axiosConfig";
 import { Divider, useTheme } from "@material-ui/core";
 
 import Loader from "../Loader";
@@ -15,7 +15,7 @@ export default function PlaylistAnalyze(props) {
   useEffect(() => {
     const getPlaylistData = async () => {
       const id = props.match.params.id;
-      const res = await axios.get(`/api/playlist/analyze/${id}`);
+      const res = await axios.get(`/playlist/analyze/${id}`);
       setData(res.data);
     };
 

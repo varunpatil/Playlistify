@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../axiosConfig";
 import { Paper, Tab, Tabs, makeStyles } from "@material-ui/core";
 
 import CreatePlaylistMenu from "../CreatePlaylistMenu";
@@ -14,7 +14,7 @@ function TopList({ type }) {
   useEffect(() => {
     const getTopList = async () => {
       const res = await axios.get(
-        `/api/top/${type.toLowerCase()}s?time_range=` + timeRange
+        `/top/${type.toLowerCase()}s?time_range=` + timeRange
       );
       setItems(res.data);
     };

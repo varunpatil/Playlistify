@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import axios from "../../axiosConfig";
 
 import { makeStyles, IconButton, Paper } from "@material-ui/core";
 
@@ -22,7 +22,7 @@ export default function Controller({ playback, refresh }) {
 
   const shuffle = async () => {
     try {
-      await axios.post("/api/playback/shuffle/", { state: !playback.shuffle });
+      await axios.post("/playback/shuffle/", { state: !playback.shuffle });
       refresh();
     } catch {
       errorSnackBar(enqueueSnackbar, closeSnackbar);
@@ -31,7 +31,7 @@ export default function Controller({ playback, refresh }) {
 
   const previous = async () => {
     try {
-      await axios.post("/api/playback/previous/", {});
+      await axios.post("/playback/previous/", {});
       refresh();
     } catch {
       errorSnackBar(enqueueSnackbar, closeSnackbar);
@@ -40,7 +40,7 @@ export default function Controller({ playback, refresh }) {
 
   const next = async () => {
     try {
-      await axios.post("/api/playback/next/", {});
+      await axios.post("/playback/next/", {});
       refresh();
     } catch {
       errorSnackBar(enqueueSnackbar, closeSnackbar);
@@ -54,7 +54,7 @@ export default function Controller({ playback, refresh }) {
     else if (playback.repeat === "off") state = "context";
 
     try {
-      await axios.post("/api/playback/repeat/", { state: state });
+      await axios.post("/playback/repeat/", { state: state });
       refresh();
     } catch {
       errorSnackBar(enqueueSnackbar, closeSnackbar);
@@ -65,7 +65,7 @@ export default function Controller({ playback, refresh }) {
     const action = playback.is_playing ? "pause" : "play";
 
     try {
-      await axios.post(`/api/playback/${action}/`, {});
+      await axios.post(`/playback/${action}/`, {});
       refresh();
     } catch {
       errorSnackBar(enqueueSnackbar, closeSnackbar);

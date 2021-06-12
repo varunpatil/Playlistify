@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
 import { Box, Grid, Button, Typography } from "@material-ui/core";
 
 export default function LoginPage() {
@@ -10,7 +10,7 @@ export default function LoginPage() {
   }, []);
 
   const getAuthurl = async () => {
-    const res = await axios.post("/api/login", {});
+    const res = await axios.post("/login", {});
     if (res.data.auth_url) {
       setAuthUrl(res.data.auth_url);
     } else if (res.data.message === "Success") {
