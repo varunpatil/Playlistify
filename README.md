@@ -1,4 +1,4 @@
-## The most advanced Spotify 3rd Party App
+## Feature Rich Spotify 3rd Party App
 
 ## Work in progress 👷‍♂️🚧
 
@@ -14,9 +14,5 @@
 - [Material UI](https://github.com/mui-org/material-ui)
 - [Nivo](https://github.com/plouc/nivo)
 - [Notistack](https://github.com/iamhosseindhv/notistack)
-- [Babel](https://github.com/babel/babel)
-- [Webpack](https://github.com/webpack/webpack)
 - [LyricsGenius](https://github.com/johnwmillr/LyricsGenius)
 - [Axios](https://github.com/axios/axios)
-
-### [Contributing Guidelines](/CONTRIBUTING.md)
