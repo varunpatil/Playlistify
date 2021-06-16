@@ -298,11 +298,12 @@ def seed_recommendation(request):
     playlist_id = body['playlist_id']
     input_track_ids = body.get('track_ids', [])[:20]
     input_artist_ids = body.get('artist_ids', [])[:20]
+    size = max(len(input_track_ids), len(input_artist_ids))
     assert (not input_artist_ids or not input_track_ids)
 
     track_ids = []
 
-    for i in range(0, 20, 5):
+    for i in range(0, size, 5):
         response = request.sp[1].recommendations(
             seed_tracks=input_track_ids[i:i + 5],
             seed_artists=input_artist_ids[i:i + 5],

@@ -36,7 +36,7 @@ def get_song_genius(track_name, artist_name):
 
     try:
         meaning = song['description']['plain'].split('\n')
-        assert (meaning != ["?"])
+        assert (meaning != ["?"] and meaning != [""])
     except:
         meaning = None
 
