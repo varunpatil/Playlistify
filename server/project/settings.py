@@ -12,7 +12,7 @@ SPOTIFY_CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
 SPOTIFY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
 SPOTIFY_REDIRECT_URI = os.environ.get('SPOTIFY_REDIRECT_URI')
 
-GENIUS_TOKEN = os.environ.get('GENIUS_CLIENT_ACCESS_TOKEN')
+GENIUS_TOKEN = os.environ.get('GENIUS_ACCESS_TOKEN')
 MUSIXMATCH_TOKEN = os.environ.get('MUSIXMATCH_API_KEY')
 
 ALLOWED_HOSTS = []
@@ -38,12 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',
     'api',
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -102,4 +100,3 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 SESSION_COOKIE_AGE = 365 * 24 * 3600
-CORS_ORIGIN_ALLOW_ALL = True

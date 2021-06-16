@@ -94,27 +94,27 @@ const useStyles = makeStyles((theme) => ({
 const moods = [
   {
     title: "Energy",
-    path: "../../../static/images/energy.jpg",
+    path: "/images/energy.jpg",
     subtitle: "subtitle",
   },
   {
     title: "Happy",
-    path: "../../../static/images/happy.jpg",
+    path: "/images/happy.jpg",
     subtitle: "subtitle",
   },
   {
     title: "Dance",
-    path: "../../../static/images/dance.jpg",
+    path: "/images/dance.jpg",
     subtitle: "subtitle",
   },
   {
     title: "Sad",
-    path: "../../../static/images/sad.jpg",
+    path: "/images/sad.jpg",
     subtitle: "subtitle",
   },
   {
     title: "Relax",
-    path: "../../../static/images/relax.jpg",
+    path: "/images/relax.jpg",
     subtitle: "subtitle",
   },
 ];
