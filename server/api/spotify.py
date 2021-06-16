@@ -1,7 +1,6 @@
-import os
-import uuid
 import spotipy
-from project.settings import CACHE_DIR, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI
+from spotipy.cache_handler import CacheHandler
+from project.settings import SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, SPOTIFY_REDIRECT_URI
 
 scope = ' '.join([
     'playlist-read-collaborative',
@@ -14,24 +13,29 @@ scope = ' '.join([
     'user-read-currently-playing',
     'user-read-playback-state',
     'user-read-private',
-    'user-read-email',
     'user-library-read',
     'user-modify-playback-state',
 ])
 
-# <---------------------------Cache and Session-----------------------------------------> #
 
-if not os.path.exists(CACHE_DIR):
-    os.makedirs(CACHE_DIR)
+class DjangoSessionCacheHandler(CacheHandler):
+    def __init__(self, request):
+        self.request = request
 
+    def get_cached_token(self):
+        token_info = None
+        try:
+            token_info = self.request.session['token_info']
+        except KeyError:
+            pass
+        return token_info
 
-def session_cache_path(request):
-    if not request.session.get('uuid'):
-        request.session['uuid'] = str(uuid.uuid4())
-    return CACHE_DIR + request.session['uuid']
+    def save_token_to_cache(self, token_info):
+        try:
+            self.request.session['token_info'] = token_info
+        except Exception as e:
+            print("Error saving token to cache: " + str(e))
 
-
-# <---------------------------TOKENS-----------------------------------------------------> #
 
 def get_auth_manager(request):
     auth_manager = spotipy.oauth2.SpotifyOAuth(
@@ -39,8 +43,8 @@ def get_auth_manager(request):
         client_secret=SPOTIFY_CLIENT_SECRET,
         redirect_uri=SPOTIFY_REDIRECT_URI,
         scope=scope,
-        cache_path=session_cache_path(request),
-        show_dialog=True,
+        cache_handler=DjangoSessionCacheHandler(request),
+        show_dialog=False,
     )
     return auth_manager
 

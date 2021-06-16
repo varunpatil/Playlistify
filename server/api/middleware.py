@@ -15,16 +15,15 @@ class LoginRequiredMiddleware:
     def __call__(self, request):
         if request.path.startswith('/api') and request.path not in [reverse('login'), reverse('logout')]:
             auth_manager = spotify.get_auth_manager(request)
+            token_info = auth_manager.cache_handler.get_cached_token()
 
             try:
-                if not auth_manager.get_cached_token():
-                    refresh_token = request.session['refresh_token']
-                    auth_manager.refresh_access_token(refresh_token)
-            except (KeyError, SpotifyException):
-                # Keyerror if no refresh_token in the session and
+                valid_token_info = auth_manager.validate_token(token_info)
                 # SpotifyException if the user removes access from the
                 # spotify apps page thus making the refresh token useless
                 # and attempting to refresh will result in a SpotifyException
+                assert (valid_token_info is not None)
+            except (SpotifyException, AssertionError):
                 return JsonResponse({"Error": "Not Logged In"}, status=403)
 
         response = self.get_response(request)
@@ -37,7 +36,6 @@ class InitRequestMiddleware:
 
     def __call__(self, request):
         if request.path.startswith('/api') and request.path not in [reverse('login'), reverse('logout')]:
-            auth_manager = spotify.get_auth_manager(request)
             request.sp = spotify.get_spotify_api_clients(request)
 
             if not request.session.get('me'):

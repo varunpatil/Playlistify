@@ -1,9 +1,7 @@
 import json
-import os
 from collections import Counter
 
 from django.http import JsonResponse
-from django.shortcuts import render
 from django.views.decorators.cache import cache_control, never_cache
 from django.views.decorators.http import require_POST
 
@@ -22,38 +20,20 @@ def login(request):
     auth_manager = spotify.get_auth_manager(request)
 
     if body.get("code"):
-        # Step 4. After getting redirected from Spotify auth page in Step 3
+        # Step 2. After getting redirected from Spotify auth page in Step 1
         try:
-            auth_manager.get_access_token(body["code"])
-            request.session['refresh_token'] = auth_manager.get_cached_token()['refresh_token']
+            auth_manager.get_access_token(code=body["code"], as_dict=False, check_cache=False)
             return JsonResponse({"message": "Success"})
         except Exception as e:
             return JsonResponse({"Error": str(e)}, status=400)
 
-    # Step 1. Check for Cached Token
-    try:
-        if not auth_manager.get_cached_token():
-            # Step 2. Check for refresh token in session before auth link
-            refresh_token = request.session['refresh_token']
-            auth_manager.refresh_access_token(refresh_token)
-            return JsonResponse({"message": "Success"})
-    except (KeyError, SpotifyException):
-        # This will be encountered if the user removes access from the
-        # spotify apps page thus making the refresh token useless
-        # Step 3. return sign in link when no token
-        auth_url = auth_manager.get_authorize_url()
-        return JsonResponse({"auth_url": auth_url})
-
-    return JsonResponse({"message": "Success"})
+    # Step 1. return auth_url
+    auth_url = auth_manager.get_authorize_url()
+    return JsonResponse({"auth_url": auth_url})
 
 
 @require_POST
 def logout(request):
-    cache_path = spotify.session_cache_path(request)
-    try:
-        os.remove(cache_path)
-    except FileNotFoundError:
-        pass
     request.session.flush()
     return JsonResponse({"message": "Success"})
 
