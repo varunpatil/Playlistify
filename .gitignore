@@ -1,9 +1,5 @@
-**/__pycache__/
-*.log
 /.vscode
-/venv
-
 /.caches
 /extras
-/static
-db.sqlite3
+
+**/__pycache__/

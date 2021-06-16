@@ -1,0 +1,5 @@
+Django==3.2.4
+lyricsgenius==2.0.2
+pymusixmatch==0.3
+spotipy==2.18.0
+textdistance==4.2.1
